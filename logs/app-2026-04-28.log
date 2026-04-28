@@ -1,0 +1,29 @@
+2026-04-28 16:06:56 [info]: 📚 Swagger docs available at /api-docs
+2026-04-28 16:06:56 [warn]: Admin React build missing at C:\Users\VICTUS\Desktop\Oxygen\Server\frontend\dist\index.html. Route /admin-react will return 503 until built.
+2026-04-28 16:06:56 [info]: [SubscriptionLifecycle] Job started (every 60s)
+2026-04-28 16:06:56 [info]: 🚀 Server running on port 7000
+2026-04-28 16:08:03 [info]: 🔍 Incoming Request: GET /api/v1/health
+2026-04-28 19:21:42 [info]: 📚 Swagger docs available at /api-docs
+2026-04-28 19:21:42 [warn]: Admin React build missing at C:\Users\VICTUS\Desktop\Oxygen\Server\frontend\dist\index.html. Route /admin-react will return 503 until built.
+2026-04-28 19:21:42 [info]: [SubscriptionLifecycle] Job started (every 60s)
+2026-04-28 19:21:42 [info]: 🚀 Server running on port 7000
+2026-04-28 19:26:40 [info]: 🔍 Incoming Request: GET /api/v1/health
+2026-04-28 19:48:47 [info]: 📚 Swagger docs available at /api-docs
+2026-04-28 19:48:47 [warn]: Admin React build missing at C:\Users\VICTUS\Desktop\Oxygen\Server\frontend\dist\index.html. Route /admin-react will return 503 until built.
+2026-04-28 19:48:47 [info]: [SubscriptionLifecycle] Job started (every 60s)
+2026-04-28 19:48:47 [info]: 🚀 Server running on port 7000
+2026-04-28 20:11:04 [info]: 📚 Swagger docs available at /api-docs
+2026-04-28 20:11:04 [warn]: Admin React build missing at C:\Users\VICTUS\Desktop\Oxygen\Server\frontend\dist\index.html. Route /admin-react will return 503 until built.
+2026-04-28 20:11:04 [info]: [SubscriptionLifecycle] Job started (every 60s)
+2026-04-28 20:11:04 [info]: 🚀 Server running on port 7000
+2026-04-28 20:35:00 [info]: 📚 Swagger docs available at /api-docs
+2026-04-28 20:35:00 [warn]: Admin React build missing at C:\Users\VICTUS\Desktop\Oxygen\Server\frontend\dist\index.html. Route /admin-react will return 503 until built.
+2026-04-28 20:35:00 [info]: [SubscriptionLifecycle] Job started (every 60s)
+2026-04-28 20:35:00 [info]: 🚀 Server running on port 7000
+2026-04-28 20:40:06 [info]: 📚 Swagger docs available at /api-docs
+2026-04-28 20:40:06 [warn]: Admin React build missing at C:\Users\VICTUS\Desktop\Oxygen\Server\frontend\dist\index.html. Route /admin-react will return 503 until built.
+2026-04-28 20:40:06 [info]: [SubscriptionLifecycle] Job started (every 60s)
+2026-04-28 20:40:06 [info]: 🚀 Server running on port 7000
+2026-04-28 20:40:55 [info]: 🔍 Incoming Request: GET /api/v1/health
+2026-04-28 20:48:36 [info]: 🔍 Incoming Request: GET /api/v1/health
+2026-04-28 21:40:55 [info]: 🔍 Incoming Request: GET /api/v1/health

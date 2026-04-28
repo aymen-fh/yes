@@ -1,0 +1,1005 @@
+2026-04-09 14:18:59 [info]: 📚 Swagger docs available at /api-docs
+2026-04-09 14:18:59 [warn]: MongoDB is unavailable. Server will stay up in degraded mode and retry every 15s.
+2026-04-09 14:18:59 [info]: 🚀 Server running on port 7000
+2026-04-09 14:19:14 [info]: Retrying MongoDB connection...
+2026-04-09 14:19:27 [info]: 📚 Swagger docs available at /api-docs
+2026-04-09 14:19:27 [warn]: MongoDB is unavailable. Server will stay up in degraded mode and retry every 15s.
+2026-04-09 14:19:27 [info]: 🚀 Server running on port 7000
+2026-04-09 14:20:20 [info]: 📚 Swagger docs available at /api-docs
+2026-04-09 14:20:20 [info]: 🚀 Server running on port 7000
+2026-04-09 14:40:58 [info]: 📚 Swagger docs available at /api-docs
+2026-04-09 14:58:57 [info]: 📚 Swagger docs available at /api-docs
+2026-04-09 15:17:21 [info]: 📚 Swagger docs available at /api-docs
+2026-04-09 15:19:40 [info]: 📚 Swagger docs available at /api-docs
+2026-04-09 15:19:40 [info]: 🚀 Server running on port 7000
+2026-04-09 15:30:52 [info]: 🔍 Incoming Request: POST /api/v1/auth/login
+2026-04-09 15:30:52 [warn]: POST /api/v1/auth/login [401] - Invalid credentials
+2026-04-09 15:31:08 [info]: 🔍 Incoming Request: POST /api/v1/auth/login
+2026-04-09 15:31:08 [warn]: POST /api/v1/auth/login [401] - Invalid credentials
+2026-04-09 15:32:55 [info]: 📚 Swagger docs available at /api-docs
+2026-04-09 15:32:55 [info]: 🚀 Server running on port 7000
+2026-04-09 15:33:03 [info]: 📚 Swagger docs available at /api-docs
+2026-04-09 15:33:03 [info]: 🚀 Server running on port 7000
+2026-04-09 15:33:07 [info]: 📚 Swagger docs available at /api-docs
+2026-04-09 15:33:07 [info]: 🚀 Server running on port 7000
+2026-04-09 15:33:07 [info]: 🔍 Incoming Request: POST /api/v1/auth/login
+2026-04-09 15:33:07 [warn]: POST /api/v1/auth/login [401] - Invalid credentials
+2026-04-09 15:33:10 [info]: 🔍 Incoming Request: POST /api/v1/auth/login
+2026-04-09 15:33:10 [warn]: POST /api/v1/auth/login [401] - Invalid credentials
+2026-04-09 15:33:13 [info]: 🔍 Incoming Request: POST /api/v1/auth/login
+2026-04-09 15:33:13 [warn]: POST /api/v1/auth/login [401] - Invalid credentials
+2026-04-09 15:33:19 [info]: 📚 Swagger docs available at /api-docs
+2026-04-09 15:33:19 [info]: 🚀 Server running on port 7000
+2026-04-09 15:33:52 [info]: 🔍 Incoming Request: POST /api/v1/auth/login
+2026-04-09 15:34:27 [info]: 📚 Swagger docs available at /api-docs
+2026-04-09 15:34:27 [info]: 🚀 Server running on port 7000
+2026-04-09 15:34:31 [info]: 📚 Swagger docs available at /api-docs
+2026-04-09 15:34:31 [info]: 🚀 Server running on port 7000
+2026-04-09 15:34:43 [info]: 📚 Swagger docs available at /api-docs
+2026-04-09 15:34:43 [info]: 🚀 Server running on port 7000
+2026-04-09 15:34:45 [info]: 📚 Swagger docs available at /api-docs
+2026-04-09 15:34:45 [info]: 🚀 Server running on port 7000
+2026-04-09 15:35:10 [info]: 📚 Swagger docs available at /api-docs
+2026-04-09 15:35:10 [info]: 🚀 Server running on port 7000
+2026-04-09 15:35:21 [info]: 📚 Swagger docs available at /api-docs
+2026-04-09 15:35:21 [info]: 🚀 Server running on port 7000
+2026-04-09 15:35:39 [info]: 📚 Swagger docs available at /api-docs
+2026-04-09 15:35:39 [info]: 🚀 Server running on port 7000
+2026-04-09 15:35:46 [info]: 📚 Swagger docs available at /api-docs
+2026-04-09 15:35:47 [info]: 🚀 Server running on port 7000
+2026-04-09 15:36:33 [info]: 🔍 Incoming Request: POST /api/v1/auth/login
+2026-04-09 15:36:43 [info]: 📚 Swagger docs available at /api-docs
+2026-04-09 15:36:43 [info]: 🚀 Server running on port 7000
+2026-04-09 15:37:15 [info]: 🔍 Incoming Request: POST /api/v1/auth/login
+2026-04-09 15:37:16 [info]: 🔍 Incoming Request: GET /api/v1/customers/me
+2026-04-09 15:37:17 [info]: 🔍 Incoming Request: GET /api/v1/subscriptions?limit=50&page=1
+2026-04-09 15:37:17 [error]: GET /api/v1/subscriptions - TypeError: Cannot set property query of #<IncomingMessage> which has only a getter
+    at file:///C:/Users/VICTUS/Desktop/Oxygen/Server/src/validators/validateRequest.js:30:15
+    at Layer.handleRequest (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\lib\layer.js:152:17)
+    at next (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\lib\route.js:157:13)
+    at requireAuth (file:///C:/Users/VICTUS/Desktop/Oxygen/Server/src/middleware/ispAuth.js:32:12)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2026-04-09 15:37:21 [info]: 🔍 Incoming Request: GET /api/v1/customers/me
+2026-04-09 15:37:22 [info]: 🔍 Incoming Request: GET /api/v1/subscriptions?limit=50&page=1
+2026-04-09 15:37:22 [error]: GET /api/v1/subscriptions - TypeError: Cannot set property query of #<IncomingMessage> which has only a getter
+    at file:///C:/Users/VICTUS/Desktop/Oxygen/Server/src/validators/validateRequest.js:30:15
+    at Layer.handleRequest (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\lib\layer.js:152:17)
+    at next (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\lib\route.js:157:13)
+    at requireAuth (file:///C:/Users/VICTUS/Desktop/Oxygen/Server/src/middleware/ispAuth.js:32:12)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2026-04-09 15:38:55 [info]: 📚 Swagger docs available at /api-docs
+2026-04-09 15:38:55 [info]: 🚀 Server running on port 7000
+2026-04-09 15:39:10 [info]: 🔍 Incoming Request: POST /api/v1/auth/login
+2026-04-09 15:39:11 [info]: 🔍 Incoming Request: GET /api/v1/subscriptions?limit=50&page=1
+2026-04-09 15:39:20 [info]: 📚 Swagger docs available at /api-docs
+2026-04-09 15:39:20 [info]: 🚀 Server running on port 7000
+2026-04-09 15:40:27 [info]: 🔍 Incoming Request: POST /api/v1/auth/login
+2026-04-09 15:40:27 [warn]: POST /api/v1/auth/login [401] - Invalid credentials
+2026-04-09 15:40:48 [info]: 🔍 Incoming Request: POST /api/v1/auth/login
+2026-04-09 15:40:49 [info]: 🔍 Incoming Request: GET /api/v1/customers/me
+2026-04-09 15:40:50 [info]: 🔍 Incoming Request: GET /api/v1/subscriptions?limit=50&page=1
+2026-04-09 15:40:51 [info]: 🔍 Incoming Request: GET /api/v1/subscriptions/69d7aaab4a9220c0735bbabf/usage
+2026-04-09 15:40:52 [info]: 🔍 Incoming Request: GET /api/v1/payments?limit=50&page=1
+2026-04-09 15:40:53 [info]: 🔍 Incoming Request: GET /api/v1/customers?limit=50&page=1
+2026-04-09 15:40:54 [info]: 🔍 Incoming Request: GET /api/v1/plans?limit=50&page=1
+2026-04-09 15:40:55 [info]: 🔍 Incoming Request: GET /api/v1/subscriptions?limit=50&page=1
+2026-04-09 15:40:56 [info]: 🔍 Incoming Request: GET /api/v1/payments?limit=50&page=1
+2026-04-09 15:40:57 [info]: 🔍 Incoming Request: GET /api/v1/payments/stats
+2026-04-09 15:41:05 [info]: 🔍 Incoming Request: GET /api/v1/customers/me
+2026-04-09 15:41:06 [info]: 🔍 Incoming Request: GET /api/v1/subscriptions?limit=50&page=1
+2026-04-09 15:41:07 [info]: 🔍 Incoming Request: GET /api/v1/subscriptions/69d7aaab4a9220c0735bbabf/usage
+2026-04-09 15:41:08 [info]: 🔍 Incoming Request: GET /api/v1/payments?limit=50&page=1
+2026-04-09 15:41:09 [info]: 🔍 Incoming Request: GET /api/v1/customers?limit=50&page=1
+2026-04-09 15:41:10 [info]: 🔍 Incoming Request: GET /api/v1/plans?limit=50&page=1
+2026-04-09 15:41:11 [info]: 🔍 Incoming Request: GET /api/v1/subscriptions?limit=50&page=1
+2026-04-09 15:41:12 [info]: 🔍 Incoming Request: GET /api/v1/payments?limit=50&page=1
+2026-04-09 15:41:13 [info]: 🔍 Incoming Request: GET /api/v1/payments/stats
+2026-04-09 16:16:20 [info]: 📚 Swagger docs available at /api-docs
+2026-04-09 16:16:20 [info]: 🚀 Server running on port 7000
+2026-04-09 16:18:56 [info]: 📚 Swagger docs available at /api-docs
+2026-04-09 16:18:56 [info]: 🚀 Server running on port 7000
+2026-04-09 16:20:07 [info]: 📚 Swagger docs available at /api-docs
+2026-04-09 16:20:07 [info]: 🚀 Server running on port 7000
+2026-04-09 16:21:43 [info]: 📚 Swagger docs available at /api-docs
+2026-04-09 16:21:43 [info]: 🚀 Server running on port 7000
+2026-04-09 16:23:39 [info]: 📚 Swagger docs available at /api-docs
+2026-04-09 16:23:39 [info]: 🚀 Server running on port 7000
+2026-04-09 16:24:12 [info]: 🔍 Incoming Request: GET /
+2026-04-09 16:24:12 [info]: 🔍 Incoming Request: GET /favicon.ico
+2026-04-09 16:24:42 [info]: 📚 Swagger docs available at /api-docs
+2026-04-09 16:24:42 [info]: 🚀 Server running on port 7000
+2026-04-09 16:34:11 [info]: 📚 Swagger docs available at /api-docs
+2026-04-09 16:34:11 [info]: 🚀 Server running on port 7000
+2026-04-09 16:34:23 [info]: 📚 Swagger docs available at /api-docs
+2026-04-09 16:34:23 [info]: 🚀 Server running on port 7000
+2026-04-09 16:34:36 [info]: 🔍 Incoming Request: OPTIONS /api/v1/auth/login
+2026-04-09 16:34:36 [error]: OPTIONS /api/v1/auth/login - Error: CORS blocked for origin: http://localhost:5173
+    at origin (file:///C:/Users/VICTUS/Desktop/Oxygen/Server/src/config/cors.js:32:21)
+    at C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:219:13
+    at optionsCallback (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:199:9)
+    at corsMiddleware (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:204:7)
+    at Layer.handleRequest (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:342:13)
+    at C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:297:9
+    at processParams (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:582:12)
+    at next (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:291:5)
+    at internalNext (file:///C:/Users/VICTUS/Desktop/Oxygen/Server/node_modules/helmet/index.mjs:527:6)
+2026-04-09 16:34:37 [info]: 🔍 Incoming Request: OPTIONS /api/v1/auth/login
+2026-04-09 16:34:37 [error]: OPTIONS /api/v1/auth/login - Error: CORS blocked for origin: http://localhost:5173
+    at origin (file:///C:/Users/VICTUS/Desktop/Oxygen/Server/src/config/cors.js:32:21)
+    at C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:219:13
+    at optionsCallback (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:199:9)
+    at corsMiddleware (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:204:7)
+    at Layer.handleRequest (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:342:13)
+    at C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:297:9
+    at processParams (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:582:12)
+    at next (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:291:5)
+    at internalNext (file:///C:/Users/VICTUS/Desktop/Oxygen/Server/node_modules/helmet/index.mjs:527:6)
+2026-04-09 16:34:37 [info]: 🔍 Incoming Request: OPTIONS /api/v1/auth/login
+2026-04-09 16:34:37 [error]: OPTIONS /api/v1/auth/login - Error: CORS blocked for origin: http://localhost:5173
+    at origin (file:///C:/Users/VICTUS/Desktop/Oxygen/Server/src/config/cors.js:32:21)
+    at C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:219:13
+    at optionsCallback (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:199:9)
+    at corsMiddleware (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:204:7)
+    at Layer.handleRequest (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:342:13)
+    at C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:297:9
+    at processParams (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:582:12)
+    at next (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:291:5)
+    at internalNext (file:///C:/Users/VICTUS/Desktop/Oxygen/Server/node_modules/helmet/index.mjs:527:6)
+2026-04-09 16:34:38 [info]: 🔍 Incoming Request: OPTIONS /api/v1/auth/login
+2026-04-09 16:34:38 [error]: OPTIONS /api/v1/auth/login - Error: CORS blocked for origin: http://localhost:5173
+    at origin (file:///C:/Users/VICTUS/Desktop/Oxygen/Server/src/config/cors.js:32:21)
+    at C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:219:13
+    at optionsCallback (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:199:9)
+    at corsMiddleware (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:204:7)
+    at Layer.handleRequest (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:342:13)
+    at C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:297:9
+    at processParams (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:582:12)
+    at next (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:291:5)
+    at internalNext (file:///C:/Users/VICTUS/Desktop/Oxygen/Server/node_modules/helmet/index.mjs:527:6)
+2026-04-09 16:34:38 [info]: 🔍 Incoming Request: OPTIONS /api/v1/auth/login
+2026-04-09 16:34:38 [error]: OPTIONS /api/v1/auth/login - Error: CORS blocked for origin: http://localhost:5173
+    at origin (file:///C:/Users/VICTUS/Desktop/Oxygen/Server/src/config/cors.js:32:21)
+    at C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:219:13
+    at optionsCallback (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:199:9)
+    at corsMiddleware (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:204:7)
+    at Layer.handleRequest (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:342:13)
+    at C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:297:9
+    at processParams (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:582:12)
+    at next (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:291:5)
+    at internalNext (file:///C:/Users/VICTUS/Desktop/Oxygen/Server/node_modules/helmet/index.mjs:527:6)
+2026-04-09 16:35:07 [info]: 🔍 Incoming Request: OPTIONS /api/v1/auth/login
+2026-04-09 16:35:07 [error]: OPTIONS /api/v1/auth/login - Error: CORS blocked for origin: http://10.133.226.80:5173
+    at origin (file:///C:/Users/VICTUS/Desktop/Oxygen/Server/src/config/cors.js:32:21)
+    at C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:219:13
+    at optionsCallback (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:199:9)
+    at corsMiddleware (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:204:7)
+    at Layer.handleRequest (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:342:13)
+    at C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:297:9
+    at processParams (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:582:12)
+    at next (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:291:5)
+    at internalNext (file:///C:/Users/VICTUS/Desktop/Oxygen/Server/node_modules/helmet/index.mjs:527:6)
+2026-04-09 16:35:07 [info]: 🔍 Incoming Request: OPTIONS /api/v1/auth/login
+2026-04-09 16:35:07 [error]: OPTIONS /api/v1/auth/login - Error: CORS blocked for origin: http://10.133.226.80:5173
+    at origin (file:///C:/Users/VICTUS/Desktop/Oxygen/Server/src/config/cors.js:32:21)
+    at C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:219:13
+    at optionsCallback (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:199:9)
+    at corsMiddleware (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:204:7)
+    at Layer.handleRequest (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:342:13)
+    at C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:297:9
+    at processParams (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:582:12)
+    at next (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:291:5)
+    at internalNext (file:///C:/Users/VICTUS/Desktop/Oxygen/Server/node_modules/helmet/index.mjs:527:6)
+2026-04-09 16:35:08 [info]: 🔍 Incoming Request: OPTIONS /api/v1/auth/login
+2026-04-09 16:35:08 [error]: OPTIONS /api/v1/auth/login - Error: CORS blocked for origin: http://10.133.226.80:5173
+    at origin (file:///C:/Users/VICTUS/Desktop/Oxygen/Server/src/config/cors.js:32:21)
+    at C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:219:13
+    at optionsCallback (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:199:9)
+    at corsMiddleware (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:204:7)
+    at Layer.handleRequest (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:342:13)
+    at C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:297:9
+    at processParams (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:582:12)
+    at next (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:291:5)
+    at internalNext (file:///C:/Users/VICTUS/Desktop/Oxygen/Server/node_modules/helmet/index.mjs:527:6)
+2026-04-09 16:35:08 [info]: 🔍 Incoming Request: OPTIONS /api/v1/auth/login
+2026-04-09 16:35:08 [error]: OPTIONS /api/v1/auth/login - Error: CORS blocked for origin: http://10.133.226.80:5173
+    at origin (file:///C:/Users/VICTUS/Desktop/Oxygen/Server/src/config/cors.js:32:21)
+    at C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:219:13
+    at optionsCallback (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:199:9)
+    at corsMiddleware (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:204:7)
+    at Layer.handleRequest (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:342:13)
+    at C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:297:9
+    at processParams (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:582:12)
+    at next (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:291:5)
+    at internalNext (file:///C:/Users/VICTUS/Desktop/Oxygen/Server/node_modules/helmet/index.mjs:527:6)
+2026-04-09 16:35:08 [info]: 🔍 Incoming Request: OPTIONS /api/v1/auth/login
+2026-04-09 16:35:08 [error]: OPTIONS /api/v1/auth/login - Error: CORS blocked for origin: http://10.133.226.80:5173
+    at origin (file:///C:/Users/VICTUS/Desktop/Oxygen/Server/src/config/cors.js:32:21)
+    at C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:219:13
+    at optionsCallback (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:199:9)
+    at corsMiddleware (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:204:7)
+    at Layer.handleRequest (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:342:13)
+    at C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:297:9
+    at processParams (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:582:12)
+    at next (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:291:5)
+    at internalNext (file:///C:/Users/VICTUS/Desktop/Oxygen/Server/node_modules/helmet/index.mjs:527:6)
+2026-04-09 16:38:57 [info]: 📚 Swagger docs available at /api-docs
+2026-04-09 16:38:57 [info]: 🚀 Server running on port 7000
+2026-04-09 16:41:21 [info]: 📚 Swagger docs available at /api-docs
+2026-04-09 16:41:21 [info]: 🚀 Server running on port 7000
+2026-04-09 16:41:37 [info]: 📚 Swagger docs available at /api-docs
+2026-04-09 16:41:37 [info]: 🚀 Server running on port 7000
+2026-04-09 16:43:04 [info]: 📚 Swagger docs available at /api-docs
+2026-04-09 16:43:04 [info]: 🚀 Server running on port 7000
+2026-04-09 16:44:04 [info]: 📚 Swagger docs available at /api-docs
+2026-04-09 16:44:04 [info]: 🚀 Server running on port 7000
+2026-04-09 16:47:29 [info]: 📚 Swagger docs available at /api-docs
+2026-04-09 16:47:29 [info]: 🧭 React admin dashboard served at /admin-react
+2026-04-09 16:47:29 [info]: 🚀 Server running on port 7000
+2026-04-09 16:48:01 [info]: 📚 Swagger docs available at /api-docs
+2026-04-09 16:48:01 [info]: 🧭 React admin dashboard served at /admin-react
+2026-04-09 16:48:01 [info]: 🚀 Server running on port 7000
+2026-04-09 16:48:03 [info]: 📚 Swagger docs available at /api-docs
+2026-04-09 16:48:03 [info]: 🧭 React admin dashboard served at /admin-react
+2026-04-09 16:48:04 [info]: 🚀 Server running on port 7000
+2026-04-09 16:48:57 [info]: 📚 Swagger docs available at /api-docs
+2026-04-09 16:48:57 [info]: 🧭 React admin dashboard served at /admin-react
+2026-04-09 16:48:59 [info]: 📚 Swagger docs available at /api-docs
+2026-04-09 16:48:59 [info]: 🧭 React admin dashboard served at /admin-react
+2026-04-09 16:48:59 [info]: 🚀 Server running on port 7000
+2026-04-09 16:49:57 [info]: 📚 Swagger docs available at /api-docs
+2026-04-09 16:49:57 [info]: 🧭 React admin dashboard served at /admin-react
+2026-04-09 16:49:57 [info]: 🚀 Server running on port 7000
+2026-04-09 16:50:39 [info]: 🔍 Incoming Request: GET /admin-react
+2026-04-09 16:50:39 [info]: 🔍 Incoming Request: GET /admin-react/
+2026-04-09 16:51:20 [info]: 🔍 Incoming Request: GET /admin-react
+2026-04-09 16:51:20 [info]: 🔍 Incoming Request: GET /admin-react/
+2026-04-09 16:52:00 [info]: 📚 Swagger docs available at /api-docs
+2026-04-09 16:52:00 [info]: 🧭 React admin dashboard served at /admin-react
+2026-04-09 16:52:00 [info]: 🚀 Server running on port 7000
+2026-04-09 16:52:14 [info]: 📚 Swagger docs available at /api-docs
+2026-04-09 16:52:14 [info]: 🧭 React admin dashboard served at /admin-react
+2026-04-09 16:52:14 [info]: 🚀 Server running on port 7000
+2026-04-09 16:52:28 [info]: 📚 Swagger docs available at /api-docs
+2026-04-09 16:52:28 [info]: 🧭 React admin dashboard served at /admin-react
+2026-04-09 16:52:28 [info]: 🚀 Server running on port 7000
+2026-04-09 16:52:31 [info]: 🔍 Incoming Request: GET /admin-react
+2026-04-09 16:52:31 [info]: 🔍 Incoming Request: GET /admin-react/
+2026-04-09 16:52:49 [info]: 🔍 Incoming Request: GET /admin-react/assets/index-C5pmWu3l.js
+2026-04-09 16:55:15 [info]: 📚 Swagger docs available at /api-docs
+2026-04-09 16:55:15 [info]: 🧭 React admin dashboard served at /admin-react
+2026-04-09 16:55:15 [info]: 🚀 Server running on port 7000
+2026-04-09 16:55:30 [info]: 📚 Swagger docs available at /api-docs
+2026-04-09 16:55:30 [info]: 🧭 React admin dashboard served at /admin-react
+2026-04-09 16:55:30 [info]: 🚀 Server running on port 7000
+2026-04-09 16:55:53 [info]: 📚 Swagger docs available at /api-docs
+2026-04-09 16:55:53 [info]: 🧭 React admin dashboard served at /admin-react
+2026-04-09 16:55:53 [info]: 🚀 Server running on port 7000
+2026-04-09 16:56:03 [info]: 🔍 Incoming Request: GET /admin-react
+2026-04-09 16:56:03 [info]: 🔍 Incoming Request: GET /admin-react/
+2026-04-09 16:56:03 [info]: 🔍 Incoming Request: GET /admin-react/assets/index-BBFmEIIj.css
+2026-04-09 16:56:03 [error]: GET /admin-react/assets/index-BBFmEIIj.css - Error: CORS blocked for origin: http://localhost:7000
+    at origin (file:///C:/Users/VICTUS/Desktop/Oxygen/Server/src/config/cors.js:32:21)
+    at C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:219:13
+    at optionsCallback (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:199:9)
+    at corsMiddleware (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:204:7)
+    at Layer.handleRequest (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:342:13)
+    at C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:297:9
+    at processParams (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:582:12)
+    at next (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:291:5)
+    at internalNext (file:///C:/Users/VICTUS/Desktop/Oxygen/Server/node_modules/helmet/index.mjs:527:6)
+2026-04-09 16:56:03 [info]: 🔍 Incoming Request: GET /admin-react/assets/index-C5pmWu3l.js
+2026-04-09 16:56:03 [error]: GET /admin-react/assets/index-C5pmWu3l.js - Error: CORS blocked for origin: http://localhost:7000
+    at origin (file:///C:/Users/VICTUS/Desktop/Oxygen/Server/src/config/cors.js:32:21)
+    at C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:219:13
+    at optionsCallback (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:199:9)
+    at corsMiddleware (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:204:7)
+    at Layer.handleRequest (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:342:13)
+    at C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:297:9
+    at processParams (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:582:12)
+    at next (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:291:5)
+    at internalNext (file:///C:/Users/VICTUS/Desktop/Oxygen/Server/node_modules/helmet/index.mjs:527:6)
+2026-04-09 16:56:03 [info]: 🔍 Incoming Request: GET /favicon.ico
+2026-04-09 16:56:14 [info]: 🔍 Incoming Request: GET /admin-react/
+2026-04-09 16:56:14 [info]: 🔍 Incoming Request: GET /admin-react/assets/index-BBFmEIIj.css
+2026-04-09 16:56:14 [error]: GET /admin-react/assets/index-BBFmEIIj.css - Error: CORS blocked for origin: http://localhost:7000
+    at origin (file:///C:/Users/VICTUS/Desktop/Oxygen/Server/src/config/cors.js:32:21)
+    at C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:219:13
+    at optionsCallback (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:199:9)
+    at corsMiddleware (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:204:7)
+    at Layer.handleRequest (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:342:13)
+    at C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:297:9
+    at processParams (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:582:12)
+    at next (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:291:5)
+    at internalNext (file:///C:/Users/VICTUS/Desktop/Oxygen/Server/node_modules/helmet/index.mjs:527:6)
+2026-04-09 16:56:14 [info]: 🔍 Incoming Request: GET /admin-react/assets/index-C5pmWu3l.js
+2026-04-09 16:56:14 [error]: GET /admin-react/assets/index-C5pmWu3l.js - Error: CORS blocked for origin: http://localhost:7000
+    at origin (file:///C:/Users/VICTUS/Desktop/Oxygen/Server/src/config/cors.js:32:21)
+    at C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:219:13
+    at optionsCallback (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:199:9)
+    at corsMiddleware (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:204:7)
+    at Layer.handleRequest (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:342:13)
+    at C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:297:9
+    at processParams (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:582:12)
+    at next (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:291:5)
+    at internalNext (file:///C:/Users/VICTUS/Desktop/Oxygen/Server/node_modules/helmet/index.mjs:527:6)
+2026-04-09 16:56:25 [info]: 🔍 Incoming Request: GET /
+2026-04-09 16:56:30 [info]: 🔍 Incoming Request: GET /admin-react/
+2026-04-09 16:56:30 [info]: 🔍 Incoming Request: GET /admin-react/assets/index-BBFmEIIj.css
+2026-04-09 16:56:30 [error]: GET /admin-react/assets/index-BBFmEIIj.css - Error: CORS blocked for origin: http://localhost:7000
+    at origin (file:///C:/Users/VICTUS/Desktop/Oxygen/Server/src/config/cors.js:32:21)
+    at C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:219:13
+    at optionsCallback (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:199:9)
+    at corsMiddleware (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:204:7)
+    at Layer.handleRequest (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:342:13)
+    at C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:297:9
+    at processParams (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:582:12)
+    at next (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:291:5)
+    at internalNext (file:///C:/Users/VICTUS/Desktop/Oxygen/Server/node_modules/helmet/index.mjs:527:6)
+2026-04-09 16:56:30 [info]: 🔍 Incoming Request: GET /admin-react/assets/index-C5pmWu3l.js
+2026-04-09 16:56:30 [error]: GET /admin-react/assets/index-C5pmWu3l.js - Error: CORS blocked for origin: http://localhost:7000
+    at origin (file:///C:/Users/VICTUS/Desktop/Oxygen/Server/src/config/cors.js:32:21)
+    at C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:219:13
+    at optionsCallback (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:199:9)
+    at corsMiddleware (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:204:7)
+    at Layer.handleRequest (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:342:13)
+    at C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:297:9
+    at processParams (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:582:12)
+    at next (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:291:5)
+    at internalNext (file:///C:/Users/VICTUS/Desktop/Oxygen/Server/node_modules/helmet/index.mjs:527:6)
+2026-04-09 16:56:30 [info]: 🔍 Incoming Request: GET /admin-react/
+2026-04-09 16:56:30 [info]: 🔍 Incoming Request: GET /admin-react/assets/index-BBFmEIIj.css
+2026-04-09 16:56:30 [error]: GET /admin-react/assets/index-BBFmEIIj.css - Error: CORS blocked for origin: http://localhost:7000
+    at origin (file:///C:/Users/VICTUS/Desktop/Oxygen/Server/src/config/cors.js:32:21)
+    at C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:219:13
+    at optionsCallback (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:199:9)
+    at corsMiddleware (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:204:7)
+    at Layer.handleRequest (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:342:13)
+    at C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:297:9
+    at processParams (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:582:12)
+    at next (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:291:5)
+    at internalNext (file:///C:/Users/VICTUS/Desktop/Oxygen/Server/node_modules/helmet/index.mjs:527:6)
+2026-04-09 16:56:31 [info]: 🔍 Incoming Request: GET /admin-react/assets/index-C5pmWu3l.js
+2026-04-09 16:56:31 [error]: GET /admin-react/assets/index-C5pmWu3l.js - Error: CORS blocked for origin: http://localhost:7000
+    at origin (file:///C:/Users/VICTUS/Desktop/Oxygen/Server/src/config/cors.js:32:21)
+    at C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:219:13
+    at optionsCallback (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:199:9)
+    at corsMiddleware (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:204:7)
+    at Layer.handleRequest (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:342:13)
+    at C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:297:9
+    at processParams (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:582:12)
+    at next (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:291:5)
+    at internalNext (file:///C:/Users/VICTUS/Desktop/Oxygen/Server/node_modules/helmet/index.mjs:527:6)
+2026-04-09 16:56:31 [info]: 🔍 Incoming Request: GET /admin-react/
+2026-04-09 16:56:31 [info]: 🔍 Incoming Request: GET /admin-react/assets/index-BBFmEIIj.css
+2026-04-09 16:56:31 [error]: GET /admin-react/assets/index-BBFmEIIj.css - Error: CORS blocked for origin: http://localhost:7000
+    at origin (file:///C:/Users/VICTUS/Desktop/Oxygen/Server/src/config/cors.js:32:21)
+    at C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:219:13
+    at optionsCallback (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:199:9)
+    at corsMiddleware (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:204:7)
+    at Layer.handleRequest (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:342:13)
+    at C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:297:9
+    at processParams (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:582:12)
+    at next (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:291:5)
+    at internalNext (file:///C:/Users/VICTUS/Desktop/Oxygen/Server/node_modules/helmet/index.mjs:527:6)
+2026-04-09 16:56:31 [info]: 🔍 Incoming Request: GET /admin-react/assets/index-C5pmWu3l.js
+2026-04-09 16:56:31 [error]: GET /admin-react/assets/index-C5pmWu3l.js - Error: CORS blocked for origin: http://localhost:7000
+    at origin (file:///C:/Users/VICTUS/Desktop/Oxygen/Server/src/config/cors.js:32:21)
+    at C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:219:13
+    at optionsCallback (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:199:9)
+    at corsMiddleware (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:204:7)
+    at Layer.handleRequest (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:342:13)
+    at C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:297:9
+    at processParams (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:582:12)
+    at next (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:291:5)
+    at internalNext (file:///C:/Users/VICTUS/Desktop/Oxygen/Server/node_modules/helmet/index.mjs:527:6)
+2026-04-09 16:56:31 [info]: 🔍 Incoming Request: GET /admin-react/
+2026-04-09 16:56:31 [info]: 🔍 Incoming Request: GET /admin-react/assets/index-C5pmWu3l.js
+2026-04-09 16:56:31 [error]: GET /admin-react/assets/index-C5pmWu3l.js - Error: CORS blocked for origin: http://localhost:7000
+    at origin (file:///C:/Users/VICTUS/Desktop/Oxygen/Server/src/config/cors.js:32:21)
+    at C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:219:13
+    at optionsCallback (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:199:9)
+    at corsMiddleware (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:204:7)
+    at Layer.handleRequest (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:342:13)
+    at C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:297:9
+    at processParams (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:582:12)
+    at next (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:291:5)
+    at internalNext (file:///C:/Users/VICTUS/Desktop/Oxygen/Server/node_modules/helmet/index.mjs:527:6)
+2026-04-09 16:56:31 [info]: 🔍 Incoming Request: GET /admin-react/assets/index-BBFmEIIj.css
+2026-04-09 16:56:31 [error]: GET /admin-react/assets/index-BBFmEIIj.css - Error: CORS blocked for origin: http://localhost:7000
+    at origin (file:///C:/Users/VICTUS/Desktop/Oxygen/Server/src/config/cors.js:32:21)
+    at C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:219:13
+    at optionsCallback (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:199:9)
+    at corsMiddleware (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:204:7)
+    at Layer.handleRequest (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:342:13)
+    at C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:297:9
+    at processParams (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:582:12)
+    at next (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:291:5)
+    at internalNext (file:///C:/Users/VICTUS/Desktop/Oxygen/Server/node_modules/helmet/index.mjs:527:6)
+2026-04-09 16:56:59 [info]: 🔍 Incoming Request: GET /admin-react/
+2026-04-09 16:56:59 [info]: 🔍 Incoming Request: GET /admin-react/assets/index-BBFmEIIj.css
+2026-04-09 16:56:59 [error]: GET /admin-react/assets/index-BBFmEIIj.css - Error: CORS blocked for origin: http://localhost:7000
+    at origin (file:///C:/Users/VICTUS/Desktop/Oxygen/Server/src/config/cors.js:32:21)
+    at C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:219:13
+    at optionsCallback (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:199:9)
+    at corsMiddleware (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:204:7)
+    at Layer.handleRequest (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:342:13)
+    at C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:297:9
+    at processParams (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:582:12)
+    at next (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:291:5)
+    at internalNext (file:///C:/Users/VICTUS/Desktop/Oxygen/Server/node_modules/helmet/index.mjs:527:6)
+2026-04-09 16:56:59 [info]: 🔍 Incoming Request: GET /admin-react/assets/index-C5pmWu3l.js
+2026-04-09 16:56:59 [error]: GET /admin-react/assets/index-C5pmWu3l.js - Error: CORS blocked for origin: http://localhost:7000
+    at origin (file:///C:/Users/VICTUS/Desktop/Oxygen/Server/src/config/cors.js:32:21)
+    at C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:219:13
+    at optionsCallback (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:199:9)
+    at corsMiddleware (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:204:7)
+    at Layer.handleRequest (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:342:13)
+    at C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:297:9
+    at processParams (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:582:12)
+    at next (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:291:5)
+    at internalNext (file:///C:/Users/VICTUS/Desktop/Oxygen/Server/node_modules/helmet/index.mjs:527:6)
+2026-04-09 16:57:42 [info]: 📚 Swagger docs available at /api-docs
+2026-04-09 16:57:42 [info]: 🧭 React admin dashboard served at /admin-react
+2026-04-09 16:57:42 [info]: 🚀 Server running on port 7000
+2026-04-09 17:06:09 [info]: 🔍 Incoming Request: POST /api/v1/auth/login
+2026-04-09 17:06:09 [warn]: POST /api/v1/auth/login [401] - Invalid credentials
+2026-04-09 17:07:51 [info]: 🔍 Incoming Request: POST /api/v1/auth/login
+2026-04-09 17:08:41 [info]: 🔍 Incoming Request: GET /admin-react/
+2026-04-09 17:08:41 [info]: 🔍 Incoming Request: GET /admin-react/assets/index-BBFmEIIj.css
+2026-04-09 17:08:41 [error]: GET /admin-react/assets/index-BBFmEIIj.css - Error: CORS blocked for origin: http://localhost:7000
+    at origin (file:///C:/Users/VICTUS/Desktop/Oxygen/Server/src/config/cors.js:32:21)
+    at C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:219:13
+    at optionsCallback (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:199:9)
+    at corsMiddleware (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:204:7)
+    at Layer.handleRequest (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:342:13)
+    at C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:297:9
+    at processParams (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:582:12)
+    at next (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:291:5)
+    at internalNext (file:///C:/Users/VICTUS/Desktop/Oxygen/Server/node_modules/helmet/index.mjs:527:6)
+2026-04-09 17:08:41 [info]: 🔍 Incoming Request: GET /admin-react/assets/index-C5pmWu3l.js
+2026-04-09 17:08:41 [error]: GET /admin-react/assets/index-C5pmWu3l.js - Error: CORS blocked for origin: http://localhost:7000
+    at origin (file:///C:/Users/VICTUS/Desktop/Oxygen/Server/src/config/cors.js:32:21)
+    at C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:219:13
+    at optionsCallback (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:199:9)
+    at corsMiddleware (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:204:7)
+    at Layer.handleRequest (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:342:13)
+    at C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:297:9
+    at processParams (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:582:12)
+    at next (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:291:5)
+    at internalNext (file:///C:/Users/VICTUS/Desktop/Oxygen/Server/node_modules/helmet/index.mjs:527:6)
+2026-04-09 17:08:42 [info]: 🔍 Incoming Request: GET /admin-react/
+2026-04-09 17:08:42 [info]: 🔍 Incoming Request: GET /admin-react/assets/index-BBFmEIIj.css
+2026-04-09 17:08:42 [error]: GET /admin-react/assets/index-BBFmEIIj.css - Error: CORS blocked for origin: http://localhost:7000
+    at origin (file:///C:/Users/VICTUS/Desktop/Oxygen/Server/src/config/cors.js:32:21)
+    at C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:219:13
+    at optionsCallback (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:199:9)
+    at corsMiddleware (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:204:7)
+    at Layer.handleRequest (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:342:13)
+    at C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:297:9
+    at processParams (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:582:12)
+    at next (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:291:5)
+    at internalNext (file:///C:/Users/VICTUS/Desktop/Oxygen/Server/node_modules/helmet/index.mjs:527:6)
+2026-04-09 17:08:42 [info]: 🔍 Incoming Request: GET /admin-react/assets/index-C5pmWu3l.js
+2026-04-09 17:08:42 [error]: GET /admin-react/assets/index-C5pmWu3l.js - Error: CORS blocked for origin: http://localhost:7000
+    at origin (file:///C:/Users/VICTUS/Desktop/Oxygen/Server/src/config/cors.js:32:21)
+    at C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:219:13
+    at optionsCallback (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:199:9)
+    at corsMiddleware (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:204:7)
+    at Layer.handleRequest (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:342:13)
+    at C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:297:9
+    at processParams (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:582:12)
+    at next (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:291:5)
+    at internalNext (file:///C:/Users/VICTUS/Desktop/Oxygen/Server/node_modules/helmet/index.mjs:527:6)
+2026-04-09 17:08:42 [info]: 🔍 Incoming Request: GET /admin-react/
+2026-04-09 17:08:42 [info]: 🔍 Incoming Request: GET /admin-react/assets/index-BBFmEIIj.css
+2026-04-09 17:08:42 [error]: GET /admin-react/assets/index-BBFmEIIj.css - Error: CORS blocked for origin: http://localhost:7000
+    at origin (file:///C:/Users/VICTUS/Desktop/Oxygen/Server/src/config/cors.js:32:21)
+    at C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:219:13
+    at optionsCallback (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:199:9)
+    at corsMiddleware (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:204:7)
+    at Layer.handleRequest (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:342:13)
+    at C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:297:9
+    at processParams (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:582:12)
+    at next (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:291:5)
+    at internalNext (file:///C:/Users/VICTUS/Desktop/Oxygen/Server/node_modules/helmet/index.mjs:527:6)
+2026-04-09 17:08:42 [info]: 🔍 Incoming Request: GET /admin-react/assets/index-C5pmWu3l.js
+2026-04-09 17:08:42 [error]: GET /admin-react/assets/index-C5pmWu3l.js - Error: CORS blocked for origin: http://localhost:7000
+    at origin (file:///C:/Users/VICTUS/Desktop/Oxygen/Server/src/config/cors.js:32:21)
+    at C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:219:13
+    at optionsCallback (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:199:9)
+    at corsMiddleware (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:204:7)
+    at Layer.handleRequest (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:342:13)
+    at C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:297:9
+    at processParams (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:582:12)
+    at next (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:291:5)
+    at internalNext (file:///C:/Users/VICTUS/Desktop/Oxygen/Server/node_modules/helmet/index.mjs:527:6)
+2026-04-09 17:08:42 [info]: 🔍 Incoming Request: GET /admin-react/
+2026-04-09 17:08:42 [info]: 🔍 Incoming Request: GET /admin-react/assets/index-BBFmEIIj.css
+2026-04-09 17:08:42 [error]: GET /admin-react/assets/index-BBFmEIIj.css - Error: CORS blocked for origin: http://localhost:7000
+    at origin (file:///C:/Users/VICTUS/Desktop/Oxygen/Server/src/config/cors.js:32:21)
+    at C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:219:13
+    at optionsCallback (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:199:9)
+    at corsMiddleware (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:204:7)
+    at Layer.handleRequest (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:342:13)
+    at C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:297:9
+    at processParams (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:582:12)
+    at next (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:291:5)
+    at internalNext (file:///C:/Users/VICTUS/Desktop/Oxygen/Server/node_modules/helmet/index.mjs:527:6)
+2026-04-09 17:08:42 [info]: 🔍 Incoming Request: GET /admin-react/assets/index-C5pmWu3l.js
+2026-04-09 17:08:42 [error]: GET /admin-react/assets/index-C5pmWu3l.js - Error: CORS blocked for origin: http://localhost:7000
+    at origin (file:///C:/Users/VICTUS/Desktop/Oxygen/Server/src/config/cors.js:32:21)
+    at C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:219:13
+    at optionsCallback (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:199:9)
+    at corsMiddleware (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:204:7)
+    at Layer.handleRequest (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:342:13)
+    at C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:297:9
+    at processParams (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:582:12)
+    at next (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:291:5)
+    at internalNext (file:///C:/Users/VICTUS/Desktop/Oxygen/Server/node_modules/helmet/index.mjs:527:6)
+2026-04-09 17:08:42 [info]: 🔍 Incoming Request: GET /admin-react/
+2026-04-09 17:08:42 [info]: 🔍 Incoming Request: GET /admin-react/assets/index-BBFmEIIj.css
+2026-04-09 17:08:42 [error]: GET /admin-react/assets/index-BBFmEIIj.css - Error: CORS blocked for origin: http://localhost:7000
+    at origin (file:///C:/Users/VICTUS/Desktop/Oxygen/Server/src/config/cors.js:32:21)
+    at C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:219:13
+    at optionsCallback (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:199:9)
+    at corsMiddleware (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:204:7)
+    at Layer.handleRequest (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:342:13)
+    at C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:297:9
+    at processParams (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:582:12)
+    at next (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:291:5)
+    at internalNext (file:///C:/Users/VICTUS/Desktop/Oxygen/Server/node_modules/helmet/index.mjs:527:6)
+2026-04-09 17:08:42 [info]: 🔍 Incoming Request: GET /admin-react/assets/index-C5pmWu3l.js
+2026-04-09 17:08:42 [error]: GET /admin-react/assets/index-C5pmWu3l.js - Error: CORS blocked for origin: http://localhost:7000
+    at origin (file:///C:/Users/VICTUS/Desktop/Oxygen/Server/src/config/cors.js:32:21)
+    at C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:219:13
+    at optionsCallback (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:199:9)
+    at corsMiddleware (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:204:7)
+    at Layer.handleRequest (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:342:13)
+    at C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:297:9
+    at processParams (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:582:12)
+    at next (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:291:5)
+    at internalNext (file:///C:/Users/VICTUS/Desktop/Oxygen/Server/node_modules/helmet/index.mjs:527:6)
+2026-04-09 17:08:42 [info]: 🔍 Incoming Request: GET /admin-react/
+2026-04-09 17:08:42 [info]: 🔍 Incoming Request: GET /admin-react/assets/index-BBFmEIIj.css
+2026-04-09 17:08:42 [error]: GET /admin-react/assets/index-BBFmEIIj.css - Error: CORS blocked for origin: http://localhost:7000
+    at origin (file:///C:/Users/VICTUS/Desktop/Oxygen/Server/src/config/cors.js:32:21)
+    at C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:219:13
+    at optionsCallback (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:199:9)
+    at corsMiddleware (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:204:7)
+    at Layer.handleRequest (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:342:13)
+    at C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:297:9
+    at processParams (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:582:12)
+    at next (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:291:5)
+    at internalNext (file:///C:/Users/VICTUS/Desktop/Oxygen/Server/node_modules/helmet/index.mjs:527:6)
+2026-04-09 17:08:42 [info]: 🔍 Incoming Request: GET /admin-react/assets/index-C5pmWu3l.js
+2026-04-09 17:08:42 [error]: GET /admin-react/assets/index-C5pmWu3l.js - Error: CORS blocked for origin: http://localhost:7000
+    at origin (file:///C:/Users/VICTUS/Desktop/Oxygen/Server/src/config/cors.js:32:21)
+    at C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:219:13
+    at optionsCallback (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:199:9)
+    at corsMiddleware (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:204:7)
+    at Layer.handleRequest (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:342:13)
+    at C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:297:9
+    at processParams (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:582:12)
+    at next (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:291:5)
+    at internalNext (file:///C:/Users/VICTUS/Desktop/Oxygen/Server/node_modules/helmet/index.mjs:527:6)
+2026-04-09 17:08:42 [info]: 🔍 Incoming Request: GET /admin-react/
+2026-04-09 17:08:42 [info]: 🔍 Incoming Request: GET /admin-react/assets/index-BBFmEIIj.css
+2026-04-09 17:08:42 [error]: GET /admin-react/assets/index-BBFmEIIj.css - Error: CORS blocked for origin: http://localhost:7000
+    at origin (file:///C:/Users/VICTUS/Desktop/Oxygen/Server/src/config/cors.js:32:21)
+    at C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:219:13
+    at optionsCallback (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:199:9)
+    at corsMiddleware (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:204:7)
+    at Layer.handleRequest (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:342:13)
+    at C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:297:9
+    at processParams (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:582:12)
+    at next (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:291:5)
+    at internalNext (file:///C:/Users/VICTUS/Desktop/Oxygen/Server/node_modules/helmet/index.mjs:527:6)
+2026-04-09 17:08:43 [info]: 🔍 Incoming Request: GET /admin-react/assets/index-C5pmWu3l.js
+2026-04-09 17:08:43 [error]: GET /admin-react/assets/index-C5pmWu3l.js - Error: CORS blocked for origin: http://localhost:7000
+    at origin (file:///C:/Users/VICTUS/Desktop/Oxygen/Server/src/config/cors.js:32:21)
+    at C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:219:13
+    at optionsCallback (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:199:9)
+    at corsMiddleware (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:204:7)
+    at Layer.handleRequest (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:342:13)
+    at C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:297:9
+    at processParams (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:582:12)
+    at next (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:291:5)
+    at internalNext (file:///C:/Users/VICTUS/Desktop/Oxygen/Server/node_modules/helmet/index.mjs:527:6)
+2026-04-09 17:08:53 [info]: 📚 Swagger docs available at /api-docs
+2026-04-09 17:08:53 [info]: 🧭 React admin dashboard served at /admin-react
+2026-04-09 17:08:53 [info]: 🚀 Server running on port 7000
+2026-04-09 17:09:04 [info]: 🔍 Incoming Request: GET /admin-react/
+2026-04-09 17:09:04 [info]: 🔍 Incoming Request: GET /admin-react/assets/index-C5pmWu3l.js
+2026-04-09 17:09:04 [error]: GET /admin-react/assets/index-C5pmWu3l.js - Error: CORS blocked for origin: http://localhost:7000
+    at origin (file:///C:/Users/VICTUS/Desktop/Oxygen/Server/src/config/cors.js:32:21)
+    at C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:219:13
+    at optionsCallback (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:199:9)
+    at corsMiddleware (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:204:7)
+    at Layer.handleRequest (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:342:13)
+    at C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:297:9
+    at processParams (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:582:12)
+    at next (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:291:5)
+    at internalNext (file:///C:/Users/VICTUS/Desktop/Oxygen/Server/node_modules/helmet/index.mjs:527:6)
+2026-04-09 17:09:04 [info]: 🔍 Incoming Request: GET /admin-react/assets/index-BBFmEIIj.css
+2026-04-09 17:09:04 [error]: GET /admin-react/assets/index-BBFmEIIj.css - Error: CORS blocked for origin: http://localhost:7000
+    at origin (file:///C:/Users/VICTUS/Desktop/Oxygen/Server/src/config/cors.js:32:21)
+    at C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:219:13
+    at optionsCallback (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:199:9)
+    at corsMiddleware (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:204:7)
+    at Layer.handleRequest (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:342:13)
+    at C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:297:9
+    at processParams (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:582:12)
+    at next (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:291:5)
+    at internalNext (file:///C:/Users/VICTUS/Desktop/Oxygen/Server/node_modules/helmet/index.mjs:527:6)
+2026-04-09 17:09:05 [info]: 🔍 Incoming Request: GET /admin-react/
+2026-04-09 17:09:05 [info]: 🔍 Incoming Request: GET /admin-react/assets/index-C5pmWu3l.js
+2026-04-09 17:09:05 [error]: GET /admin-react/assets/index-C5pmWu3l.js - Error: CORS blocked for origin: http://localhost:7000
+    at origin (file:///C:/Users/VICTUS/Desktop/Oxygen/Server/src/config/cors.js:32:21)
+    at C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:219:13
+    at optionsCallback (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:199:9)
+    at corsMiddleware (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:204:7)
+    at Layer.handleRequest (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:342:13)
+    at C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:297:9
+    at processParams (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:582:12)
+    at next (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:291:5)
+    at internalNext (file:///C:/Users/VICTUS/Desktop/Oxygen/Server/node_modules/helmet/index.mjs:527:6)
+2026-04-09 17:09:05 [info]: 🔍 Incoming Request: GET /admin-react/assets/index-BBFmEIIj.css
+2026-04-09 17:09:05 [error]: GET /admin-react/assets/index-BBFmEIIj.css - Error: CORS blocked for origin: http://localhost:7000
+    at origin (file:///C:/Users/VICTUS/Desktop/Oxygen/Server/src/config/cors.js:32:21)
+    at C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:219:13
+    at optionsCallback (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:199:9)
+    at corsMiddleware (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:204:7)
+    at Layer.handleRequest (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:342:13)
+    at C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:297:9
+    at processParams (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:582:12)
+    at next (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:291:5)
+    at internalNext (file:///C:/Users/VICTUS/Desktop/Oxygen/Server/node_modules/helmet/index.mjs:527:6)
+2026-04-09 17:09:05 [info]: 🔍 Incoming Request: GET /admin-react/
+2026-04-09 17:09:05 [info]: 🔍 Incoming Request: GET /admin-react/assets/index-BBFmEIIj.css
+2026-04-09 17:09:05 [error]: GET /admin-react/assets/index-BBFmEIIj.css - Error: CORS blocked for origin: http://localhost:7000
+    at origin (file:///C:/Users/VICTUS/Desktop/Oxygen/Server/src/config/cors.js:32:21)
+    at C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:219:13
+    at optionsCallback (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:199:9)
+    at corsMiddleware (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:204:7)
+    at Layer.handleRequest (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:342:13)
+    at C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:297:9
+    at processParams (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:582:12)
+    at next (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:291:5)
+    at internalNext (file:///C:/Users/VICTUS/Desktop/Oxygen/Server/node_modules/helmet/index.mjs:527:6)
+2026-04-09 17:09:05 [info]: 🔍 Incoming Request: GET /admin-react/assets/index-C5pmWu3l.js
+2026-04-09 17:09:05 [error]: GET /admin-react/assets/index-C5pmWu3l.js - Error: CORS blocked for origin: http://localhost:7000
+    at origin (file:///C:/Users/VICTUS/Desktop/Oxygen/Server/src/config/cors.js:32:21)
+    at C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:219:13
+    at optionsCallback (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:199:9)
+    at corsMiddleware (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:204:7)
+    at Layer.handleRequest (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:342:13)
+    at C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:297:9
+    at processParams (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:582:12)
+    at next (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:291:5)
+    at internalNext (file:///C:/Users/VICTUS/Desktop/Oxygen/Server/node_modules/helmet/index.mjs:527:6)
+2026-04-09 17:09:05 [info]: 🔍 Incoming Request: GET /admin-react/
+2026-04-09 17:09:05 [info]: 🔍 Incoming Request: GET /admin-react/assets/index-BBFmEIIj.css
+2026-04-09 17:09:05 [error]: GET /admin-react/assets/index-BBFmEIIj.css - Error: CORS blocked for origin: http://localhost:7000
+    at origin (file:///C:/Users/VICTUS/Desktop/Oxygen/Server/src/config/cors.js:32:21)
+    at C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:219:13
+    at optionsCallback (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:199:9)
+    at corsMiddleware (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:204:7)
+    at Layer.handleRequest (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:342:13)
+    at C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:297:9
+    at processParams (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:582:12)
+    at next (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:291:5)
+    at internalNext (file:///C:/Users/VICTUS/Desktop/Oxygen/Server/node_modules/helmet/index.mjs:527:6)
+2026-04-09 17:09:05 [info]: 🔍 Incoming Request: GET /admin-react/assets/index-C5pmWu3l.js
+2026-04-09 17:09:05 [error]: GET /admin-react/assets/index-C5pmWu3l.js - Error: CORS blocked for origin: http://localhost:7000
+    at origin (file:///C:/Users/VICTUS/Desktop/Oxygen/Server/src/config/cors.js:32:21)
+    at C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:219:13
+    at optionsCallback (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:199:9)
+    at corsMiddleware (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:204:7)
+    at Layer.handleRequest (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:342:13)
+    at C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:297:9
+    at processParams (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:582:12)
+    at next (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:291:5)
+    at internalNext (file:///C:/Users/VICTUS/Desktop/Oxygen/Server/node_modules/helmet/index.mjs:527:6)
+2026-04-09 17:09:11 [info]: 🔍 Incoming Request: GET /a
+2026-04-09 17:10:44 [info]: 🔍 Incoming Request: GET /admin-react/assets/not-found.js
+2026-04-09 17:11:21 [info]: 📚 Swagger docs available at /api-docs
+2026-04-09 17:11:21 [info]: 🧭 React admin dashboard served at /admin-react
+2026-04-09 17:11:21 [info]: 📚 Swagger docs available at /api-docs
+2026-04-09 17:11:21 [info]: 🧭 React admin dashboard served at /admin-react
+2026-04-09 17:11:21 [info]: 🚀 Server running on port 7000
+2026-04-09 17:11:21 [info]: 🚀 Server running on port 7000
+2026-04-09 17:11:55 [info]: 📚 Swagger docs available at /api-docs
+2026-04-09 17:11:55 [info]: 🧭 React admin dashboard served at /admin-react
+2026-04-09 17:11:55 [info]: 🚀 Server running on port 7000
+2026-04-09 17:12:03 [info]: 📚 Swagger docs available at /api-docs
+2026-04-09 17:12:03 [info]: 🧭 React admin dashboard served at /admin-react
+2026-04-09 17:12:03 [info]: 📚 Swagger docs available at /api-docs
+2026-04-09 17:12:03 [info]: 🧭 React admin dashboard served at /admin-react
+2026-04-09 17:12:03 [info]: 📚 Swagger docs available at /api-docs
+2026-04-09 17:12:03 [info]: 🧭 React admin dashboard served at /admin-react
+2026-04-09 17:12:04 [info]: 🚀 Server running on port 7000
+2026-04-09 17:12:04 [info]: 🚀 Server running on port 7000
+2026-04-09 17:12:04 [info]: 🚀 Server running on port 7000
+2026-04-09 17:13:50 [info]: 🔍 Incoming Request: GET /admin-react
+2026-04-09 17:13:50 [info]: 🔍 Incoming Request: GET /admin-react/
+2026-04-09 17:14:18 [info]: 🔍 Incoming Request: GET /admin-react/assets/not-found.js
+2026-04-09 17:15:03 [info]: 🔍 Incoming Request: GET /admin-react/
+2026-04-09 17:15:05 [info]: 🔍 Incoming Request: GET /assets/index-C5pmWu3l.js
+2026-04-09 17:15:20 [info]: 🔍 Incoming Request: POST /api/v1/auth/login
+2026-04-09 17:16:39 [info]: 📚 Swagger docs available at /api-docs
+2026-04-09 17:16:39 [info]: 🧭 React admin dashboard served at /admin-react
+2026-04-09 17:16:40 [info]: 🚀 Server running on port 7000
+2026-04-09 17:16:43 [info]: 🔍 Incoming Request: GET /admin-react/
+2026-04-09 17:16:43 [info]: 🔍 Incoming Request: GET /admin-react/assets/index-BBFmEIIj.css
+2026-04-09 17:16:43 [error]: GET /admin-react/assets/index-BBFmEIIj.css - Error: CORS blocked for origin: http://localhost:7000
+    at origin (file:///C:/Users/VICTUS/Desktop/Oxygen/Server/src/config/cors.js:32:21)
+    at C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:219:13
+    at optionsCallback (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:199:9)
+    at corsMiddleware (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:204:7)
+    at Layer.handleRequest (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:342:13)
+    at C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:297:9
+    at processParams (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:582:12)
+    at next (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:291:5)
+    at internalNext (file:///C:/Users/VICTUS/Desktop/Oxygen/Server/node_modules/helmet/index.mjs:527:6)
+2026-04-09 17:16:43 [info]: 🔍 Incoming Request: GET /admin-react/assets/index-C5pmWu3l.js
+2026-04-09 17:16:43 [error]: GET /admin-react/assets/index-C5pmWu3l.js - Error: CORS blocked for origin: http://localhost:7000
+    at origin (file:///C:/Users/VICTUS/Desktop/Oxygen/Server/src/config/cors.js:32:21)
+    at C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:219:13
+    at optionsCallback (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:199:9)
+    at corsMiddleware (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:204:7)
+    at Layer.handleRequest (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:342:13)
+    at C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:297:9
+    at processParams (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:582:12)
+    at next (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:291:5)
+    at internalNext (file:///C:/Users/VICTUS/Desktop/Oxygen/Server/node_modules/helmet/index.mjs:527:6)
+2026-04-09 17:16:44 [info]: 🔍 Incoming Request: GET /admin-react/
+2026-04-09 17:16:44 [info]: 🔍 Incoming Request: GET /admin-react/assets/index-C5pmWu3l.js
+2026-04-09 17:16:44 [error]: GET /admin-react/assets/index-C5pmWu3l.js - Error: CORS blocked for origin: http://localhost:7000
+    at origin (file:///C:/Users/VICTUS/Desktop/Oxygen/Server/src/config/cors.js:32:21)
+    at C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:219:13
+    at optionsCallback (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:199:9)
+    at corsMiddleware (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:204:7)
+    at Layer.handleRequest (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:342:13)
+    at C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:297:9
+    at processParams (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:582:12)
+    at next (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:291:5)
+    at internalNext (file:///C:/Users/VICTUS/Desktop/Oxygen/Server/node_modules/helmet/index.mjs:527:6)
+2026-04-09 17:16:44 [info]: 🔍 Incoming Request: GET /admin-react/assets/index-BBFmEIIj.css
+2026-04-09 17:16:44 [error]: GET /admin-react/assets/index-BBFmEIIj.css - Error: CORS blocked for origin: http://localhost:7000
+    at origin (file:///C:/Users/VICTUS/Desktop/Oxygen/Server/src/config/cors.js:32:21)
+    at C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:219:13
+    at optionsCallback (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:199:9)
+    at corsMiddleware (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:204:7)
+    at Layer.handleRequest (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:342:13)
+    at C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:297:9
+    at processParams (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:582:12)
+    at next (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:291:5)
+    at internalNext (file:///C:/Users/VICTUS/Desktop/Oxygen/Server/node_modules/helmet/index.mjs:527:6)
+2026-04-09 17:16:44 [info]: 🔍 Incoming Request: GET /admin-react/
+2026-04-09 17:16:44 [info]: 🔍 Incoming Request: GET /admin-react/assets/index-C5pmWu3l.js
+2026-04-09 17:16:44 [error]: GET /admin-react/assets/index-C5pmWu3l.js - Error: CORS blocked for origin: http://localhost:7000
+    at origin (file:///C:/Users/VICTUS/Desktop/Oxygen/Server/src/config/cors.js:32:21)
+    at C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:219:13
+    at optionsCallback (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:199:9)
+    at corsMiddleware (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:204:7)
+    at Layer.handleRequest (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:342:13)
+    at C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:297:9
+    at processParams (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:582:12)
+    at next (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:291:5)
+    at internalNext (file:///C:/Users/VICTUS/Desktop/Oxygen/Server/node_modules/helmet/index.mjs:527:6)
+2026-04-09 17:16:44 [info]: 🔍 Incoming Request: GET /admin-react/assets/index-BBFmEIIj.css
+2026-04-09 17:16:44 [error]: GET /admin-react/assets/index-BBFmEIIj.css - Error: CORS blocked for origin: http://localhost:7000
+    at origin (file:///C:/Users/VICTUS/Desktop/Oxygen/Server/src/config/cors.js:32:21)
+    at C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:219:13
+    at optionsCallback (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:199:9)
+    at corsMiddleware (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:204:7)
+    at Layer.handleRequest (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:342:13)
+    at C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:297:9
+    at processParams (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:582:12)
+    at next (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:291:5)
+    at internalNext (file:///C:/Users/VICTUS/Desktop/Oxygen/Server/node_modules/helmet/index.mjs:527:6)
+2026-04-09 17:16:45 [info]: 🔍 Incoming Request: GET /admin-react/
+2026-04-09 17:16:45 [info]: 🔍 Incoming Request: GET /admin-react/assets/index-BBFmEIIj.css
+2026-04-09 17:16:45 [error]: GET /admin-react/assets/index-BBFmEIIj.css - Error: CORS blocked for origin: http://localhost:7000
+    at origin (file:///C:/Users/VICTUS/Desktop/Oxygen/Server/src/config/cors.js:32:21)
+    at C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:219:13
+    at optionsCallback (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:199:9)
+    at corsMiddleware (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:204:7)
+    at Layer.handleRequest (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:342:13)
+    at C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:297:9
+    at processParams (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:582:12)
+    at next (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:291:5)
+    at internalNext (file:///C:/Users/VICTUS/Desktop/Oxygen/Server/node_modules/helmet/index.mjs:527:6)
+2026-04-09 17:16:45 [info]: 🔍 Incoming Request: GET /admin-react/assets/index-C5pmWu3l.js
+2026-04-09 17:16:45 [error]: GET /admin-react/assets/index-C5pmWu3l.js - Error: CORS blocked for origin: http://localhost:7000
+    at origin (file:///C:/Users/VICTUS/Desktop/Oxygen/Server/src/config/cors.js:32:21)
+    at C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:219:13
+    at optionsCallback (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:199:9)
+    at corsMiddleware (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:204:7)
+    at Layer.handleRequest (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:342:13)
+    at C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:297:9
+    at processParams (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:582:12)
+    at next (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:291:5)
+    at internalNext (file:///C:/Users/VICTUS/Desktop/Oxygen/Server/node_modules/helmet/index.mjs:527:6)
+2026-04-09 17:16:45 [info]: 🔍 Incoming Request: GET /admin-react/
+2026-04-09 17:16:45 [info]: 🔍 Incoming Request: GET /admin-react/assets/index-C5pmWu3l.js
+2026-04-09 17:16:45 [error]: GET /admin-react/assets/index-C5pmWu3l.js - Error: CORS blocked for origin: http://localhost:7000
+    at origin (file:///C:/Users/VICTUS/Desktop/Oxygen/Server/src/config/cors.js:32:21)
+    at C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:219:13
+    at optionsCallback (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:199:9)
+    at corsMiddleware (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:204:7)
+    at Layer.handleRequest (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:342:13)
+    at C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:297:9
+    at processParams (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:582:12)
+    at next (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:291:5)
+    at internalNext (file:///C:/Users/VICTUS/Desktop/Oxygen/Server/node_modules/helmet/index.mjs:527:6)
+2026-04-09 17:16:45 [info]: 🔍 Incoming Request: GET /admin-react/assets/index-BBFmEIIj.css
+2026-04-09 17:16:45 [error]: GET /admin-react/assets/index-BBFmEIIj.css - Error: CORS blocked for origin: http://localhost:7000
+    at origin (file:///C:/Users/VICTUS/Desktop/Oxygen/Server/src/config/cors.js:32:21)
+    at C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:219:13
+    at optionsCallback (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:199:9)
+    at corsMiddleware (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\cors\lib\index.js:204:7)
+    at Layer.handleRequest (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:342:13)
+    at C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:297:9
+    at processParams (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:582:12)
+    at next (C:\Users\VICTUS\Desktop\Oxygen\Server\node_modules\router\index.js:291:5)
+    at internalNext (file:///C:/Users/VICTUS/Desktop/Oxygen/Server/node_modules/helmet/index.mjs:527:6)
+2026-04-09 17:16:58 [info]: 🔍 Incoming Request: GET /admin-react/assets/index-BBFmEIIj.css
+2026-04-09 17:16:58 [info]: 🔍 Incoming Request: GET /.well-known/appspecific/com.chrome.devtools.json
+2026-04-09 17:18:29 [info]: 📚 Swagger docs available at /api-docs
+2026-04-09 17:18:29 [info]: 🧭 React admin dashboard served at /admin-react
+2026-04-09 17:18:29 [info]: 🚀 Server running on port 7000
+2026-04-09 17:19:04 [info]: 🔍 Incoming Request: GET /admin-react/
+2026-04-09 17:19:16 [info]: 🔍 Incoming Request: GET /admin-react/assets/index-BBFmEIIj.css
+2026-04-09 17:19:18 [info]: 🔍 Incoming Request: GET /admin-react/assets/index-C5pmWu3l.js
+2026-04-09 17:20:20 [info]: 🔍 Incoming Request: GET /admin-react/
+2026-04-09 17:20:20 [info]: 🔍 Incoming Request: GET /admin-react/assets/index-C5pmWu3l.js
+2026-04-09 17:20:20 [info]: 🔍 Incoming Request: GET /admin-react/assets/index-BBFmEIIj.css
+2026-04-09 17:21:49 [info]: 📚 Swagger docs available at /api-docs
+2026-04-09 17:21:49 [info]: 🧭 React admin dashboard served at /admin-react
+2026-04-09 17:21:49 [info]: 📚 Swagger docs available at /api-docs
+2026-04-09 17:21:49 [info]: 🧭 React admin dashboard served at /admin-react
+2026-04-09 17:21:49 [info]: 📚 Swagger docs available at /api-docs
+2026-04-09 17:21:49 [info]: 🧭 React admin dashboard served at /admin-react
+2026-04-09 17:21:49 [info]: 📚 Swagger docs available at /api-docs
+2026-04-09 17:21:49 [info]: 🧭 React admin dashboard served at /admin-react
+2026-04-09 17:21:49 [info]: 🚀 Server running on port 7000
+2026-04-09 17:21:49 [info]: 🚀 Server running on port 7000
+2026-04-09 17:21:49 [info]: 🚀 Server running on port 7000
+2026-04-09 17:21:49 [info]: 🚀 Server running on port 7000
+2026-04-09 17:22:04 [info]: 📚 Swagger docs available at /api-docs
+2026-04-09 17:22:04 [info]: 🧭 React admin dashboard served at /admin-react
+2026-04-09 17:22:04 [info]: 📚 Swagger docs available at /api-docs
+2026-04-09 17:22:04 [info]: 🧭 React admin dashboard served at /admin-react
+2026-04-09 17:22:04 [info]: 📚 Swagger docs available at /api-docs
+2026-04-09 17:22:04 [info]: 🧭 React admin dashboard served at /admin-react
+2026-04-09 17:22:04 [info]: 📚 Swagger docs available at /api-docs
+2026-04-09 17:22:04 [info]: 🧭 React admin dashboard served at /admin-react
+2026-04-09 17:22:04 [info]: 🚀 Server running on port 7000
+2026-04-09 17:22:04 [info]: 🚀 Server running on port 7000
+2026-04-09 17:22:04 [info]: 🚀 Server running on port 7000
+2026-04-09 17:22:04 [info]: 🚀 Server running on port 7000
+2026-04-09 17:23:03 [info]: 🔍 Incoming Request: GET /admin-react/assets/index-BBFmEIIj.css
+2026-04-09 17:23:24 [info]: 🔍 Incoming Request: GET /admin-react/assets/index-C5pmWu3l.js
+2026-04-09 17:23:45 [info]: 🔍 Incoming Request: GET /admin-react/
+2026-04-09 17:25:22 [info]: 📚 Swagger docs available at /api-docs
+2026-04-09 17:25:22 [info]: 🧭 React admin dashboard served at /admin-react
+2026-04-09 17:25:22 [info]: 🚀 Server running on port 7000
+2026-04-09 17:25:27 [info]: 🔍 Incoming Request: GET /admin-react/
+2026-04-09 17:25:27 [info]: 🔍 Incoming Request: GET /admin-react/assets/index-BBFmEIIj.css
+2026-04-09 17:25:27 [info]: 🔍 Incoming Request: GET /admin-react/assets/index-C5pmWu3l.js
+2026-04-09 17:25:27 [info]: 🔍 Incoming Request: GET /.well-known/appspecific/com.chrome.devtools.json
+2026-04-09 17:25:31 [info]: 🔍 Incoming Request: POST /api/v1/auth/login
+2026-04-09 17:25:31 [info]: 🔍 Incoming Request: GET /api/v1/customers?limit=30&page=1
+2026-04-09 17:25:31 [info]: 🔍 Incoming Request: GET /api/v1/plans?limit=30&page=1
+2026-04-09 17:25:31 [info]: 🔍 Incoming Request: GET /api/v1/subscriptions?limit=30&page=1
+2026-04-09 17:25:31 [info]: 🔍 Incoming Request: GET /api/v1/payments?limit=30&page=1
+2026-04-09 17:25:31 [info]: 🔍 Incoming Request: GET /api/v1/devices?limit=30&page=1
+2026-04-09 17:25:31 [info]: 🔍 Incoming Request: GET /api/v1/payments/stats
+2026-04-09 17:25:55 [info]: 🔍 Incoming Request: GET /api/v1/customers?limit=30&page=1
+2026-04-09 17:25:55 [info]: 🔍 Incoming Request: GET /api/v1/plans?limit=30&page=1
+2026-04-09 17:25:55 [info]: 🔍 Incoming Request: GET /api/v1/subscriptions?limit=30&page=1
+2026-04-09 17:25:55 [info]: 🔍 Incoming Request: GET /api/v1/payments?limit=30&page=1
+2026-04-09 17:25:55 [info]: 🔍 Incoming Request: GET /api/v1/devices?limit=30&page=1
+2026-04-09 17:25:55 [info]: 🔍 Incoming Request: GET /api/v1/payments/stats
+2026-04-09 17:25:56 [info]: 🔍 Incoming Request: GET /api/v1/customers?limit=30&page=1
+2026-04-09 17:25:56 [info]: 🔍 Incoming Request: GET /api/v1/plans?limit=30&page=1
+2026-04-09 17:25:56 [info]: 🔍 Incoming Request: GET /api/v1/subscriptions?limit=30&page=1
+2026-04-09 17:25:56 [info]: 🔍 Incoming Request: GET /api/v1/payments?limit=30&page=1
+2026-04-09 17:25:56 [info]: 🔍 Incoming Request: GET /api/v1/devices?limit=30&page=1
+2026-04-09 17:25:56 [info]: 🔍 Incoming Request: GET /api/v1/payments/stats
+2026-04-09 17:25:56 [info]: 🔍 Incoming Request: GET /api/v1/customers?limit=30&page=1
+2026-04-09 17:25:56 [info]: 🔍 Incoming Request: GET /api/v1/plans?limit=30&page=1
+2026-04-09 17:25:56 [info]: 🔍 Incoming Request: GET /api/v1/subscriptions?limit=30&page=1
+2026-04-09 17:25:56 [info]: 🔍 Incoming Request: GET /api/v1/payments?limit=30&page=1
+2026-04-09 17:25:56 [info]: 🔍 Incoming Request: GET /api/v1/devices?limit=30&page=1
+2026-04-09 17:25:56 [info]: 🔍 Incoming Request: GET /api/v1/payments/stats
+2026-04-09 17:25:57 [info]: 🔍 Incoming Request: GET /api/v1/customers?limit=30&page=1
+2026-04-09 17:25:57 [info]: 🔍 Incoming Request: GET /api/v1/plans?limit=30&page=1
+2026-04-09 17:25:57 [info]: 🔍 Incoming Request: GET /api/v1/subscriptions?limit=30&page=1
+2026-04-09 17:25:57 [info]: 🔍 Incoming Request: GET /api/v1/payments?limit=30&page=1
+2026-04-09 17:25:57 [info]: 🔍 Incoming Request: GET /api/v1/devices?limit=30&page=1
+2026-04-09 17:25:57 [info]: 🔍 Incoming Request: GET /api/v1/payments/stats
+2026-04-09 17:25:57 [info]: 🔍 Incoming Request: GET /api/v1/customers?limit=30&page=1
+2026-04-09 17:25:57 [info]: 🔍 Incoming Request: GET /api/v1/plans?limit=30&page=1
+2026-04-09 17:25:57 [info]: 🔍 Incoming Request: GET /api/v1/subscriptions?limit=30&page=1
+2026-04-09 17:25:57 [info]: 🔍 Incoming Request: GET /api/v1/payments?limit=30&page=1
+2026-04-09 17:25:57 [info]: 🔍 Incoming Request: GET /api/v1/devices?limit=30&page=1
+2026-04-09 17:25:57 [info]: 🔍 Incoming Request: GET /api/v1/payments/stats
+2026-04-09 17:25:57 [info]: 🔍 Incoming Request: GET /api/v1/customers?limit=30&page=1
+2026-04-09 17:25:57 [info]: 🔍 Incoming Request: GET /api/v1/plans?limit=30&page=1
+2026-04-09 17:25:57 [info]: 🔍 Incoming Request: GET /api/v1/subscriptions?limit=30&page=1
+2026-04-09 17:25:57 [info]: 🔍 Incoming Request: GET /api/v1/payments?limit=30&page=1
+2026-04-09 17:25:57 [info]: 🔍 Incoming Request: GET /api/v1/devices?limit=30&page=1
+2026-04-09 17:25:57 [info]: 🔍 Incoming Request: GET /api/v1/payments/stats
+2026-04-09 17:26:39 [info]: 📚 Swagger docs available at /api-docs
+2026-04-09 17:26:39 [info]: 🧭 React admin dashboard served at /admin-react
+2026-04-09 17:26:39 [info]: 🚀 Server running on port 7000
+2026-04-09 17:26:39 [info]: 📚 Swagger docs available at /api-docs
+2026-04-09 17:26:39 [info]: 🧭 React admin dashboard served at /admin-react
+2026-04-09 17:26:39 [info]: 📚 Swagger docs available at /api-docs
+2026-04-09 17:26:39 [info]: 🧭 React admin dashboard served at /admin-react
+2026-04-09 17:26:39 [info]: 📚 Swagger docs available at /api-docs
+2026-04-09 17:26:39 [info]: 🧭 React admin dashboard served at /admin-react
+2026-04-09 17:26:39 [info]: 🚀 Server running on port 7000
+2026-04-09 17:26:39 [info]: 🚀 Server running on port 7000
+2026-04-09 17:26:39 [info]: 🚀 Server running on port 7000
+2026-04-09 17:26:39 [info]: 📚 Swagger docs available at /api-docs
+2026-04-09 17:26:39 [info]: 🧭 React admin dashboard served at /admin-react
+2026-04-09 17:26:39 [info]: 🚀 Server running on port 7000

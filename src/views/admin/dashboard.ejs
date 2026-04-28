@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Oxygen Admin Dashboard</title>
+    <link rel="stylesheet" href="/admin.css" />
+  </head>
+  <body>
+    <header class="hero">
+      <div>
+        <p class="eyebrow">Oxygen ISP</p>
+        <h1>Operations Dashboard</h1>
+        <p class="lead">Manage customers, plans, subscriptions, and billing in one place.</p>
+      </div>
+      <a href="/api/v1/health" class="ghost-btn">API Health</a>
+    </header>
+
+    <section class="grid stats-grid">
+      <article class="card stat-card">
+        <p>Total Customers</p>
+        <h2><%= stats.totalCustomers %></h2>
+      </article>
+      <article class="card stat-card">
+        <p>Active Customers</p>
+        <h2><%= stats.activeCustomers %></h2>
+      </article>
+      <article class="card stat-card">
+        <p>Total Plans</p>
+        <h2><%= stats.totalPlans %></h2>
+      </article>
+      <article class="card stat-card">
+        <p>Active Subscriptions</p>
+        <h2><%= stats.activeSubscriptions %></h2>
+      </article>
+      <article class="card stat-card">
+        <p>Pending Invoices</p>
+        <h2><%= stats.pendingPayments %></h2>
+      </article>
+      <article class="card stat-card">
+        <p>Collected Revenue</p>
+        <h2><%= stats.paidRevenue %></h2>
+      </article>
+    </section>
+
+    <main class="grid section-grid">
+      <section class="card table-card">
+        <div class="section-head">
+          <h3>Customers Management</h3>
+          <span><%= customers.length %> records</span>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Code</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% customers.forEach((item) => { %>
+              <tr>
+                <td><%= item.customerCode %></td>
+                <td><%= item.fullName %></td>
+                <td><%= item.email %></td>
+                <td><span class="chip chip-<%= item.status %>"><%= item.status %></span></td>
+              </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="card table-card">
+        <div class="section-head">
+          <h3>Plans Management</h3>
+          <span><%= plans.length %> records</span>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Code</th>
+                <th>Name</th>
+                <th>Speed</th>
+                <th>Price</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% plans.forEach((item) => { %>
+              <tr>
+                <td><%= item.code %></td>
+                <td><%= item.name %></td>
+                <td><%= item.speedMbps %> Mbps</td>
+                <td><%= item.monthlyPrice %> EGP</td>
+              </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="card table-card">
+        <div class="section-head">
+          <h3>Subscriptions</h3>
+          <span><%= subscriptions.length %> records</span>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Number</th>
+                <th>Customer</th>
+                <th>Plan</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% subscriptions.forEach((item) => { %>
+              <tr>
+                <td><%= item.subscriptionNumber %></td>
+                <td><%= item.customerId?.fullName || '-' %></td>
+                <td><%= item.planId?.name || '-' %></td>
+                <td><span class="chip chip-<%= item.status %>"><%= item.status %></span></td>
+              </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="card table-card">
+        <div class="section-head">
+          <h3>Payments</h3>
+          <span><%= payments.length %> records</span>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Invoice</th>
+                <th>Customer</th>
+                <th>Total</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% payments.forEach((item) => { %>
+              <tr>
+                <td><%= item.invoiceNumber %></td>
+                <td><%= item.customerId?.fullName || '-' %></td>
+                <td><%= item.totalAmount %> <%= item.currency %></td>
+                <td><span class="chip chip-<%= item.status %>"><%= item.status %></span></td>
+              </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

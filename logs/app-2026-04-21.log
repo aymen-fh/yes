@@ -1,0 +1,1 @@
+2026-04-21 21:43:05 [error]: [SubscriptionLifecycle] Failed to expire subscriptions: Connection pool for localhost:27017 was cleared because another operation failed with: "connection <monitor> to 127.0.0.1:27017 timed out"
