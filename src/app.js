@@ -36,6 +36,9 @@ const hasAdminReactBuild = fs.existsSync(adminReactIndexPath);
 
 const app = express();
 
+// Trust the first proxy hop when X-Forwarded-* headers are present.
+app.set("trust proxy", 1);
+
 // ─── Core middleware ─────────────────────────────────────────────────────────
 app.use(requestId);
 app.use((req, res, next) => {
