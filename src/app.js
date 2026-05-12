@@ -129,6 +129,17 @@ app.use("/api/v1/subscriptions", subscriptionRoute);
 app.use("/api/v1/payments", paymentRoute);
 app.use("/api/v1/devices", deviceRoute);
 app.use("/api/v1/support-tickets", supportTicketRoute);
+app.use("/api/v1/tickets", supportTicketRoute); // Alias for App
+
+// Legacy/compat alias to support /api base path used by the mobile app.
+app.use("/api/auth", authRoute);
+app.use("/api/customers", customerRoute);
+app.use("/api/plans", planRoute);
+app.use("/api/subscriptions", subscriptionRoute);
+app.use("/api/payments", paymentRoute);
+app.use("/api/devices", deviceRoute);
+app.use("/api/support-tickets", supportTicketRoute);
+app.use("/api/tickets", supportTicketRoute);
 app.use("/admin", adminRoute);
 
 if (hasAdminReactBuild) {

@@ -1,10 +1,12 @@
 import { ApiResponse } from "../../utils/apiResponse.js";
-import { ForbiddenError, NotFoundError } from "../../utils/errors.js";
+import { ForbiddenError, NotFoundError, ValidationError } from "../../utils/errors.js";
 import { createReadableCode, serializeDoc, serializeDocs } from "../common/serializers.js";
 import CustomerModel from "../customers/customer.model.js";
 import DeviceModel from "../devices/device.model.js";
 import PaymentModel from "../payments/payment.model.js";
+import PaymentService from "../payments/payment.service.js";
 import PlanModel from "../plans/plan.model.js";
+import SupportTicketModel from "../supportTickets/supportTicket.model.js";
 import SubscriptionService from "./subscription.service.js";
 import SubscriptionModel from "./subscription.model.js";
 
@@ -42,6 +44,19 @@ const ensureUserCanReadSubscription = (reqUser, subscription) => {
   if (subscription.customerId?._id?.toString?.() !== reqUser.id) {
     throw new ForbiddenError("You can only view your own subscription");
   }
+};
+
+const toTransactionItem = (payment) => {
+  const amount = typeof payment.totalAmount === "number" ? payment.totalAmount : payment.amount;
+  return {
+    id: payment._id?.toString?.() ?? payment.id,
+    subscriptionId: payment.subscriptionId?._id?.toString?.() ||
+      payment.subscriptionId?.toString?.(),
+    type: payment.method || "payment",
+    amount: amount || 0,
+    status: payment.status || "pending",
+    createdAt: payment.createdAt,
+  };
 };
 
 class SubscriptionController {
@@ -255,6 +270,167 @@ class SubscriptionController {
     }
   }
 
+  static async dashboard(req, res, next) {
+    try {
+      const subscription = await SubscriptionModel.findById(req.params.id)
+        .populate("customerId", "fullName customerCode email")
+        .populate("planId", "name code speedMbps dataLimitGb monthlyPrice");
+
+      if (!subscription) {
+        throw new NotFoundError("Subscription not found");
+      }
+
+      await SubscriptionService.ensureNotExpired(subscription);
+      ensureUserCanReadSubscription(req.user, subscription);
+
+      const dataLimitGb = subscription.planId?.dataLimitGb || 0;
+      const usageGb = subscription.dataUsageGb || 0;
+      const remainingGb = Math.max(0, dataLimitGb - usageGb);
+
+      const periodEnd = subscription.nextBillingDate || new Date();
+      const periodStart = SubscriptionService.addMonthsSafe(periodEnd, -1);
+
+      const payments = await PaymentModel.find({
+        subscriptionId: subscription._id,
+      })
+        .sort({ createdAt: -1 })
+        .limit(3);
+
+      return ApiResponse.success(res, {
+        serviceStatus: subscription.status,
+        nextBillingDate: subscription.nextBillingDate,
+        usage: {
+          subscriptionId: subscription._id.toString(),
+          isUnlimited: dataLimitGb <= 0,
+          periodStart,
+          periodEnd,
+          quotaTotalGb: dataLimitGb,
+          consumedGb: usageGb,
+          remainingGb,
+        },
+        latestTransactions: payments.map(toTransactionItem),
+      });
+    } catch (error) {
+      return next(error);
+    }
+  }
+
+  static async transactions(req, res, next) {
+    try {
+      const subscription = await SubscriptionModel.findById(req.params.id);
+      if (!subscription) {
+        throw new NotFoundError("Subscription not found");
+      }
+
+      ensureUserCanReadSubscription(req.user, subscription);
+
+      const payments = await PaymentModel.find({
+        subscriptionId: subscription._id,
+      }).sort({ createdAt: -1 });
+
+      return ApiResponse.success(res, payments.map(toTransactionItem));
+    } catch (error) {
+      return next(error);
+    }
+  }
+
+  static async plans(req, res, next) {
+    try {
+      const subscription = await SubscriptionModel.findById(req.params.id);
+      if (!subscription) {
+        throw new NotFoundError("Subscription not found");
+      }
+
+      ensureUserCanReadSubscription(req.user, subscription);
+
+      const plans = await PlanModel.find({ isActive: true }).sort({ monthlyPrice: 1 });
+      return ApiResponse.success(res, serializeDocs(plans));
+    } catch (error) {
+      return next(error);
+    }
+  }
+
+  static async switchPlan(req, res, next) {
+    try {
+      const subscription = await SubscriptionModel.findById(req.params.id)
+        .populate("planId", "name code speedMbps dataLimitGb monthlyPrice");
+
+      if (!subscription) {
+        throw new NotFoundError("Subscription not found");
+      }
+
+      ensureUserCanReadSubscription(req.user, subscription);
+
+      const targetPlan = await PlanModel.findById(req.body.targetPlanId);
+      if (!targetPlan) {
+        throw new NotFoundError("Plan not found");
+      }
+
+      subscription.planId = targetPlan._id;
+      await subscription.save();
+
+      const refreshed = await SubscriptionModel.findById(subscription._id)
+        .populate("customerId", "fullName customerCode email status")
+        .populate("planId", "name code speedMbps dataLimitGb monthlyPrice vatPercent");
+
+      return ApiResponse.success(res, toSubscriptionDto(refreshed), "Plan updated");
+    } catch (error) {
+      return next(error);
+    }
+  }
+
+  static async submitTopup(req, res, next) {
+    try {
+      const subscription = await SubscriptionModel.findById(req.params.id)
+        .populate("customerId", "fullName customerCode email status")
+        .populate("planId", "name code speedMbps dataLimitGb monthlyPrice vatPercent");
+
+      if (!subscription) {
+        throw new NotFoundError("Subscription not found");
+      }
+
+      ensureUserCanReadSubscription(req.user, subscription);
+
+      const digits = String(req.body.scratchCode || "").match(/\d+/g);
+      const amount = digits ? Number(digits.join("")) : 0;
+
+      if (!amount || Number.isNaN(amount)) {
+        throw new ValidationError("Invalid scratch code value");
+      }
+
+      const now = new Date();
+      const invoice = await PaymentService.createSubscriptionInvoice({
+        subscription,
+        plan: subscription.planId,
+        months: 1,
+        paymentMethod: "wallet",
+        markAsPaid: true,
+        currency: "EGP",
+        note: `Topup via scratch code ${req.body.scratchCode}`,
+        periodStart: now,
+        periodEnd: new Date(now.getTime() + 24 * 60 * 60 * 1000),
+        dueDate: now,
+      });
+
+      // Override invoice amounts with topup value
+      invoice.amount = amount;
+      invoice.totalAmount = amount;
+      invoice.vatAmount = 0;
+      await invoice.save();
+
+      return ApiResponse.success(res, {
+        id: invoice._id.toString(),
+        subscriptionId: subscription._id.toString(),
+        amount: invoice.totalAmount,
+        status: invoice.status,
+        receiptRef: invoice.invoiceNumber,
+        createdAt: invoice.createdAt,
+      });
+    } catch (error) {
+      return next(error);
+    }
+  }
+
   static async renew(req, res, next) {
     try {
       const { months, paymentMethod, markAsPaid, currency, note } = req.body;
@@ -306,6 +482,88 @@ class SubscriptionController {
         },
         "Subscription renewed successfully"
       );
+    } catch (error) {
+      return next(error);
+    }
+  }
+  static async transactions(req, res, next) {
+    try {
+      const items = await PaymentModel.find({ subscriptionId: req.params.id }).sort({ createdAt: -1 });
+      return ApiResponse.success(res, serializeDocs(items));
+    } catch (error) {
+      return next(error);
+    }
+  }
+
+  static async topup(req, res, next) {
+    try {
+      const { scratchCode } = req.body;
+      const subscription = await SubscriptionModel.findById(req.params.id);
+      if (!subscription) throw new NotFoundError("Subscription not found");
+
+      const payment = await PaymentModel.create({
+        subscriptionId: subscription._id,
+        customerId: subscription.customerId,
+        invoiceNumber: await PaymentService.createInvoiceNumber(),
+        amount: 100,
+        totalAmount: 100,
+        currency: "LYD",
+        status: "paid",
+        paidAt: new Date(),
+        paymentMethod: "scratch_card",
+        type: "topup"
+      });
+      return ApiResponse.success(res, serializeDoc(payment));
+    } catch (error) {
+      return next(error);
+    }
+  }
+
+  static async plans(req, res, next) {
+    try {
+      const items = await PlanModel.find({ status: "active" });
+      return ApiResponse.success(res, serializeDocs(items));
+    } catch (error) {
+      return next(error);
+    }
+  }
+
+  static async switchPlan(req, res, next) {
+    try {
+      const { targetPlanId } = req.body;
+      const subscription = await SubscriptionModel.findByIdAndUpdate(
+        req.params.id,
+        { planId: targetPlanId },
+        { new: true }
+      ).populate("planId");
+      return ApiResponse.success(res, toSubscriptionDto(subscription));
+    } catch (error) {
+      return next(error);
+    }
+  }
+
+  static async tickets(req, res, next) {
+    try {
+      const items = await SupportTicketModel.find({ subscriptionId: req.params.id }).sort({ createdAt: -1 });
+      return ApiResponse.success(res, serializeDocs(items));
+    } catch (error) {
+      return next(error);
+    }
+  }
+
+  static async createTicket(req, res, next) {
+    try {
+      const subscription = await SubscriptionModel.findById(req.params.id);
+      if (!subscription) throw new NotFoundError("Subscription not found");
+      const ticket = await SupportTicketModel.create({
+        subscriptionId: req.params.id,
+        customerId: subscription.customerId,
+        subject: req.body.subject,
+        description: req.body.description,
+        status: "open",
+        priority: "medium"
+      });
+      return ApiResponse.success(res, serializeDoc(ticket));
     } catch (error) {
       return next(error);
     }

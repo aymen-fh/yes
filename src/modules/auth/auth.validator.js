@@ -27,7 +27,7 @@ export const requestLoginOtpSchema = z.object({
 
 export const verifyLoginOtpSchema = z.object({
   otpToken: z.string().min(10),
-  code: z.string().regex(/^\d{5}$/),
+  code: z.string().regex(/^\d{6}$/),
 });
 
 export const refreshTokenSchema = z.object({

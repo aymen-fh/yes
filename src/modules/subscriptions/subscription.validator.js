@@ -31,6 +31,14 @@ export const renewSubscriptionSchema = z.object({
   note: z.string().max(240).optional(),
 });
 
+export const switchPlanSchema = z.object({
+  targetPlanId: objectIdSchema,
+});
+
+export const topupSubmitSchema = z.object({
+  scratchCode: z.string().min(3).max(64),
+});
+
 export const updateSubscriptionSchema = z
   .object({
     planId: objectIdSchema.optional(),

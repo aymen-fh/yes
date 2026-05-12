@@ -40,7 +40,7 @@ const phonesMatch = (contractPhone, providedPhone) => {
   return contractTail === providedTail;
 };
 
-const generateOtpCode = () => String(randomInt(0, 100000)).padStart(5, "0");
+const generateOtpCode = () => String(randomInt(0, 1000000)).padStart(6, "0");
 
 const maskPhone = (phone) => {
   const normalized = normalizePhone(phone);
