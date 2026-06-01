@@ -1,7 +1,7 @@
 import { ApiResponse } from "../../utils/apiResponse.js";
 import { NotFoundError } from "../../utils/errors.js";
+import { getCustomerDomainModels } from "../../utils/roleModels.js";
 import { serializeDoc, serializeDocs } from "../common/serializers.js";
-import DeviceModel from "./device.model.js";
 
 const buildDeviceQuery = ({ status, customerId }) => {
   const query = {};
@@ -20,16 +20,17 @@ const buildDeviceQuery = ({ status, customerId }) => {
 class DeviceController {
   static async list(req, res, next) {
     try {
+      const { Device } = getCustomerDomainModels();
       const { page, limit, status, customerId } = req.query;
       const query = buildDeviceQuery({ status, customerId });
 
       const [items, total] = await Promise.all([
-        DeviceModel.find(query)
+        Device.find(query)
           .populate("customerId", "fullName customerCode email")
           .sort({ createdAt: -1 })
           .skip((page - 1) * limit)
           .limit(limit),
-        DeviceModel.countDocuments(query),
+        Device.countDocuments(query),
       ]);
 
       return ApiResponse.paginated(res, serializeDocs(items), total, page, limit);
@@ -40,7 +41,8 @@ class DeviceController {
 
   static async getById(req, res, next) {
     try {
-      const device = await DeviceModel.findById(req.params.id).populate(
+      const { Device } = getCustomerDomainModels();
+      const device = await Device.findById(req.params.id).populate(
         "customerId",
         "fullName customerCode email"
       );
@@ -56,13 +58,14 @@ class DeviceController {
 
   static async create(req, res, next) {
     try {
+      const { Device } = getCustomerDomainModels();
       const payload = {
         ...req.body,
         serialNumber: req.body.serialNumber.toUpperCase().trim(),
         macAddress: req.body.macAddress.toUpperCase().trim(),
       };
 
-      const device = await DeviceModel.create(payload);
+      const device = await Device.create(payload);
       return ApiResponse.created(res, serializeDoc(device), "Device created successfully");
     } catch (error) {
       return next(error);
@@ -71,7 +74,8 @@ class DeviceController {
 
   static async update(req, res, next) {
     try {
-      const device = await DeviceModel.findByIdAndUpdate(req.params.id, req.body, {
+      const { Device } = getCustomerDomainModels();
+      const device = await Device.findByIdAndUpdate(req.params.id, req.body, {
         new: true,
       }).populate("customerId", "fullName customerCode email");
 
@@ -87,7 +91,8 @@ class DeviceController {
 
   static async remove(req, res, next) {
     try {
-      const deleted = await DeviceModel.findByIdAndDelete(req.params.id);
+      const { Device } = getCustomerDomainModels();
+      const deleted = await Device.findByIdAndDelete(req.params.id);
       if (!deleted) {
         throw new NotFoundError("Device not found");
       }

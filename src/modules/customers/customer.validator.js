@@ -8,6 +8,7 @@ export const customerIdParamsSchema = z.object({
 export const customerQuerySchema = paginationQuerySchema.extend({
   status: z.enum(["active", "suspended", "pending"]).optional(),
   search: z.string().optional(),
+  role: z.enum(["customer", "admin", "distributor", "support"]).optional(),
 });
 
 export const createCustomerSchema = z.object({

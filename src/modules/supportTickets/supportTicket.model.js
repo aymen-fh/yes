@@ -98,3 +98,11 @@ const supportTicketSchema = new mongoose.Schema(
 supportTicketSchema.index({ customerId: 1, status: 1, createdAt: -1 });
 
 export default mongoose.model("SupportTicket", supportTicketSchema);
+
+export const getSupportTicketModel = (connection) => {
+  if (!connection) {
+    return mongoose.model("SupportTicket", supportTicketSchema);
+  }
+
+  return connection.models.SupportTicket || connection.model("SupportTicket", supportTicketSchema);
+};

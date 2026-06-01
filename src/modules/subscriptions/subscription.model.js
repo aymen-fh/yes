@@ -61,3 +61,11 @@ const subscriptionSchema = new mongoose.Schema(
 subscriptionSchema.index({ customerId: 1, status: 1 });
 
 export default mongoose.model("Subscription", subscriptionSchema);
+
+export const getSubscriptionModel = (connection) => {
+  if (!connection) {
+    return mongoose.model("Subscription", subscriptionSchema);
+  }
+
+  return connection.models.Subscription || connection.model("Subscription", subscriptionSchema);
+};

@@ -6,24 +6,14 @@
     "auditLog": "C:\\Users\\VICTUS\\Desktop\\Oxygen\\Server\\logs\\.aa99e786ffc10d270ee047db5dd915f5fc9cf772-audit.json",
     "files": [
         {
-            "date": 1775737138791,
-            "name": "C:\\Users\\VICTUS\\Desktop\\Oxygen\\Server\\logs\\app-2026-04-09.log",
-            "hash": "53262a47ce9cd2bb9457669e80df03b024398113bb65552128506719d2246440"
+            "date": 1780216833123,
+            "name": "C:\\Users\\VICTUS\\Desktop\\Oxygen\\Server\\logs\\app-2026-05-31.log",
+            "hash": "987cb861e8dffe0e86603e70f493493c860ee6e524085e62ea484f7f9bd67559"
         },
         {
-            "date": 1776022558709,
-            "name": "C:\\Users\\VICTUS\\Desktop\\Oxygen\\Server\\logs\\app-2026-04-12.log",
-            "hash": "d2196b92e8f1244433a63150f52d7d08fe087498f4544c73e36b794173e68484"
-        },
-        {
-            "date": 1776187387246,
-            "name": "C:\\Users\\VICTUS\\Desktop\\Oxygen\\Server\\logs\\app-2026-04-14.log",
-            "hash": "9e1323e0bde1e5732dfab402ab22f8b58b9fd48a24d9815353413c67b685d1f5"
-        },
-        {
-            "date": 1776208214508,
-            "name": "C:\\Users\\VICTUS\\Desktop\\Oxygen\\Server\\logs\\app-2026-04-15.log",
-            "hash": "3c00b42976dfa3aa3ee5397931a2d25d358957236efe03f069226cf07508d58f"
+            "date": 1780264927977,
+            "name": "C:\\Users\\VICTUS\\Desktop\\Oxygen\\Server\\logs\\app-2026-06-01.log",
+            "hash": "dc9db649a4859ef597355b40ed3c5239572d52bb28c78749209e98f4ffb0ca21"
         }
     ],
     "hashType": "sha256"

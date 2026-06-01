@@ -63,3 +63,14 @@ const customerSchema = new mongoose.Schema(
 );
 
 export default mongoose.model("Customer", customerSchema);
+
+export const getCustomerModel = (connection, role) => {
+  const modelName = role ? `${role}_Customer` : "Customer";
+  const collectionName = role ? `${role}s` : "customers";
+
+  if (!connection) {
+    return mongoose.models[modelName] || mongoose.model(modelName, customerSchema, collectionName);
+  }
+
+  return connection.models[modelName] || connection.model(modelName, customerSchema, collectionName);
+};

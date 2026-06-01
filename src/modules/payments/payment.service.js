@@ -1,13 +1,14 @@
 import { createReadableCode } from "../common/serializers.js";
-import PaymentModel from "./payment.model.js";
+import { getCustomerDomainModels } from "../../utils/roleModels.js";
 
 const resolveId = (value) => value?._id || value;
 
 class PaymentService {
   static async createInvoiceNumber() {
+    const { Payment } = getCustomerDomainModels();
     for (let attempt = 0; attempt < 8; attempt += 1) {
       const invoice = createReadableCode("INV");
-      const exists = await PaymentModel.exists({ invoiceNumber: invoice });
+      const exists = await Payment.exists({ invoiceNumber: invoice });
       if (!exists) return invoice;
     }
 
@@ -51,9 +52,10 @@ class PaymentService {
   }
 
   static async createSubscriptionInvoice(input) {
+    const { Payment } = getCustomerDomainModels();
     const payload = PaymentService.buildSubscriptionInvoicePayload(input);
 
-    const existing = await PaymentModel.findOne({
+    const existing = await Payment.findOne({
       subscriptionId: payload.subscriptionId,
       periodStart: payload.periodStart,
       periodEnd: payload.periodEnd,
@@ -64,7 +66,7 @@ class PaymentService {
     }
 
     const invoiceNumber = await PaymentService.createInvoiceNumber();
-    const payment = await PaymentModel.create({
+    const payment = await Payment.create({
       ...payload,
       invoiceNumber,
     });

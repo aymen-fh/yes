@@ -14,8 +14,8 @@ const startServer = async () => {
     try {
         await db({ throwOnError: false });
 
-        const server = app.listen(port, () => {
-            logger.info(`🚀 Server running on port ${port}`);
+        const server = app.listen(port, "0.0.0.0", () => {
+            logger.info(`🚀 Server running on port ${port} (0.0.0.0)`);
         });
 
         startSubscriptionLifecycleJob({ intervalMs: subscriptionLifecycleIntervalMs });

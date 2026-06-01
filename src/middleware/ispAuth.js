@@ -1,6 +1,7 @@
 import JwtService from "../utils/jwtServices.js";
 import { ForbiddenError, UnauthorizedError } from "../utils/errors.js";
-import CustomerModel from "../modules/customers/customer.model.js";
+import { Roles } from "../utils/roles.js";
+import { getModelsForRole } from "../utils/roleModels.js";
 
 export const requireAuth = async (req, _res, next) => {
   try {
@@ -11,8 +12,10 @@ export const requireAuth = async (req, _res, next) => {
 
     const token = authHeader.split(" ")[1];
     const payload = JwtService.verify(token);
+    const role = payload.role || Roles.CUSTOMER;
+    const { Customer } = getModelsForRole(role);
 
-    const currentCustomer = await CustomerModel.findById(payload.id);
+    const currentCustomer = await Customer.findById(payload.id);
     if (!currentCustomer) {
       return next(new UnauthorizedError("Account no longer exists"));
     }

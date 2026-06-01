@@ -61,3 +61,11 @@ const planSchema = new mongoose.Schema(
 );
 
 export default mongoose.model("Plan", planSchema);
+
+export const getPlanModel = (connection) => {
+  if (!connection) {
+    return mongoose.model("Plan", planSchema);
+  }
+
+  return connection.models.Plan || connection.model("Plan", planSchema);
+};

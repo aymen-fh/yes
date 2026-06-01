@@ -1,7 +1,4 @@
-import CustomerModel from "../customers/customer.model.js";
-import PlanModel from "../plans/plan.model.js";
-import SubscriptionModel from "../subscriptions/subscription.model.js";
-import PaymentModel from "../payments/payment.model.js";
+import { getCustomerDomainModels } from "../../utils/roleModels.js";
 import { serializeDocs } from "../common/serializers.js";
 
 const currencyFormatter = new Intl.NumberFormat("en-US", {
@@ -13,6 +10,7 @@ const currencyFormatter = new Intl.NumberFormat("en-US", {
 class AdminController {
   static async dashboard(req, res, next) {
     try {
+      const { Customer, Plan, Subscription, Payment } = getCustomerDomainModels();
       const [
         totalCustomers,
         activeCustomers,
@@ -25,23 +23,23 @@ class AdminController {
         subscriptions,
         payments,
       ] = await Promise.all([
-        CustomerModel.countDocuments(),
-        CustomerModel.countDocuments({ status: "active" }),
-        PlanModel.countDocuments(),
-        SubscriptionModel.countDocuments({ status: "active" }),
-        PaymentModel.countDocuments({ status: "pending" }),
-        PaymentModel.aggregate([
+        Customer.countDocuments(),
+        Customer.countDocuments({ status: "active" }),
+        Plan.countDocuments(),
+        Subscription.countDocuments({ status: "active" }),
+        Payment.countDocuments({ status: "pending" }),
+        Payment.aggregate([
           { $match: { status: "paid" } },
           { $group: { _id: null, total: { $sum: "$totalAmount" } } },
         ]),
-        CustomerModel.find().sort({ createdAt: -1 }).limit(12),
-        PlanModel.find().sort({ createdAt: -1 }).limit(12),
-        SubscriptionModel.find()
+        Customer.find().sort({ createdAt: -1 }).limit(12),
+        Plan.find().sort({ createdAt: -1 }).limit(12),
+        Subscription.find()
           .populate("customerId", "fullName customerCode")
           .populate("planId", "name code")
           .sort({ createdAt: -1 })
           .limit(12),
-        PaymentModel.find()
+        Payment.find()
           .populate("customerId", "fullName customerCode")
           .populate("subscriptionId", "subscriptionNumber")
           .sort({ createdAt: -1 })

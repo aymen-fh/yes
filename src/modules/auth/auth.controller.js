@@ -49,7 +49,7 @@ class AuthController {
 
   static async logout(req, res, next) {
     try {
-      await AuthService.logout(req.user.id);
+      await AuthService.logout(req.user.id, req.user.role);
       return ApiResponse.success(res, null, "Logged out");
     } catch (error) {
       return next(error);

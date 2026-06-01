@@ -54,3 +54,11 @@ const deviceSchema = new mongoose.Schema(
 );
 
 export default mongoose.model("Device", deviceSchema);
+
+export const getDeviceModel = (connection) => {
+  if (!connection) {
+    return mongoose.model("Device", deviceSchema);
+  }
+
+  return connection.models.Device || connection.model("Device", deviceSchema);
+};

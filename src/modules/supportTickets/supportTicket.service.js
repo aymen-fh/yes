@@ -1,12 +1,13 @@
 import { ForbiddenError } from "../../utils/errors.js";
+import { getCustomerDomainModels } from "../../utils/roleModels.js";
 import { createReadableCode } from "../common/serializers.js";
-import SupportTicketModel from "./supportTicket.model.js";
 
 class SupportTicketService {
   static async createTicketNumber() {
+    const { SupportTicket } = getCustomerDomainModels();
     for (let attempt = 0; attempt < 8; attempt += 1) {
       const number = createReadableCode("TCK");
-      const exists = await SupportTicketModel.exists({ ticketNumber: number });
+      const exists = await SupportTicket.exists({ ticketNumber: number });
       if (!exists) return number;
     }
 

@@ -4,7 +4,7 @@ import EncryptionServices from "../../utils/encryptionServices.js";
 import JwtService from "../../utils/jwtServices.js";
 import { ConflictError, UnauthorizedError } from "../../utils/errors.js";
 import { Roles } from "../../utils/roles.js";
-import CustomerModel from "../customers/customer.model.js";
+import { findUserByIdentifierAcrossRoles, getModelsForRole } from "../../utils/roleModels.js";
 import { createReadableCode, serializeDoc } from "../common/serializers.js";
 
 const LOGIN_OTP_EXPIRY_MS = 5 * 60 * 1000;
@@ -115,10 +115,11 @@ const sanitizeCustomer = (customer) =>
   });
 
 const createUniqueCustomerCode = async () => {
+  const { Customer } = getModelsForRole(Roles.CUSTOMER);
   // Retry random code generation to avoid unique index collisions.
   for (let attempt = 0; attempt < 8; attempt += 1) {
     const candidate = createReadableCode("CUS");
-    const exists = await CustomerModel.exists({ customerCode: candidate });
+    const exists = await Customer.exists({ customerCode: candidate });
     if (!exists) return candidate;
   }
 
@@ -126,12 +127,13 @@ const createUniqueCustomerCode = async () => {
 };
 
 const issueTokenPair = async (customer) => {
+  const { Customer } = getModelsForRole(customer.role);
   const token = JwtService.sign(toAuthPayload(customer));
   const refreshToken = JwtService.signRefresh({ id: customer._id.toString(), role: customer.role });
   // Store only a hash of the refresh token to reduce token leakage impact.
   const refreshTokenHash = await EncryptionServices.encryptText(refreshToken);
 
-  await CustomerModel.findByIdAndUpdate(customer._id, {
+  await Customer.findByIdAndUpdate(customer._id, {
     refreshTokenHash,
     lastLoginAt: new Date(),
   });
@@ -139,17 +141,13 @@ const issueTokenPair = async (customer) => {
   return { token, refreshToken };
 };
 
-const findCustomerByIdentifier = async (identifier) => {
-  if (identifier.includes("@")) {
-    return CustomerModel.findOne({ email: identifier.toLowerCase().trim() });
-  }
-
-  return CustomerModel.findOne({ customerCode: identifier.toUpperCase().trim() });
-};
+const findCustomerByIdentifier = async (identifier) =>
+  findUserByIdentifierAcrossRoles(identifier);
 
 class AuthService {
   static async register(payload) {
-    const existing = await CustomerModel.findOne({ email: payload.email.toLowerCase() });
+    const { Customer } = getModelsForRole(Roles.CUSTOMER);
+    const existing = await Customer.findOne({ email: payload.email.toLowerCase() });
     if (existing) {
       throw new ConflictError("Email already in use");
     }
@@ -157,7 +155,7 @@ class AuthService {
     const customerCode = await createUniqueCustomerCode();
     const password = await EncryptionServices.encryptText(payload.password);
 
-    const customer = await CustomerModel.create({
+    const customer = await Customer.create({
       customerCode,
       fullName: payload.fullName,
       email: payload.email.toLowerCase().trim(),
@@ -178,7 +176,8 @@ class AuthService {
 
   static async login(payload) {
     const identifier = payload.identifier || payload.email;
-    const customer = await findCustomerByIdentifier(identifier ?? "");
+    const result = await findCustomerByIdentifier(identifier ?? "");
+    const customer = result?.user;
     if (!customer) {
       throw new UnauthorizedError("Invalid credentials");
     }
@@ -201,9 +200,9 @@ class AuthService {
   }
 
   static async requestLoginOtp(payload) {
-    const customer = await CustomerModel.findOne({
-      email: payload.email.toLowerCase().trim(),
-    });
+    const result = await findCustomerByIdentifier(payload.email);
+    const customer = result?.user;
+    const role = result?.role || customer?.role;
 
     if (!customer) {
       throw new UnauthorizedError("Invalid credentials");
@@ -229,6 +228,7 @@ class AuthService {
 
     loginOtpSessions.set(otpToken, {
       customerId: customer._id.toString(),
+      role: role || customer.role,
       code,
       attempts: 0,
       expiresAt: Date.now() + LOGIN_OTP_EXPIRY_MS,
@@ -278,7 +278,8 @@ class AuthService {
 
     loginOtpSessions.delete(otpToken);
 
-    const customer = await CustomerModel.findById(session.customerId);
+    const { Customer } = getModelsForRole(session.role || Roles.CUSTOMER);
+    const customer = await Customer.findById(session.customerId);
     if (!customer) {
       throw new UnauthorizedError("Account no longer exists");
     }
@@ -293,7 +294,8 @@ class AuthService {
 
   static async refreshToken(payload) {
     const decoded = JwtService.verifyRefresh(payload.refreshToken);
-    const customer = await CustomerModel.findById(decoded.id);
+    const { Customer } = getModelsForRole(decoded.role || Roles.CUSTOMER);
+    const customer = await Customer.findById(decoded.id);
 
     if (!customer?.refreshTokenHash) {
       throw new UnauthorizedError("Refresh token is invalid");
@@ -316,8 +318,9 @@ class AuthService {
     };
   }
 
-  static async logout(customerId) {
-    await CustomerModel.findByIdAndUpdate(customerId, { refreshTokenHash: null });
+  static async logout(customerId, role = Roles.CUSTOMER) {
+    const { Customer } = getModelsForRole(role);
+    await Customer.findByIdAndUpdate(customerId, { refreshTokenHash: null });
   }
 }
 

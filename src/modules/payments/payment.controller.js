@@ -1,10 +1,8 @@
 import { ApiResponse } from "../../utils/apiResponse.js";
 import { ForbiddenError, NotFoundError, ValidationError } from "../../utils/errors.js";
+import { getCustomerDomainModels } from "../../utils/roleModels.js";
 import { serializeDoc, serializeDocs } from "../common/serializers.js";
-import CustomerModel from "../customers/customer.model.js";
-import SubscriptionModel from "../subscriptions/subscription.model.js";
 import PaymentService from "./payment.service.js";
-import PaymentModel from "./payment.model.js";
 
 const ensureUserCanReadPayment = (reqUser, payment) => {
   if (reqUser.role !== "customer") return;
@@ -16,9 +14,10 @@ const ensureUserCanReadPayment = (reqUser, payment) => {
 };
 
 const ensurePaymentRelations = async ({ customerId, subscriptionId }) => {
+  const { Customer, Subscription } = getCustomerDomainModels();
   const [customer, subscription] = await Promise.all([
-    CustomerModel.findById(customerId),
-    SubscriptionModel.findById(subscriptionId),
+    Customer.findById(customerId),
+    Subscription.findById(subscriptionId),
   ]);
 
   if (!customer) {
@@ -37,6 +36,7 @@ const ensurePaymentRelations = async ({ customerId, subscriptionId }) => {
 class PaymentController {
   static async list(req, res, next) {
     try {
+      const { Payment } = getCustomerDomainModels();
       const { page, limit, customerId, subscriptionId, status } = req.query;
       const query = {};
 
@@ -55,13 +55,13 @@ class PaymentController {
       }
 
       const [items, total] = await Promise.all([
-        PaymentModel.find(query)
+        Payment.find(query)
           .populate("customerId", "fullName customerCode email")
           .populate("subscriptionId", "subscriptionNumber status")
           .sort({ createdAt: -1 })
           .skip((page - 1) * limit)
           .limit(limit),
-        PaymentModel.countDocuments(query),
+        Payment.countDocuments(query),
       ]);
 
       return ApiResponse.paginated(res, serializeDocs(items), total, page, limit);
@@ -72,7 +72,8 @@ class PaymentController {
 
   static async getById(req, res, next) {
     try {
-      const payment = await PaymentModel.findById(req.params.id)
+      const { Payment } = getCustomerDomainModels();
+      const payment = await Payment.findById(req.params.id)
         .populate("customerId", "fullName customerCode email")
         .populate("subscriptionId", "subscriptionNumber status");
 
@@ -90,6 +91,7 @@ class PaymentController {
 
   static async create(req, res, next) {
     try {
+      const { Payment } = getCustomerDomainModels();
       await ensurePaymentRelations(req.body);
 
       const invoiceNumber = await PaymentService.createInvoiceNumber();
@@ -99,8 +101,8 @@ class PaymentController {
         currency: req.body.currency.toUpperCase(),
       };
 
-      const payment = await PaymentModel.create(payload);
-      const item = await PaymentModel.findById(payment._id)
+      const payment = await Payment.create(payload);
+      const item = await Payment.findById(payment._id)
         .populate("customerId", "fullName customerCode email")
         .populate("subscriptionId", "subscriptionNumber status");
 
@@ -112,13 +114,14 @@ class PaymentController {
 
   static async update(req, res, next) {
     try {
+      const { Payment } = getCustomerDomainModels();
       const payload = { ...req.body };
 
       if (payload.status === "paid" && !payload.paidAt) {
         payload.paidAt = new Date();
       }
 
-      const payment = await PaymentModel.findByIdAndUpdate(req.params.id, payload, {
+      const payment = await Payment.findByIdAndUpdate(req.params.id, payload, {
         new: true,
       })
         .populate("customerId", "fullName customerCode email")
@@ -136,7 +139,8 @@ class PaymentController {
 
   static async stats(req, res, next) {
     try {
-      const [summary] = await PaymentModel.aggregate([
+      const { Payment } = getCustomerDomainModels();
+      const [summary] = await Payment.aggregate([
         {
           $group: {
             _id: null,

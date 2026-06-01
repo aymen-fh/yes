@@ -80,3 +80,11 @@ const paymentSchema = new mongoose.Schema(
 paymentSchema.index({ customerId: 1, status: 1 });
 
 export default mongoose.model("Payment", paymentSchema);
+
+export const getPaymentModel = (connection) => {
+  if (!connection) {
+    return mongoose.model("Payment", paymentSchema);
+  }
+
+  return connection.models.Payment || connection.model("Payment", paymentSchema);
+};

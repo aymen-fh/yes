@@ -1,7 +1,7 @@
 import { serializeDoc } from "../common/serializers.js";
 import NotificationService from "../notifications/notification.service.js";
 import PaymentService from "../payments/payment.service.js";
-import SubscriptionModel from "./subscription.model.js";
+import { getCustomerDomainModels } from "../../utils/roleModels.js";
 
 class SubscriptionService {
   static addMonthsSafe(dateInput, monthsToAdd) {
@@ -17,9 +17,10 @@ class SubscriptionService {
   }
 
   static async expireDueSubscriptions() {
+    const { Subscription } = getCustomerDomainModels();
     const now = new Date();
 
-    const result = await SubscriptionModel.updateMany(
+    const result = await Subscription.updateMany(
       {
         status: { $in: ["active", "pending"] },
         nextBillingDate: { $lte: now },

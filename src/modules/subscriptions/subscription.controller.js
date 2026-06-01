@@ -1,19 +1,15 @@
 import { ApiResponse } from "../../utils/apiResponse.js";
 import { ForbiddenError, NotFoundError, ValidationError } from "../../utils/errors.js";
+import { getCustomerDomainModels } from "../../utils/roleModels.js";
 import { createReadableCode, serializeDoc, serializeDocs } from "../common/serializers.js";
-import CustomerModel from "../customers/customer.model.js";
-import DeviceModel from "../devices/device.model.js";
-import PaymentModel from "../payments/payment.model.js";
 import PaymentService from "../payments/payment.service.js";
-import PlanModel from "../plans/plan.model.js";
-import SupportTicketModel from "../supportTickets/supportTicket.model.js";
 import SubscriptionService from "./subscription.service.js";
-import SubscriptionModel from "./subscription.model.js";
 
 const ensurePlanAndCustomer = async ({ planId, customerId }) => {
+  const { Plan, Customer } = getCustomerDomainModels();
   const [plan, customer] = await Promise.all([
-    PlanModel.findById(planId),
-    CustomerModel.findById(customerId),
+    Plan.findById(planId),
+    Customer.findById(customerId),
   ]);
 
   if (!plan) {
@@ -29,10 +25,13 @@ const ensurePlanAndCustomer = async ({ planId, customerId }) => {
 
 const toSubscriptionDto = (subscription) => serializeDoc(subscription);
 
+const getDomainModels = () => getCustomerDomainModels();
+
 const createSubscriptionNumber = async () => {
+  const { Subscription } = getCustomerDomainModels();
   for (let attempt = 0; attempt < 8; attempt += 1) {
     const number = createReadableCode("SUB");
-    const exists = await SubscriptionModel.exists({ subscriptionNumber: number });
+    const exists = await Subscription.exists({ subscriptionNumber: number });
     if (!exists) return number;
   }
 
@@ -62,6 +61,7 @@ const toTransactionItem = (payment) => {
 class SubscriptionController {
   static async list(req, res, next) {
     try {
+      const { Subscription } = getDomainModels();
       await SubscriptionService.expireDueSubscriptions();
 
       const { page, limit, customerId, status } = req.query;
@@ -78,14 +78,14 @@ class SubscriptionController {
       }
 
       const [items, total] = await Promise.all([
-        SubscriptionModel.find(query)
+        Subscription.find(query)
           .populate("customerId", "fullName customerCode email")
           .populate("planId", "name code speedMbps dataLimitGb monthlyPrice")
           .populate("deviceId", "serialNumber model status ipAddress")
           .sort({ createdAt: -1 })
           .skip((page - 1) * limit)
           .limit(limit),
-        SubscriptionModel.countDocuments(query),
+        Subscription.countDocuments(query),
       ]);
 
       return ApiResponse.paginated(res, serializeDocs(items), total, page, limit);
@@ -96,7 +96,8 @@ class SubscriptionController {
 
   static async getById(req, res, next) {
     try {
-      const subscription = await SubscriptionModel.findById(req.params.id)
+      const { Subscription } = getDomainModels();
+      const subscription = await Subscription.findById(req.params.id)
         .populate("customerId", "fullName customerCode email status")
         .populate("planId", "name code speedMbps dataLimitGb monthlyPrice vatPercent")
         .populate("deviceId", "serialNumber model status firmwareVersion ipAddress");
@@ -116,6 +117,7 @@ class SubscriptionController {
 
   static async create(req, res, next) {
     try {
+      const { Subscription, Device, Payment } = getDomainModels();
       const { plan } = await ensurePlanAndCustomer(req.body);
 
       const startedAt = req.body.startedAt || new Date();
@@ -133,13 +135,13 @@ class SubscriptionController {
 
       const subscriptionNumber = await createSubscriptionNumber();
 
-      const subscription = await SubscriptionModel.create({
+      const subscription = await Subscription.create({
         subscriptionNumber,
         ...createPayload,
       });
 
       if (req.body.deviceId) {
-        await DeviceModel.findByIdAndUpdate(req.body.deviceId, {
+        await Device.findByIdAndUpdate(req.body.deviceId, {
           customerId: req.body.customerId,
           subscriptionId: subscription._id,
           status: "online",
@@ -147,7 +149,7 @@ class SubscriptionController {
         });
       }
 
-      const item = await SubscriptionModel.findById(subscription._id)
+      const item = await Subscription.findById(subscription._id)
         .populate("customerId", "fullName customerCode email")
         .populate("planId", "name code speedMbps dataLimitGb monthlyPrice vatPercent")
         .populate("deviceId", "serialNumber model status ipAddress");
@@ -158,7 +160,7 @@ class SubscriptionController {
       });
 
       if (activationInvoice) {
-        const invoiceItem = await PaymentModel.findById(activationInvoice._id)
+        const invoiceItem = await Payment.findById(activationInvoice._id)
           .populate("customerId", "fullName customerCode email")
           .populate("subscriptionId", "subscriptionNumber status");
 
@@ -180,7 +182,8 @@ class SubscriptionController {
 
   static async update(req, res, next) {
     try {
-      const existing = await SubscriptionModel.findById(req.params.id);
+      const { Subscription, Device, Payment } = getDomainModels();
+      const existing = await Subscription.findById(req.params.id);
       if (!existing) {
         throw new NotFoundError("Subscription not found");
       }
@@ -192,7 +195,7 @@ class SubscriptionController {
         });
       }
 
-      const updated = await SubscriptionModel.findByIdAndUpdate(req.params.id, req.body, {
+      const updated = await Subscription.findByIdAndUpdate(req.params.id, req.body, {
         new: true,
       })
         .populate("customerId", "fullName customerCode email")
@@ -200,7 +203,7 @@ class SubscriptionController {
         .populate("deviceId", "serialNumber model status ipAddress");
 
       if (req.body.deviceId) {
-        await DeviceModel.findByIdAndUpdate(req.body.deviceId, {
+        await Device.findByIdAndUpdate(req.body.deviceId, {
           customerId: updated.customerId?._id || updated.customerId,
           subscriptionId: updated._id,
           status: "online",
@@ -217,7 +220,7 @@ class SubscriptionController {
       }
 
       if (activationInvoice) {
-        const invoiceItem = await PaymentModel.findById(activationInvoice._id)
+        const invoiceItem = await Payment.findById(activationInvoice._id)
           .populate("customerId", "fullName customerCode email")
           .populate("subscriptionId", "subscriptionNumber status");
 
@@ -239,7 +242,8 @@ class SubscriptionController {
 
   static async usage(req, res, next) {
     try {
-      const subscription = await SubscriptionModel.findById(req.params.id)
+      const { Subscription } = getDomainModels();
+      const subscription = await Subscription.findById(req.params.id)
         .populate("customerId", "fullName customerCode")
         .populate("planId", "name dataLimitGb speedMbps");
 
@@ -272,7 +276,8 @@ class SubscriptionController {
 
   static async dashboard(req, res, next) {
     try {
-      const subscription = await SubscriptionModel.findById(req.params.id)
+      const { Subscription, Payment } = getDomainModels();
+      const subscription = await Subscription.findById(req.params.id)
         .populate("customerId", "fullName customerCode email")
         .populate("planId", "name code speedMbps dataLimitGb monthlyPrice");
 
@@ -290,7 +295,7 @@ class SubscriptionController {
       const periodEnd = subscription.nextBillingDate || new Date();
       const periodStart = SubscriptionService.addMonthsSafe(periodEnd, -1);
 
-      const payments = await PaymentModel.find({
+      const payments = await Payment.find({
         subscriptionId: subscription._id,
       })
         .sort({ createdAt: -1 })
@@ -317,14 +322,15 @@ class SubscriptionController {
 
   static async transactions(req, res, next) {
     try {
-      const subscription = await SubscriptionModel.findById(req.params.id);
+      const { Subscription, Payment } = getDomainModels();
+      const subscription = await Subscription.findById(req.params.id);
       if (!subscription) {
         throw new NotFoundError("Subscription not found");
       }
 
       ensureUserCanReadSubscription(req.user, subscription);
 
-      const payments = await PaymentModel.find({
+      const payments = await Payment.find({
         subscriptionId: subscription._id,
       }).sort({ createdAt: -1 });
 
@@ -336,14 +342,15 @@ class SubscriptionController {
 
   static async plans(req, res, next) {
     try {
-      const subscription = await SubscriptionModel.findById(req.params.id);
+      const { Subscription, Plan } = getDomainModels();
+      const subscription = await Subscription.findById(req.params.id);
       if (!subscription) {
         throw new NotFoundError("Subscription not found");
       }
 
       ensureUserCanReadSubscription(req.user, subscription);
 
-      const plans = await PlanModel.find({ isActive: true }).sort({ monthlyPrice: 1 });
+      const plans = await Plan.find({ isActive: true }).sort({ monthlyPrice: 1 });
       return ApiResponse.success(res, serializeDocs(plans));
     } catch (error) {
       return next(error);
@@ -352,7 +359,8 @@ class SubscriptionController {
 
   static async switchPlan(req, res, next) {
     try {
-      const subscription = await SubscriptionModel.findById(req.params.id)
+      const { Subscription, Plan } = getDomainModels();
+      const subscription = await Subscription.findById(req.params.id)
         .populate("planId", "name code speedMbps dataLimitGb monthlyPrice");
 
       if (!subscription) {
@@ -361,7 +369,7 @@ class SubscriptionController {
 
       ensureUserCanReadSubscription(req.user, subscription);
 
-      const targetPlan = await PlanModel.findById(req.body.targetPlanId);
+      const targetPlan = await Plan.findById(req.body.targetPlanId);
       if (!targetPlan) {
         throw new NotFoundError("Plan not found");
       }
@@ -369,7 +377,7 @@ class SubscriptionController {
       subscription.planId = targetPlan._id;
       await subscription.save();
 
-      const refreshed = await SubscriptionModel.findById(subscription._id)
+      const refreshed = await Subscription.findById(subscription._id)
         .populate("customerId", "fullName customerCode email status")
         .populate("planId", "name code speedMbps dataLimitGb monthlyPrice vatPercent");
 
@@ -381,7 +389,8 @@ class SubscriptionController {
 
   static async submitTopup(req, res, next) {
     try {
-      const subscription = await SubscriptionModel.findById(req.params.id)
+      const { Subscription } = getDomainModels();
+      const subscription = await Subscription.findById(req.params.id)
         .populate("customerId", "fullName customerCode email status")
         .populate("planId", "name code speedMbps dataLimitGb monthlyPrice vatPercent");
 
@@ -435,7 +444,8 @@ class SubscriptionController {
     try {
       const { months, paymentMethod, markAsPaid, currency, note } = req.body;
 
-      const subscription = await SubscriptionModel.findById(req.params.id)
+      const { Subscription, Payment } = getDomainModels();
+      const subscription = await Subscription.findById(req.params.id)
         .populate("customerId", "fullName customerCode email status")
         .populate("planId", "name code speedMbps dataLimitGb monthlyPrice vatPercent");
 
@@ -460,12 +470,12 @@ class SubscriptionController {
         note,
       });
 
-      const refreshedSubscription = await SubscriptionModel.findById(subscription._id)
+      const refreshedSubscription = await Subscription.findById(subscription._id)
         .populate("customerId", "fullName customerCode email status")
         .populate("planId", "name code speedMbps dataLimitGb monthlyPrice vatPercent")
         .populate("deviceId", "serialNumber model status ipAddress");
 
-      const paymentItem = await PaymentModel.findById(payment._id)
+      const paymentItem = await Payment.findById(payment._id)
         .populate("customerId", "fullName customerCode email")
         .populate("subscriptionId", "subscriptionNumber status");
 
@@ -488,7 +498,8 @@ class SubscriptionController {
   }
   static async transactions(req, res, next) {
     try {
-      const items = await PaymentModel.find({ subscriptionId: req.params.id }).sort({ createdAt: -1 });
+      const { Payment } = getDomainModels();
+      const items = await Payment.find({ subscriptionId: req.params.id }).sort({ createdAt: -1 });
       return ApiResponse.success(res, serializeDocs(items));
     } catch (error) {
       return next(error);
@@ -498,10 +509,11 @@ class SubscriptionController {
   static async topup(req, res, next) {
     try {
       const { scratchCode } = req.body;
-      const subscription = await SubscriptionModel.findById(req.params.id);
+      const { Subscription, Payment } = getDomainModels();
+      const subscription = await Subscription.findById(req.params.id);
       if (!subscription) throw new NotFoundError("Subscription not found");
 
-      const payment = await PaymentModel.create({
+      const payment = await Payment.create({
         subscriptionId: subscription._id,
         customerId: subscription.customerId,
         invoiceNumber: await PaymentService.createInvoiceNumber(),
@@ -521,7 +533,8 @@ class SubscriptionController {
 
   static async plans(req, res, next) {
     try {
-      const items = await PlanModel.find({ status: "active" });
+      const { Plan } = getDomainModels();
+      const items = await Plan.find({ status: "active" });
       return ApiResponse.success(res, serializeDocs(items));
     } catch (error) {
       return next(error);
@@ -531,7 +544,8 @@ class SubscriptionController {
   static async switchPlan(req, res, next) {
     try {
       const { targetPlanId } = req.body;
-      const subscription = await SubscriptionModel.findByIdAndUpdate(
+      const { Subscription } = getDomainModels();
+      const subscription = await Subscription.findByIdAndUpdate(
         req.params.id,
         { planId: targetPlanId },
         { new: true }
@@ -544,7 +558,8 @@ class SubscriptionController {
 
   static async tickets(req, res, next) {
     try {
-      const items = await SupportTicketModel.find({ subscriptionId: req.params.id }).sort({ createdAt: -1 });
+      const { SupportTicket } = getDomainModels();
+      const items = await SupportTicket.find({ subscriptionId: req.params.id }).sort({ createdAt: -1 });
       return ApiResponse.success(res, serializeDocs(items));
     } catch (error) {
       return next(error);
@@ -553,9 +568,10 @@ class SubscriptionController {
 
   static async createTicket(req, res, next) {
     try {
-      const subscription = await SubscriptionModel.findById(req.params.id);
+      const { Subscription, SupportTicket } = getDomainModels();
+      const subscription = await Subscription.findById(req.params.id);
       if (!subscription) throw new NotFoundError("Subscription not found");
-      const ticket = await SupportTicketModel.create({
+      const ticket = await SupportTicket.create({
         subscriptionId: req.params.id,
         customerId: subscription.customerId,
         subject: req.body.subject,
