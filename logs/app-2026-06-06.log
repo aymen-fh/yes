@@ -1,0 +1,2 @@
+2026-06-06 00:52:20 [error]: [SubscriptionLifecycle] Failed to expire subscriptions: getaddrinfo ENOTFOUND ac-ccnnprl-shard-00-01.0go1gqi.mongodb.net
+2026-06-06 00:52:31 [error]: [SubscriptionLifecycle] Failed to expire subscriptions: getaddrinfo ENOTFOUND ac-ccnnprl-shard-00-01.0go1gqi.mongodb.net
