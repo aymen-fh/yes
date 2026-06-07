@@ -13,6 +13,7 @@ class AuthController {
 
   static async login(req, res, next) {
     try {
+      console.log("Login attempt:", req.body);
       const data = await AuthService.login(req.body);
       return ApiResponse.success(res, data, "Login successful");
     } catch (error) {

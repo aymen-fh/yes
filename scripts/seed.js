@@ -1,5 +1,8 @@
 import "dotenv/config";
 import mongoose from "mongoose";
+import dns from "dns";
+
+dns.setServers(["8.8.8.8", "8.8.4.4"]);
 
 import EncryptionServices from "../src/utils/encryptionServices.js";
 import { getRoleDb } from "../src/utils/roleDb.js";
@@ -58,21 +61,25 @@ const bestPlans = [
   }
 ];
 
-// 2. Users by Role (Merged from data.ts & seedData)
 const admins = [
-  { role: Roles.ADMIN, fullName: "المدير العام", email: "admin@yes.com", phone: "0910000001", address: "طرابلس", status: "active" },
+  { role: Roles.ADMIN, fullName: "مسعود الغنودي", email: "admin@yes.com", phone: "0910000001", address: "طرابلس", status: "active" },
 ];
 
 const distributors = [
-  { role: Roles.DISTRIBUTOR, fullName: "أحمد التاجوري (مركز النور للمكالمات)", email: "agent1@yes.com", phone: "0917766554", address: "طرابلس - سوق الجمعة", status: "active" },
-  { role: Roles.DISTRIBUTOR, fullName: "محمد الخراز (أوكسجين فور يو)", email: "agent2@yes.com", phone: "0923344556", address: "بنغازي - الحدائق", status: "active" },
-  { role: Roles.DISTRIBUTOR, fullName: "مصطفى قادربوه (اتصالات زليتن)", email: "agent3@yes.com", phone: "0913004005", address: "زليتن - وسط المدينة", status: "active" },
+  { role: Roles.DISTRIBUTOR, fullName: "علي كريم (بئر الغنم)", email: "agent1@yes.com", phone: "0917766554", address: "بئر الغنم", status: "active" },
+  { role: Roles.DISTRIBUTOR, fullName: "علي المريمي (رقدالين)", email: "agent2@yes.com", phone: "0923344556", address: "رقدالين", status: "active" },
 ];
 
 const supports = [
-  { role: Roles.SUPPORT, fullName: "المهندس وسيم زريق", email: "eng1@yes.com", phone: "0919991112", address: "طرابلس", status: "active" },
-  { role: Roles.SUPPORT, fullName: "المهندس مصعب القماطي", email: "eng2@yes.com", phone: "0924445551", address: "بنغازي", status: "active" },
-  { role: Roles.SUPPORT, fullName: "المهندسة نورهان العقوري", email: "eng3@yes.com", phone: "0917778889", address: "مصراتة", status: "active" },
+  { role: Roles.SUPPORT, fullName: "مهندس معتصم شيوب", email: "tech1@yes.com", phone: "0919991112", address: "طرابلس", status: "active" },
+];
+
+const sysEngineers = [
+  { role: Roles.SYSTEM_ENGINEER, fullName: "مهندسة هديل العلي", email: "syseng1@yes.com", phone: "0921112223", address: "طرابلس", status: "active" },
+];
+
+const customerServices = [
+  { role: Roles.CUSTOMER_SERVICE, fullName: "مهندسة دعاء محمد", email: "cs1@yes.com", phone: "0941112223", address: "طرابلس", status: "active" },
 ];
 
 const customers = [
@@ -87,6 +94,8 @@ const bestUsers = [
   ...admins,
   ...distributors,
   ...supports,
+  ...sysEngineers,
+  ...customerServices,
   ...customers
 ];
 
@@ -96,7 +105,19 @@ const connect = async () => {
   if (!mongoUrl || !dbName) {
     throw new Error("Missing MONGO_URL or MONGO_DB_NAME in environment");
   }
-  await mongoose.connect(mongoUrl, { dbName });
+  
+  let retries = 5;
+  while (retries > 0) {
+    try {
+      await mongoose.connect(mongoUrl, { dbName });
+      return;
+    } catch (err) {
+      console.log(`Connection failed. Retrying... (${retries} left)`);
+      retries -= 1;
+      await new Promise(res => setTimeout(res, 5000));
+    }
+  }
+  throw new Error("Failed to connect to MongoDB after multiple retries");
 };
 
 const createCode = (prefix, index) => `${prefix}-${String(index + 1).padStart(4, "0")}`;
@@ -121,11 +142,15 @@ const seed = async () => {
   const adminModels = getRoleModels(Roles.ADMIN);
   const distributorModels = getRoleModels(Roles.DISTRIBUTOR);
   const supportModels = getRoleModels(Roles.SUPPORT);
+  const sysEngModels = getRoleModels(Roles.SYSTEM_ENGINEER);
+  const csModels = getRoleModels(Roles.CUSTOMER_SERVICE);
 
   await Promise.all([
     adminModels.Customer.deleteMany({}),
     distributorModels.Customer.deleteMany({}),
     supportModels.Customer.deleteMany({}),
+    sysEngModels.Customer.deleteMany({}),
+    csModels.Customer.deleteMany({}),
     customerModels.Customer.deleteMany({}),
     customerModels.Plan.deleteMany({}),
     customerModels.Device.deleteMany({}),
@@ -233,8 +258,10 @@ const seed = async () => {
   console.log("-----------------------------------------");
   console.log(`Seed complete successfully!`);
   console.log(`Admin login: admin@yes.com / ${DEFAULT_PASSWORD}`);
-  console.log(`Distributor login: agent1@yes.com / ${DEFAULT_PASSWORD}`);
-  console.log(`Support login: eng1@yes.com / ${DEFAULT_PASSWORD}`);
+  console.log(`Agent login: agent1@yes.com / ${DEFAULT_PASSWORD}`);
+  console.log(`Tech Support login: tech1@yes.com / ${DEFAULT_PASSWORD}`);
+  console.log(`Sys Eng login: syseng1@yes.com / ${DEFAULT_PASSWORD}`);
+  console.log(`Customer Service login: cs1@yes.com / ${DEFAULT_PASSWORD}`);
   console.log(`Customer login: customer1@yes.com / ${DEFAULT_PASSWORD}`);
 };
 
