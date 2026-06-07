@@ -66,14 +66,14 @@ router.post(
 router.post(
   "/",
   requireAuth,
-  requireRole("admin", "distributor", "support"),
+  requireRole("admin", "agent", "tech_support", "system_engineer", "customer_service"),
   validateRequest({ body: createSubscriptionSchema }),
   SubscriptionController.create
 );
 router.patch(
   "/:id",
   requireAuth,
-  requireRole("admin", "distributor", "support"),
+  requireRole("admin", "agent", "tech_support", "system_engineer", "customer_service"),
   validateRequest({ params: subscriptionIdParamsSchema, body: updateSubscriptionSchema }),
   SubscriptionController.update
 );

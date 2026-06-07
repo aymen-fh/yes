@@ -34,7 +34,7 @@ router.post(
 router.patch(
   "/:id",
   requireAuth,
-  requireRole("admin", "distributor", "support"),
+  requireRole("admin", "agent", "tech_support", "system_engineer", "customer_service"),
   validateRequest({ params: supportTicketIdParamsSchema, body: updateSupportTicketSchema }),
   SupportTicketController.update
 );

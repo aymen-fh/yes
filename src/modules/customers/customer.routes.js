@@ -15,14 +15,14 @@ router.get("/me", requireAuth, CustomerController.me);
 router.get(
   "/",
   requireAuth,
-  requireRole("admin", "distributor", "support"),
+  requireRole("admin", "agent", "tech_support", "system_engineer", "customer_service"),
   validateRequest({ query: customerQuerySchema }),
   CustomerController.list
 );
 router.get(
   "/:id",
   requireAuth,
-  requireSelfOrRole("id", "admin", "distributor", "support"),
+  requireSelfOrRole("id", "admin", "agent", "tech_support", "system_engineer", "customer_service"),
   validateRequest({ params: customerIdParamsSchema }),
   CustomerController.getById
 );
@@ -36,7 +36,7 @@ router.post(
 router.patch(
   "/:id",
   requireAuth,
-  requireSelfOrRole("id", "admin", "distributor", "support"),
+  requireSelfOrRole("id", "admin", "agent", "tech_support", "system_engineer", "customer_service"),
   validateRequest({ params: customerIdParamsSchema, body: updateCustomerSchema }),
   CustomerController.update
 );
