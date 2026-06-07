@@ -21,6 +21,10 @@ export const isAllowedOrigin = (origin) => {
     return true;
   }
 
+  if (origin.endsWith('.ondigitalocean.app')) {
+    return true;
+  }
+
   // Allow localhost development tools unless explicitly running production.
   return !isProduction && isDevelopmentOrigin(origin);
 };
