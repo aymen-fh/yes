@@ -12,7 +12,8 @@
     "seed": "node scripts/seed.js",
     "seed.js": "node scripts/seed.js",
     "seed:isp": "node scripts/seed.js",
-    "seed:jobs": "node scripts/seed.js"
+    "seed:jobs": "node scripts/seed.js",
+    "normalize:usage": "node scripts/normalize-limited-usage.js"
   },
   "keywords": [],
   "author": "",
