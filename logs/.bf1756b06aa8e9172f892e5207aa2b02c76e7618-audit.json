@@ -1,0 +1,15 @@
+{
+    "keep": {
+        "days": true,
+        "amount": 14
+    },
+    "auditLog": "C:\\Users\\VICTUS\\Desktop\\Oxygen\\server\\logs\\.bf1756b06aa8e9172f892e5207aa2b02c76e7618-audit.json",
+    "files": [
+        {
+            "date": 1780811830375,
+            "name": "C:\\Users\\VICTUS\\Desktop\\Oxygen\\server\\logs\\app-2026-06-07.log",
+            "hash": "58db2a40d230acb3fcd79cfbcc1f1dd1c65eee8b15ea4946ca8bb89fafcbb9b4"
+        }
+    ],
+    "hashType": "sha256"
+}

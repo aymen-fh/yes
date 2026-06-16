@@ -24,11 +24,19 @@ export const createSubscriptionSchema = z.object({
 });
 
 export const renewSubscriptionSchema = z.object({
+  renewNow: z.boolean().optional(),
   months: z.coerce.number().int().min(1).max(12).default(1),
   paymentMethod: z.enum(["cash", "card", "bank_transfer", "wallet"]).default("card"),
   markAsPaid: z.boolean().default(true),
-  currency: z.string().min(3).max(3).default("EGP"),
+  currency: z.string().min(3).max(3).default("LYD"),
   note: z.string().max(240).optional(),
+});
+
+export const createTicketSchema = z.object({
+  subject: z.string().min(4).max(140),
+  description: z.string().min(10).max(1000),
+  category: z.enum(["technical", "billing", "account", "other"]).default("technical"),
+  priority: z.enum(["low", "medium", "high", "urgent"]).default("medium"),
 });
 
 export const switchPlanSchema = z.object({

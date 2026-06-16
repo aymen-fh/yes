@@ -6,6 +6,9 @@ import { getDeviceModel } from "../modules/devices/device.model.js";
 import { getSubscriptionModel } from "../modules/subscriptions/subscription.model.js";
 import { getPaymentModel } from "../modules/payments/payment.model.js";
 import { getSupportTicketModel } from "../modules/supportTickets/supportTicket.model.js";
+import { getServicePointModel } from "../modules/servicePoints/servicePoint.model.js";
+import { getUsageDailyModel } from "../modules/usage/usageDaily.model.js";
+import { getSpeedTestModel } from "../modules/speedTests/speedTest.model.js";
 
 const roleModelsCache = new Map();
 
@@ -16,6 +19,9 @@ const buildModels = (db, role) => ({
   Subscription: getSubscriptionModel(db),
   Payment: getPaymentModel(db),
   SupportTicket: getSupportTicketModel(db),
+  ServicePoint: getServicePointModel(db),
+  UsageDaily: getUsageDailyModel(db),
+  SpeedTest: getSpeedTestModel(db),
 });
 
 export const getModelsForRole = (role) => {

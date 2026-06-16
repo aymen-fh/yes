@@ -2,8 +2,10 @@ import { Router } from "express";
 import { requireAuth, requireRole } from "../../middleware/ispAuth.js";
 import { validateRequest } from "../../validators/validateRequest.js";
 import SubscriptionController from "./subscription.controller.js";
+import ServicePointController from "../servicePoints/servicePoint.controller.js";
 import {
   createSubscriptionSchema,
+  createTicketSchema,
   renewSubscriptionSchema,
   subscriptionIdParamsSchema,
   subscriptionQuerySchema,
@@ -14,6 +16,7 @@ import {
 
 const router = Router();
 
+router.get("/service-points", requireAuth, ServicePointController.list);
 router.get("/", requireAuth, validateRequest({ query: subscriptionQuerySchema }), SubscriptionController.list);
 router.get(
   "/:id",
@@ -26,6 +29,24 @@ router.get(
   requireAuth,
   validateRequest({ params: subscriptionIdParamsSchema }),
   SubscriptionController.dashboard
+);
+router.get(
+  "/:id/usage/daily",
+  requireAuth,
+  validateRequest({ params: subscriptionIdParamsSchema }),
+  SubscriptionController.dailyUsage
+);
+router.get(
+  "/:id/speed-test/latest",
+  requireAuth,
+  validateRequest({ params: subscriptionIdParamsSchema }),
+  SubscriptionController.latestSpeedTest
+);
+router.post(
+  "/:id/speed-test",
+  requireAuth,
+  validateRequest({ params: subscriptionIdParamsSchema }),
+  SubscriptionController.runSpeedTest
 );
 router.get(
   "/:id/usage",
@@ -78,13 +99,24 @@ router.patch(
   SubscriptionController.update
 );
 
-// App specific nested routes
-router.get("/:id/transactions", requireAuth, SubscriptionController.transactions);
-router.post("/:id/topups/submit", requireAuth, SubscriptionController.topup);
-router.get("/:id/plans", requireAuth, SubscriptionController.plans);
-router.post("/:id/plans/switch", requireAuth, SubscriptionController.switchPlan);
-router.post("/:id/plans/renew", requireAuth, SubscriptionController.renew);
-router.get("/:id/tickets", requireAuth, SubscriptionController.tickets);
-router.post("/:id/tickets", requireAuth, SubscriptionController.createTicket);
+// App-specific aliases (validated)
+router.post(
+  "/:id/plans/renew",
+  requireAuth,
+  validateRequest({ params: subscriptionIdParamsSchema, body: renewSubscriptionSchema }),
+  SubscriptionController.renew
+);
+router.get(
+  "/:id/tickets",
+  requireAuth,
+  validateRequest({ params: subscriptionIdParamsSchema }),
+  SubscriptionController.tickets
+);
+router.post(
+  "/:id/tickets",
+  requireAuth,
+  validateRequest({ params: subscriptionIdParamsSchema, body: createTicketSchema }),
+  SubscriptionController.createTicket
+);
 
 export default router;

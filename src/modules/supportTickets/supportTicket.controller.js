@@ -3,6 +3,7 @@ import { NotFoundError, ValidationError } from "../../utils/errors.js";
 import { STAFF_ROLES } from "../../utils/roles.js";
 import { findUserByIdAcrossRoles, getCustomerDomainModels } from "../../utils/roleModels.js";
 import { serializeDoc, serializeDocs } from "../common/serializers.js";
+import { toTicketMobileDto } from "../../utils/mobileDto.js";
 import NotificationService from "../notifications/notification.service.js";
 import SupportTicketService from "./supportTicket.service.js";
 
@@ -99,7 +100,7 @@ class SupportTicketController {
       SupportTicketService.ensureUserCanReadTicket(req.user, ticket);
 
       const hydrated = await hydrateAssignedTo(ticket);
-      return ApiResponse.success(res, serializeDoc(hydrated));
+      return ApiResponse.success(res, toTicketMobileDto(hydrated));
     } catch (error) {
       return next(error);
     }
@@ -138,7 +139,7 @@ class SupportTicketController {
         ticket: serializeDoc(hydrated),
       });
 
-      return ApiResponse.created(res, serializeDoc(hydrated), "Support ticket created successfully");
+      return ApiResponse.created(res, toTicketMobileDto(hydrated), "Support ticket created successfully");
     } catch (error) {
       return next(error);
     }
@@ -168,7 +169,7 @@ class SupportTicketController {
         .populate("subscriptionId", "subscriptionNumber status");
 
       const hydrated = await hydrateAssignedTo(updatedTicket);
-      return ApiResponse.success(res, serializeDoc(hydrated), "Reply added to ticket");
+      return ApiResponse.success(res, toTicketMobileDto(hydrated), "Reply added to ticket");
     } catch (error) {
       return next(error);
     }

@@ -3,6 +3,11 @@ import { getCustomerDomainModels } from "../../utils/roleModels.js";
 import { createReadableCode } from "../common/serializers.js";
 
 class SupportTicketService {
+  static normalizeAuthorRole(role) {
+    if (role === "customer") return "customer";
+    return "support";
+  }
+
   static async createTicketNumber() {
     const { SupportTicket } = getCustomerDomainModels();
     for (let attempt = 0; attempt < 8; attempt += 1) {
@@ -33,7 +38,7 @@ class SupportTicketService {
       ...(ticket.replies || []),
       {
         authorId: actor.id,
-        authorRole: actor.role,
+        authorRole: SupportTicketService.normalizeAuthorRole(actor.role),
         message: trimmed,
         createdAt: new Date(),
       },

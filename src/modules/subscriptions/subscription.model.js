@@ -29,6 +29,16 @@ const subscriptionSchema = new mongoose.Schema(
       enum: ["active", "pending", "suspended", "cancelled"],
       default: "pending",
     },
+    serviceType: {
+      type: String,
+      enum: ["ftth", "mobile4g5g", "adsl", "other"],
+      default: "ftth",
+    },
+    branchName: {
+      type: String,
+      default: "",
+      trim: true,
+    },
     assignedIp: {
       type: String,
       default: "",

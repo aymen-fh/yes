@@ -2,9 +2,13 @@ import { ApiResponse } from "../../utils/apiResponse.js";
 import { ForbiddenError, NotFoundError, ValidationError } from "../../utils/errors.js";
 import { getCustomerDomainModels } from "../../utils/roleModels.js";
 import { createReadableCode, serializeDoc, serializeDocs } from "../common/serializers.js";
+import { toSubscriptionMobileDto, toTicketMobileDto, toPlanMobileDto, toSpeedTestDto } from "../../utils/mobileDto.js";
+import { ensureUserCanReadSubscription } from "../../utils/subscriptionAccess.js";
 import PaymentService from "../payments/payment.service.js";
 import SubscriptionService from "./subscription.service.js";
-
+import SupportTicketService from "../supportTickets/supportTicket.service.js";
+import UsageService from "../usage/usage.service.js";
+import SpeedTestService from "../speedTests/speedTest.service.js";
 const ensurePlanAndCustomer = async ({ planId, customerId }) => {
   const { Plan, Customer } = getCustomerDomainModels();
   const [plan, customer] = await Promise.all([
@@ -23,7 +27,7 @@ const ensurePlanAndCustomer = async ({ planId, customerId }) => {
   return { plan, customer };
 };
 
-const toSubscriptionDto = (subscription) => serializeDoc(subscription);
+const toSubscriptionDto = (subscription) => toSubscriptionMobileDto(subscription);
 
 const getDomainModels = () => getCustomerDomainModels();
 
@@ -38,24 +42,43 @@ const createSubscriptionNumber = async () => {
   return `${createReadableCode("SUB")}-${Date.now().toString().slice(-4)}`;
 };
 
-const ensureUserCanReadSubscription = (reqUser, subscription) => {
-  if (reqUser.role !== "customer") return;
-  if (subscription.customerId?._id?.toString?.() !== reqUser.id) {
-    throw new ForbiddenError("You can only view your own subscription");
-  }
-};
-
 const toTransactionItem = (payment) => {
   const amount = typeof payment.totalAmount === "number" ? payment.totalAmount : payment.amount;
+  const note = String(payment.note || "").toLowerCase();
+  let type = payment.method || "payment";
+
+  if (note.includes("topup") || note.includes("scratch")) {
+    type = "topup";
+  } else if (note.includes("renew") || note.includes("اشتراك")) {
+    type = "renew";
+  }
+
   return {
     id: payment._id?.toString?.() ?? payment.id,
     subscriptionId: payment.subscriptionId?._id?.toString?.() ||
       payment.subscriptionId?.toString?.(),
-    type: payment.method || "payment",
+    type,
     amount: amount || 0,
     status: payment.status || "pending",
     createdAt: payment.createdAt,
   };
+};
+
+const computeAccountBalance = (payments) => {
+  let balance = 0;
+
+  for (const payment of payments) {
+    if (payment.status !== "paid") continue;
+
+    const amount = payment.totalAmount || payment.amount || 0;
+    const note = String(payment.note || "").toLowerCase();
+
+    if (note.includes("topup") || note.includes("scratch")) {
+      balance += amount;
+    }
+  }
+
+  return Math.max(0, balance);
 };
 
 class SubscriptionController {
@@ -88,7 +111,13 @@ class SubscriptionController {
         Subscription.countDocuments(query),
       ]);
 
-      return ApiResponse.paginated(res, serializeDocs(items), total, page, limit);
+      return ApiResponse.paginated(
+        res,
+        items.map((item) => toSubscriptionMobileDto(item)),
+        total,
+        page,
+        limit
+      );
     } catch (error) {
       return next(error);
     }
@@ -257,16 +286,26 @@ class SubscriptionController {
       const dataLimitGb = subscription.planId?.dataLimitGb || 0;
       const usageGb = subscription.dataUsageGb || 0;
       const usagePercent = dataLimitGb > 0 ? Math.min(100, Math.round((usageGb / dataLimitGb) * 100)) : 0;
+      const periodEnd = subscription.nextBillingDate || new Date();
+      const periodStart = SubscriptionService.addMonthsSafe(periodEnd, -1);
+      const dailyUsage = await UsageService.getLastDaysUsage(subscription._id, 7);
 
       return ApiResponse.success(res, {
+        subscriptionId: subscription._id.toString(),
         id: subscription._id.toString(),
         subscriptionNumber: subscription.subscriptionNumber,
         customer: subscription.customerId,
         plan: subscription.planId,
         usageGb,
+        consumedGb: usageGb,
         dataLimitGb,
+        quotaTotalGb: dataLimitGb,
         remainingGb: Math.max(0, dataLimitGb - usageGb),
         usagePercent,
+        isUnlimited: dataLimitGb >= 999,
+        periodStart,
+        periodEnd,
+        dailyUsage,
         status: subscription.status,
       });
     } catch (error) {
@@ -295,25 +334,30 @@ class SubscriptionController {
       const periodEnd = subscription.nextBillingDate || new Date();
       const periodStart = SubscriptionService.addMonthsSafe(periodEnd, -1);
 
-      const payments = await Payment.find({
-        subscriptionId: subscription._id,
-      })
-        .sort({ createdAt: -1 })
-        .limit(3);
+      const [latestPayments, paidPayments] = await Promise.all([
+        Payment.find({ subscriptionId: subscription._id })
+          .sort({ createdAt: -1 })
+          .limit(3),
+        Payment.find({ subscriptionId: subscription._id, status: "paid" }),
+      ]);
+
+      const dailyUsage = await UsageService.getLastDaysUsage(subscription._id, 7);
 
       return ApiResponse.success(res, {
         serviceStatus: subscription.status,
         nextBillingDate: subscription.nextBillingDate,
+        accountBalance: computeAccountBalance(paidPayments),
         usage: {
           subscriptionId: subscription._id.toString(),
-          isUnlimited: dataLimitGb <= 0,
+          isUnlimited: dataLimitGb >= 999,
           periodStart,
           periodEnd,
           quotaTotalGb: dataLimitGb,
           consumedGb: usageGb,
           remainingGb,
+          dailyUsage,
         },
-        latestTransactions: payments.map(toTransactionItem),
+        latestTransactions: latestPayments.map(toTransactionItem),
       });
     } catch (error) {
       return next(error);
@@ -351,7 +395,7 @@ class SubscriptionController {
       ensureUserCanReadSubscription(req.user, subscription);
 
       const plans = await Plan.find({ isActive: true }).sort({ monthlyPrice: 1 });
-      return ApiResponse.success(res, serializeDocs(plans));
+      return ApiResponse.success(res, plans.map((plan) => toPlanMobileDto(plan)));
     } catch (error) {
       return next(error);
     }
@@ -414,7 +458,7 @@ class SubscriptionController {
         months: 1,
         paymentMethod: "wallet",
         markAsPaid: true,
-        currency: "EGP",
+        currency: "LYD",
         note: `Topup via scratch code ${req.body.scratchCode}`,
         periodStart: now,
         periodEnd: new Date(now.getTime() + 24 * 60 * 60 * 1000),
@@ -496,71 +540,22 @@ class SubscriptionController {
       return next(error);
     }
   }
-  static async transactions(req, res, next) {
-    try {
-      const { Payment } = getDomainModels();
-      const items = await Payment.find({ subscriptionId: req.params.id }).sort({ createdAt: -1 });
-      return ApiResponse.success(res, serializeDocs(items));
-    } catch (error) {
-      return next(error);
-    }
-  }
-
-  static async topup(req, res, next) {
-    try {
-      const { scratchCode } = req.body;
-      const { Subscription, Payment } = getDomainModels();
-      const subscription = await Subscription.findById(req.params.id);
-      if (!subscription) throw new NotFoundError("Subscription not found");
-
-      const payment = await Payment.create({
-        subscriptionId: subscription._id,
-        customerId: subscription.customerId,
-        invoiceNumber: await PaymentService.createInvoiceNumber(),
-        amount: 100,
-        totalAmount: 100,
-        currency: "LYD",
-        status: "paid",
-        paidAt: new Date(),
-        paymentMethod: "scratch_card",
-        type: "topup"
-      });
-      return ApiResponse.success(res, serializeDoc(payment));
-    } catch (error) {
-      return next(error);
-    }
-  }
-
-  static async plans(req, res, next) {
-    try {
-      const { Plan } = getDomainModels();
-      const items = await Plan.find({ status: "active" });
-      return ApiResponse.success(res, serializeDocs(items));
-    } catch (error) {
-      return next(error);
-    }
-  }
-
-  static async switchPlan(req, res, next) {
-    try {
-      const { targetPlanId } = req.body;
-      const { Subscription } = getDomainModels();
-      const subscription = await Subscription.findByIdAndUpdate(
-        req.params.id,
-        { planId: targetPlanId },
-        { new: true }
-      ).populate("planId");
-      return ApiResponse.success(res, toSubscriptionDto(subscription));
-    } catch (error) {
-      return next(error);
-    }
-  }
 
   static async tickets(req, res, next) {
     try {
-      const { SupportTicket } = getDomainModels();
-      const items = await SupportTicket.find({ subscriptionId: req.params.id }).sort({ createdAt: -1 });
-      return ApiResponse.success(res, serializeDocs(items));
+      const { Subscription, SupportTicket } = getDomainModels();
+      const subscription = await Subscription.findById(req.params.id);
+
+      if (!subscription) {
+        throw new NotFoundError("Subscription not found");
+      }
+
+      ensureUserCanReadSubscription(req.user, subscription);
+
+      const items = await SupportTicket.find({ subscriptionId: subscription._id })
+        .sort({ createdAt: -1 });
+
+      return ApiResponse.success(res, items.map(toTicketMobileDto));
     } catch (error) {
       return next(error);
     }
@@ -570,16 +565,99 @@ class SubscriptionController {
     try {
       const { Subscription, SupportTicket } = getDomainModels();
       const subscription = await Subscription.findById(req.params.id);
-      if (!subscription) throw new NotFoundError("Subscription not found");
+
+      if (!subscription) {
+        throw new NotFoundError("Subscription not found");
+      }
+
+      ensureUserCanReadSubscription(req.user, subscription);
+
+      const subject = String(req.body.subject || "").trim();
+      const description = String(req.body.description || "").trim();
+
+      if (subject.length < 4) {
+        throw new ValidationError("Subject must be at least 4 characters");
+      }
+
+      if (description.length < 10) {
+        throw new ValidationError("Description must be at least 10 characters");
+      }
+
+      const ticketNumber = await SupportTicketService.createTicketNumber();
+
       const ticket = await SupportTicket.create({
-        subscriptionId: req.params.id,
+        ticketNumber,
+        subscriptionId: subscription._id,
         customerId: subscription.customerId,
-        subject: req.body.subject,
-        description: req.body.description,
+        subject,
+        description,
         status: "open",
-        priority: "medium"
+        priority: req.body.priority || "medium",
+        category: req.body.category || "technical",
+        replies: [
+          {
+            authorId: subscription.customerId,
+            authorRole: "customer",
+            message: description,
+            createdAt: new Date(),
+          },
+        ],
       });
-      return ApiResponse.success(res, serializeDoc(ticket));
+
+      return ApiResponse.created(res, toTicketMobileDto(ticket), "Support ticket created successfully");
+    } catch (error) {
+      return next(error);
+    }
+  }
+
+  static async dailyUsage(req, res, next) {
+    try {
+      const { Subscription } = getDomainModels();
+      const subscription = await Subscription.findById(req.params.id);
+      if (!subscription) throw new NotFoundError("Subscription not found");
+
+      ensureUserCanReadSubscription(req.user, subscription);
+
+      const dailyUsage = await UsageService.getLastDaysUsage(subscription._id, 7);
+      return ApiResponse.success(res, dailyUsage);
+    } catch (error) {
+      return next(error);
+    }
+  }
+
+  static async runSpeedTest(req, res, next) {
+    try {
+      const { Subscription } = getDomainModels();
+      const subscription = await Subscription.findById(req.params.id).populate(
+        "planId",
+        "name code speedMbps dataLimitGb monthlyPrice"
+      );
+
+      if (!subscription) throw new NotFoundError("Subscription not found");
+
+      ensureUserCanReadSubscription(req.user, subscription);
+
+      const result = await SpeedTestService.runForSubscription({
+        subscription,
+        customerId: subscription.customerId,
+      });
+
+      return ApiResponse.success(res, toSpeedTestDto(result), "Speed test completed");
+    } catch (error) {
+      return next(error);
+    }
+  }
+
+  static async latestSpeedTest(req, res, next) {
+    try {
+      const { Subscription } = getDomainModels();
+      const subscription = await Subscription.findById(req.params.id);
+      if (!subscription) throw new NotFoundError("Subscription not found");
+
+      ensureUserCanReadSubscription(req.user, subscription);
+
+      const latest = await SpeedTestService.getLatest(subscription._id);
+      return ApiResponse.success(res, toSpeedTestDto(latest));
     } catch (error) {
       return next(error);
     }

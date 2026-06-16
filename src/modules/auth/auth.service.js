@@ -130,7 +130,6 @@ const issueTokenPair = async (customer) => {
   const { Customer } = getModelsForRole(customer.role);
   const token = JwtService.sign(toAuthPayload(customer));
   const refreshToken = JwtService.signRefresh({ id: customer._id.toString(), role: customer.role });
-  // Store only a hash of the refresh token to reduce token leakage impact.
   const refreshTokenHash = await EncryptionServices.encryptText(refreshToken);
 
   await Customer.findByIdAndUpdate(customer._id, {
@@ -139,6 +138,18 @@ const issueTokenPair = async (customer) => {
   });
 
   return { token, refreshToken };
+};
+
+const buildAuthResponse = (customer, tokens) => {
+  const profile = sanitizeCustomer(customer);
+
+  return {
+    user: profile,
+    customer: profile,
+    accessToken: tokens.token,
+    token: tokens.token,
+    refreshToken: tokens.refreshToken,
+  };
 };
 
 const findCustomerByIdentifier = async (identifier) =>
@@ -168,10 +179,7 @@ class AuthService {
 
     const tokens = await issueTokenPair(customer);
 
-    return {
-      customer: sanitizeCustomer(customer),
-      ...tokens,
-    };
+    return buildAuthResponse(customer, tokens);
   }
 
   static async login(payload) {
@@ -193,10 +201,7 @@ class AuthService {
 
     const tokens = await issueTokenPair(customer);
 
-    return {
-      customer: sanitizeCustomer(customer),
-      ...tokens,
-    };
+    return buildAuthResponse(customer, tokens);
   }
 
   static async requestLoginOtp(payload) {
@@ -237,10 +242,13 @@ class AuthService {
     await sendLoginOtpSms({ phone: customer.phone, code });
 
     return {
+      requestId: otpToken,
       otpToken,
+      expiresInSec: Math.floor(LOGIN_OTP_EXPIRY_MS / 1000),
       expiresInSeconds: Math.floor(LOGIN_OTP_EXPIRY_MS / 1000),
-      destinationPhone: customer.phone,
+      maskedDestination: maskPhone(customer.phone),
       maskedPhone: maskPhone(customer.phone),
+      destinationPhone: customer.phone,
     };
   }
 
@@ -286,10 +294,7 @@ class AuthService {
 
     const tokens = await issueTokenPair(customer);
 
-    return {
-      customer: sanitizeCustomer(customer),
-      ...tokens,
-    };
+    return buildAuthResponse(customer, tokens);
   }
 
   static async refreshToken(payload) {
@@ -312,10 +317,7 @@ class AuthService {
 
     const tokens = await issueTokenPair(customer);
 
-    return {
-      customer: sanitizeCustomer(customer),
-      ...tokens,
-    };
+    return buildAuthResponse(customer, tokens);
   }
 
   static async logout(customerId, role = Roles.CUSTOMER) {

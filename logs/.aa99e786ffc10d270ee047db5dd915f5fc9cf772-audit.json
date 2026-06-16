@@ -6,16 +6,6 @@
     "auditLog": "C:\\Users\\VICTUS\\Desktop\\Oxygen\\Server\\logs\\.aa99e786ffc10d270ee047db5dd915f5fc9cf772-audit.json",
     "files": [
         {
-            "date": 1780216833123,
-            "name": "C:\\Users\\VICTUS\\Desktop\\Oxygen\\Server\\logs\\app-2026-05-31.log",
-            "hash": "987cb861e8dffe0e86603e70f493493c860ee6e524085e62ea484f7f9bd67559"
-        },
-        {
-            "date": 1780264927977,
-            "name": "C:\\Users\\VICTUS\\Desktop\\Oxygen\\Server\\logs\\app-2026-06-01.log",
-            "hash": "dc9db649a4859ef597355b40ed3c5239572d52bb28c78749209e98f4ffb0ca21"
-        },
-        {
             "date": 1780412107486,
             "name": "C:\\Users\\VICTUS\\Desktop\\Oxygen\\Server\\logs\\app-2026-06-02.log",
             "hash": "b607ae1d42d01b28e55f1519a953e01849567731c19755194e3d4f09de00eb91"
@@ -39,6 +29,26 @@
             "date": 1780806864229,
             "name": "C:\\Users\\VICTUS\\Desktop\\Oxygen\\Server\\logs\\app-2026-06-07.log",
             "hash": "209888c4622722539d3e75bc1ba8456e3de47cf8481e9c504c02d1e64575cc55"
+        },
+        {
+            "date": 1781169648362,
+            "name": "C:\\Users\\VICTUS\\Desktop\\Oxygen\\Server\\logs\\app-2026-06-11.log",
+            "hash": "213f5a134a152278f074d2feb9d3c95b3ec22e17448042f8c1f798e8c6df9e55"
+        },
+        {
+            "date": 1781466901581,
+            "name": "C:\\Users\\VICTUS\\Desktop\\Oxygen\\Server\\logs\\app-2026-06-14.log",
+            "hash": "e625737349bf0456832f2b8766088236885a6b1fa567202c2273da44d334721d"
+        },
+        {
+            "date": 1781475211130,
+            "name": "C:\\Users\\VICTUS\\Desktop\\Oxygen\\Server\\logs\\app-2026-06-15.log",
+            "hash": "4c2639f6bd237dd9be072002dc9aa0b21b4aa59584e20761fdbbfc22ac347828"
+        },
+        {
+            "date": 1781620413362,
+            "name": "C:\\Users\\VICTUS\\Desktop\\Oxygen\\Server\\logs\\app-2026-06-16.log",
+            "hash": "de9a46f0576ce9e994a93b2a2254ba913c824a3f022ac88d231ce319d13e8351"
         }
     ],
     "hashType": "sha256"

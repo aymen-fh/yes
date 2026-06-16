@@ -1,0 +1,11 @@
+2026-06-15 00:13:30 [error]: [SubscriptionLifecycle] Failed to expire subscriptions: getaddrinfo ENOTFOUND ac-ccnnprl-shard-00-01.0go1gqi.mongodb.net
+2026-06-15 00:13:41 [error]: [SubscriptionLifecycle] Failed to expire subscriptions: getaddrinfo ENOTFOUND ac-ccnnprl-shard-00-01.0go1gqi.mongodb.net
+2026-06-15 00:14:41 [error]: [SubscriptionLifecycle] Failed to expire subscriptions: getaddrinfo ENOTFOUND ac-ccnnprl-shard-00-01.0go1gqi.mongodb.net
+2026-06-15 00:15:41 [error]: [SubscriptionLifecycle] Failed to expire subscriptions: getaddrinfo ENOTFOUND ac-ccnnprl-shard-00-01.0go1gqi.mongodb.net
+2026-06-15 00:37:56 [error]: [SubscriptionLifecycle] Failed to expire subscriptions: getaddrinfo ENOTFOUND ac-ccnnprl-shard-00-01.0go1gqi.mongodb.net
+2026-06-15 00:38:06 [error]: [SubscriptionLifecycle] Failed to expire subscriptions: getaddrinfo ENOTFOUND ac-ccnnprl-shard-00-01.0go1gqi.mongodb.net
+2026-06-15 00:38:23 [info]: 📚 Swagger docs available at /api-docs
+2026-06-15 00:38:23 [warn]: Admin React build missing at C:\Users\VICTUS\Desktop\Oxygen\frontend\dist\index.html. Route /admin-react will return 503 until built.
+2026-06-15 00:38:23 [info]: [SubscriptionLifecycle] Job started (every 60s)
+2026-06-15 00:38:23 [warn]: MongoDB is unavailable. Server will stay up in degraded mode and retry every 15s.
+2026-06-15 00:38:23 [info]: 🚀 Server running on port 7000 (0.0.0.0)

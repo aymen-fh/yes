@@ -2,12 +2,15 @@ import { ApiResponse } from "../../utils/apiResponse.js";
 import { NotFoundError } from "../../utils/errors.js";
 import { getCustomerDomainModels } from "../../utils/roleModels.js";
 import { serializeDoc, serializeDocs } from "../common/serializers.js";
+import { toPlanMobileDto } from "../../utils/mobileDto.js";
 
 const buildPlanQuery = ({ isActive, search }) => {
   const query = {};
 
   if (typeof isActive === "string") {
     query.isActive = isActive === "true";
+  } else {
+    query.isActive = true;
   }
 
   if (search) {
@@ -35,7 +38,7 @@ class PlanController {
         Plan.countDocuments(query),
       ]);
 
-      return ApiResponse.paginated(res, serializeDocs(items), total, page, limit);
+      return ApiResponse.paginated(res, items.map((item) => toPlanMobileDto(item)), total, page, limit);
     } catch (error) {
       return next(error);
     }

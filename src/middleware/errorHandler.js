@@ -9,10 +9,11 @@ export function errorHandler(err, req, res, next) {
     message = field ? `${field} already exists` : "Duplicate value";
   }
   // Mongoose validation
-  if (err.name === "ValidationError") {
+  if (err.name === "ValidationError" && err.errors && !err.isOperational) {
     statusCode = 400;
     message = Object.values(err.errors).map((e) => e.message).join(", ");
   }
+
   // JWT errors
   if (err.name === "JsonWebTokenError") {
     statusCode = 401;
@@ -33,6 +34,10 @@ export function errorHandler(err, req, res, next) {
     message,
     requestId: req.id,
   };
+
+  if (err.errors) {
+    response.errors = err.errors;
+  }
 
   if (process.env.NODE_ENV !== "production") {
     response.error = {

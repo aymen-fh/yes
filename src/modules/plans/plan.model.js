@@ -35,6 +35,21 @@ const planSchema = new mongoose.Schema(
       min: 1,
       max: 24,
     },
+    durationDays: {
+      type: Number,
+      default: null,
+      min: 1,
+      max: 365,
+    },
+    validityLabel: {
+      type: String,
+      default: "",
+      trim: true,
+    },
+    isUnlimited: {
+      type: Boolean,
+      default: false,
+    },
     vatPercent: {
       type: Number,
       default: 15,

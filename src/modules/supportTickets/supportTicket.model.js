@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import SupportTicketService from "./supportTicket.service.js";
 
 const supportTicketSchema = new mongoose.Schema(
   {
@@ -60,7 +61,15 @@ const supportTicketSchema = new mongoose.Schema(
         },
         authorRole: {
           type: String,
-          enum: ["customer", "admin", "distributor", "support"],
+          enum: [
+            "customer",
+            "admin",
+            "distributor",
+            "support",
+            "tech_support",
+            "customer_service",
+            "system_engineer",
+          ],
           required: true,
         },
         message: {
@@ -96,6 +105,12 @@ const supportTicketSchema = new mongoose.Schema(
 );
 
 supportTicketSchema.index({ customerId: 1, status: 1, createdAt: -1 });
+
+supportTicketSchema.pre("validate", async function ensureTicketNumber() {
+  if (this.ticketNumber) return;
+
+  this.ticketNumber = await SupportTicketService.createTicketNumber();
+});
 
 export default mongoose.model("SupportTicket", supportTicketSchema);
 

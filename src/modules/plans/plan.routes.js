@@ -2,6 +2,7 @@ import { Router } from "express";
 import { requireAuth, requireRole } from "../../middleware/ispAuth.js";
 import { validateRequest } from "../../validators/validateRequest.js";
 import PlanController from "./plan.controller.js";
+import ServicePointController from "../servicePoints/servicePoint.controller.js";
 import {
   createPlanSchema,
   planIdParamsSchema,
@@ -11,6 +12,7 @@ import {
 
 const router = Router();
 
+router.get("/service-points", requireAuth, ServicePointController.list);
 router.get("/", requireAuth, validateRequest({ query: planQuerySchema }), PlanController.list);
 router.get("/:id", requireAuth, validateRequest({ params: planIdParamsSchema }), PlanController.getById);
 router.post(
