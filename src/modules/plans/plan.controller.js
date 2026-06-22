@@ -4,12 +4,12 @@ import { getCustomerDomainModels } from "../../utils/roleModels.js";
 import { serializeDoc, serializeDocs } from "../common/serializers.js";
 import { toPlanMobileDto } from "../../utils/mobileDto.js";
 
-const buildPlanQuery = ({ isActive, search }) => {
+const buildPlanQuery = ({ isActive, search, includeInactive }) => {
   const query = {};
 
   if (typeof isActive === "string") {
     query.isActive = isActive === "true";
-  } else {
+  } else if (includeInactive !== "true") {
     query.isActive = true;
   }
 
@@ -27,8 +27,8 @@ class PlanController {
   static async list(req, res, next) {
     try {
       const { Plan } = getCustomerDomainModels();
-      const { page, limit, isActive, search } = req.query;
-      const query = buildPlanQuery({ isActive, search });
+      const { page, limit, isActive, search, includeInactive } = req.query;
+      const query = buildPlanQuery({ isActive, search, includeInactive });
 
       const [items, total] = await Promise.all([
         Plan.find(query)

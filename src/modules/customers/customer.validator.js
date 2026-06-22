@@ -8,7 +8,7 @@ export const customerIdParamsSchema = z.object({
 export const customerQuerySchema = paginationQuerySchema.extend({
   status: z.enum(["active", "suspended", "pending"]).optional(),
   search: z.string().optional(),
-  role: z.enum(["customer", "admin", "distributor", "support"]).optional(),
+  role: z.enum(["customer", "admin", "agent", "tech_support", "system_engineer", "customer_service"]).optional(),
 });
 
 export const createCustomerSchema = z.object({
@@ -17,7 +17,7 @@ export const createCustomerSchema = z.object({
   password: z.string().min(8).max(128),
   phone: z.string().min(6).max(20),
   address: z.string().max(160).optional(),
-  role: z.enum(["customer", "admin", "distributor", "support"]).default("customer"),
+  role: z.enum(["customer", "admin", "agent", "tech_support", "system_engineer", "customer_service"]).default("customer"),
   status: z.enum(["active", "suspended", "pending"]).default("active"),
 });
 
@@ -27,7 +27,7 @@ export const updateCustomerSchema = z
     phone: z.string().min(6).max(20).optional(),
     address: z.string().max(160).optional(),
     status: z.enum(["active", "suspended", "pending"]).optional(),
-    role: z.enum(["customer", "admin", "distributor", "support"]).optional(),
+    role: z.enum(["customer", "admin", "agent", "tech_support", "system_engineer", "customer_service"]).optional(),
   })
   .refine((input) => Object.keys(input).length > 0, {
     message: "Provide at least one field to update",

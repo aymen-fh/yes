@@ -19,6 +19,7 @@ import supportTicketRoute from "./modules/supportTickets/supportTicket.routes.js
 import servicePointRoute from "./modules/servicePoints/servicePoint.routes.js";
 import mobileRoute from "./modules/mobile/mobile.routes.js";
 import adminRoute from "./modules/admin/admin.routes.js";
+import dashboardRoute from "./modules/dashboard/dashboard.routes.js";
 import { corsOptions } from "./config/cors.js";
 import { errorHandler, notFoundHandler } from "./middleware/errorHandler.js";
 import { requestId } from "./middleware/requestId.js";
@@ -137,6 +138,7 @@ app.use("/api/v1/support-tickets", supportTicketRoute);
 app.use("/api/v1/tickets", supportTicketRoute); // Alias for App
 app.use("/api/v1/service-points", servicePointRoute);
 app.use("/api/v1/mobile", mobileRoute);
+app.use("/api/v1/dashboard", dashboardRoute);
 
 // Legacy/compat alias to support /api base path used by the mobile app.
 app.use("/api/auth", authRoute);
@@ -149,6 +151,7 @@ app.use("/api/support-tickets", supportTicketRoute);
 app.use("/api/tickets", supportTicketRoute);
 app.use("/api/service-points", servicePointRoute);
 app.use("/api/mobile", mobileRoute);
+app.use("/api/dashboard", dashboardRoute);
 app.use("/admin", adminRoute);
 
 if (hasAdminReactBuild) {
