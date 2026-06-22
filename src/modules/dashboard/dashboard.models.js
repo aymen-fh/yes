@@ -4,6 +4,7 @@ import { Roles } from "../../utils/roles.js";
 
 const agentProfileSchema = new mongoose.Schema(
   {
+    profileCode: { type: String, trim: true, uppercase: true },
     userId: { type: mongoose.Schema.Types.ObjectId, required: true, unique: true },
     name: { type: String, required: true, trim: true },
     phone: { type: String, required: true, trim: true },
@@ -19,6 +20,7 @@ const agentProfileSchema = new mongoose.Schema(
 
 const engineerProfileSchema = new mongoose.Schema(
   {
+    profileCode: { type: String, trim: true, uppercase: true },
     userId: { type: mongoose.Schema.Types.ObjectId, required: true, unique: true },
     name: { type: String, required: true, trim: true },
     phone: { type: String, required: true, trim: true },
@@ -123,6 +125,7 @@ const agentRequestSchema = new mongoose.Schema(
 
 const internalMessageSchema = new mongoose.Schema(
   {
+    messageCode: { type: String, unique: true, sparse: true, trim: true, uppercase: true },
     senderId: { type: String, required: true },
     senderName: { type: String, required: true, trim: true },
     senderRole: {

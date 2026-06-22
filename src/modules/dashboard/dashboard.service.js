@@ -14,10 +14,13 @@ import {
   InternalMessage,
 } from "./dashboard.models.js";
 
+const resolveModel = (Model) => (Model?.modelName ? Model : Model());
+
 const nextCode = async (Model, field, prefix) => {
+  const MongooseModel = resolveModel(Model);
   for (let i = 0; i < 8; i += 1) {
     const code = createReadableCode(prefix);
-    const exists = await Model().exists({ [field]: code });
+    const exists = await MongooseModel.exists({ [field]: code });
     if (!exists) return code;
   }
   return `${createReadableCode(prefix)}-${Date.now().toString().slice(-4)}`;
@@ -42,13 +45,44 @@ const listCustomers = async () => {
 };
 
 const listAgents = async () => {
+  const { Customer } = getModelsForRole(Roles.DISTRIBUTOR);
   const profiles = await AgentProfile().find().sort({ createdAt: -1 });
-  return profiles.map((p) => toDto(p));
+  const results = [];
+  for (const profile of profiles) {
+    const user = await Customer.findById(profile.userId);
+    const dto = toDto(profile);
+    if (!dto.profileCode && user?.customerCode) {
+      profile.profileCode = user.customerCode;
+      await profile.save();
+      dto.profileCode = user.customerCode;
+    }
+    dto.customerCode = user?.customerCode ?? dto.profileCode;
+    results.push(dto);
+  }
+  return results;
 };
 
 const listEngineers = async () => {
+  const engineerRoles = [Roles.SUPPORT, Roles.SYSTEM_ENGINEER];
   const profiles = await EngineerProfile().find().sort({ createdAt: -1 });
-  return profiles.map((p) => toDto(p));
+  const results = [];
+  for (const profile of profiles) {
+    let user = null;
+    for (const role of engineerRoles) {
+      const { Customer } = getModelsForRole(role);
+      user = await Customer.findById(profile.userId);
+      if (user) break;
+    }
+    const dto = toDto(profile);
+    if (!dto.profileCode && user?.customerCode) {
+      profile.profileCode = user.customerCode;
+      await profile.save();
+      dto.profileCode = user.customerCode;
+    }
+    dto.customerCode = user?.customerCode ?? dto.profileCode;
+    results.push(dto);
+  }
+  return results;
 };
 
 const ensureEngineerProfiles = async () => {
@@ -61,6 +95,7 @@ const ensureEngineerProfiles = async () => {
       if (!exists) {
         await EngineerProfile().create({
           userId: user._id,
+          profileCode: user.customerCode,
           name: user.fullName,
           phone: user.phone,
           specialization: role === Roles.SYSTEM_ENGINEER ? "مهندس منظومة" : "دعم فني",
@@ -80,6 +115,7 @@ const ensureAgentProfiles = async () => {
     if (!exists) {
       await AgentProfile().create({
         userId: user._id,
+        profileCode: user.customerCode,
         name: user.fullName,
         phone: user.phone,
         region: user.address || "",
@@ -147,6 +183,7 @@ class DashboardService {
 
     const profile = await AgentProfile().create({
       userId: user._id,
+      profileCode: customerCode,
       name: payload.name,
       phone: payload.phone,
       region: payload.region || "",
@@ -222,6 +259,7 @@ class DashboardService {
     if (role === Roles.SUPPORT || role === Roles.SYSTEM_ENGINEER) {
       await EngineerProfile().create({
         userId: user._id,
+        profileCode: customerCode,
         name: user.fullName,
         phone: user.phone,
         specialization: role === Roles.SYSTEM_ENGINEER ? "مهندس منظومة" : "دعم فني",
@@ -297,7 +335,8 @@ class DashboardService {
   }
 
   static async createMessage(payload) {
-    const msg = await InternalMessage().create(payload);
+    const messageCode = await nextCode(InternalMessage, "messageCode", "MSG");
+    const msg = await InternalMessage().create({ ...payload, messageCode });
     return toDto(msg);
   }
 
