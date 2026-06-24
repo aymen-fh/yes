@@ -4,6 +4,7 @@ import DashboardController from "./dashboard.controller.js";
 
 const router = Router();
 const adminOnly = [requireAuth, requireRole("admin", "system_engineer")];
+const staffOnly = [requireAuth, requireRole("admin", "system_engineer", "agent", "customer_service", "tech_support")];
 
 router.get("/bootstrap", ...adminOnly, DashboardController.bootstrap);
 
@@ -27,6 +28,7 @@ router.delete("/cards/:id", ...adminOnly, DashboardController.deleteCard);
 
 router.post("/reports", requireAuth, DashboardController.createReport);
 router.post("/audit-logs", requireAuth, DashboardController.createAuditLog);
+router.get("/permissions", ...staffOnly, DashboardController.listPermissions);
 router.put("/permissions", ...adminOnly, DashboardController.upsertPermissions);
 
 router.post("/requests", requireAuth, DashboardController.createRequest);

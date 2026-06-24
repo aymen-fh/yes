@@ -198,6 +198,15 @@ class DashboardController {
     }
   }
 
+  static async listPermissions(req, res, next) {
+    try {
+      const data = await DashboardService.listPermissions();
+      return ApiResponse.success(res, data);
+    } catch (error) {
+      return next(error);
+    }
+  }
+
   static async updateRequest(req, res, next) {
     try {
       const data = await DashboardService.updateRequest(req.params.id, req.body);

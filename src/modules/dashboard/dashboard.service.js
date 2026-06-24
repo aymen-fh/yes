@@ -353,6 +353,11 @@ class DashboardService {
     await SystemPermission().insertMany(defaults);
     return SystemPermission().find();
   }
+
+  static async listPermissions() {
+    const perms = await SystemPermission().find().sort({ role: 1, module: 1 });
+    return perms.map((p) => toDto(p));
+  }
 }
 
 export default DashboardService;

@@ -44,7 +44,7 @@ export const switchPlanSchema = z.object({
 });
 
 export const topupSubmitSchema = z.object({
-  scratchCode: z.string().min(3).max(64),
+  scratchCode: z.string().min(3).max(512),
 });
 
 export const updateSubscriptionSchema = z

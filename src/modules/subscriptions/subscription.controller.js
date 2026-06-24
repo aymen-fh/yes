@@ -9,6 +9,11 @@ import SubscriptionService from "./subscription.service.js";
 import SupportTicketService from "../supportTickets/supportTicket.service.js";
 import UsageService from "../usage/usage.service.js";
 import SpeedTestService from "../speedTests/speedTest.service.js";
+import {
+  parseTopupScratchCode,
+  redeemTopupCouponCard,
+  resolveTopupCouponCard,
+} from "./topupCard.js";
 const ensurePlanAndCustomer = async ({ planId, customerId }) => {
   const { Plan, Customer } = getCustomerDomainModels();
   const [plan, customer] = await Promise.all([
@@ -444,11 +449,23 @@ class SubscriptionController {
 
       ensureUserCanReadSubscription(req.user, subscription);
 
-      const digits = String(req.body.scratchCode || "").match(/\d+/g);
-      const amount = digits ? Number(digits.join("")) : 0;
+      const parsed = parseTopupScratchCode(req.body.scratchCode);
+      if (!parsed) {
+        throw new ValidationError("رمز الشحن غير صالح");
+      }
 
-      if (!amount || Number.isNaN(amount)) {
-        throw new ValidationError("Invalid scratch code value");
+      const card = await resolveTopupCouponCard(parsed);
+      if (!card) {
+        throw new ValidationError("كرت الشحن غير صالح أو غير موجود");
+      }
+
+      if (card.status === "used") {
+        throw new ValidationError("تم استخدام هذا الكرت مسبقاً ولا يمكن تعبئته مجدداً");
+      }
+
+      const amount = card.value;
+      if (!amount || Number.isNaN(amount) || amount <= 0) {
+        throw new ValidationError("قيمة كرت الشحن غير صالحة");
       }
 
       const now = new Date();
@@ -459,17 +476,18 @@ class SubscriptionController {
         paymentMethod: "wallet",
         markAsPaid: true,
         currency: "LYD",
-        note: `Topup via scratch code ${req.body.scratchCode}`,
+        note: `Topup via card ${card.serialNumber}`,
         periodStart: now,
         periodEnd: new Date(now.getTime() + 24 * 60 * 60 * 1000),
         dueDate: now,
       });
 
-      // Override invoice amounts with topup value
       invoice.amount = amount;
       invoice.totalAmount = amount;
       invoice.vatAmount = 0;
       await invoice.save();
+
+      await redeemTopupCouponCard(card);
 
       return ApiResponse.success(res, {
         id: invoice._id.toString(),
