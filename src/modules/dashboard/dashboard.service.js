@@ -2,7 +2,14 @@ import EncryptionServices from "../../utils/encryptionServices.js";
 import { NotFoundError } from "../../utils/errors.js";
 import { Roles, STAFF_ROLES } from "../../utils/roles.js";
 import { findUserByIdAcrossRoles, getModelsForRole } from "../../utils/roleModels.js";
-import { createReadableCode, serializeDoc } from "../common/serializers.js";
+import {
+  COUPON_CARD_SERIAL_LENGTH,
+  createNumericCode,
+  createReadableCode,
+  isValidCouponCardSerial,
+  serializeDoc,
+  toNumericSerial,
+} from "../common/serializers.js";
 import {
   AgentProfile,
   EngineerProfile,
@@ -24,6 +31,16 @@ const nextCode = async (Model, field, prefix) => {
     if (!exists) return code;
   }
   return `${createReadableCode(prefix)}-${Date.now().toString().slice(-4)}`;
+};
+
+const nextNumericCode = async (Model, field, length = COUPON_CARD_SERIAL_LENGTH) => {
+  const MongooseModel = resolveModel(Model);
+  for (let i = 0; i < 12; i += 1) {
+    const code = createNumericCode(length);
+    const exists = await MongooseModel.exists({ [field]: code });
+    if (!exists) return code;
+  }
+  return Date.now().toString().slice(-length);
 };
 
 const toDto = (doc) => serializeDoc(doc);
@@ -129,9 +146,42 @@ const ensureAgentProfiles = async () => {
   }
 };
 
+const normalizeLegacyCouponCardSerials = async () => {
+  const Model = CouponCard();
+  const cards = await Model.find({
+    $or: [
+      { serialNumber: /[^0-9]/ },
+      { serialNumber: { $not: new RegExp(`^\\d{${COUPON_CARD_SERIAL_LENGTH}}$`) } },
+    ],
+  });
+
+  for (const card of cards) {
+    const digits = toNumericSerial(card.serialNumber);
+    let nextSerial = digits;
+
+    if (!isValidCouponCardSerial(digits)) {
+      nextSerial = await nextNumericCode(Model, "serialNumber", COUPON_CARD_SERIAL_LENGTH);
+    } else {
+      const conflict = await Model.findOne({
+        serialNumber: digits,
+        _id: { $ne: card._id },
+      });
+      if (conflict) {
+        nextSerial = await nextNumericCode(Model, "serialNumber", COUPON_CARD_SERIAL_LENGTH);
+      }
+    }
+
+    if (nextSerial !== card.serialNumber) {
+      card.serialNumber = nextSerial;
+      await card.save();
+    }
+  }
+};
+
 class DashboardService {
   static async bootstrap() {
     await Promise.all([ensureAgentProfiles(), ensureEngineerProfiles()]);
+    await normalizeLegacyCouponCardSerials();
 
     const { Plan, SupportTicket } = getModelsForRole(Roles.CUSTOMER);
     const [customers, staffUsers, agents, engineers, plans, tickets, cards, reports, logs, permissions, requests, messages] =
@@ -299,9 +349,14 @@ class DashboardService {
   }
 
   static async generateCards({ value, count }) {
+    await normalizeLegacyCouponCardSerials();
     const created = [];
     for (let i = 0; i < count; i += 1) {
-      const serialNumber = await nextCode(CouponCard(), "serialNumber", "CRD");
+      const serialNumber = await nextNumericCode(
+        CouponCard(),
+        "serialNumber",
+        COUPON_CARD_SERIAL_LENGTH
+      );
       const pinCode = String(Math.floor(100000 + Math.random() * 900000));
       const card = await CouponCard().create({ serialNumber, pinCode, value, status: "available" });
       created.push(toDto(card));

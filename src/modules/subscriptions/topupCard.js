@@ -1,5 +1,6 @@
 import { CouponCard } from "../dashboard/dashboard.models.js";
 import { ValidationError } from "../../utils/errors.js";
+import { toNumericSerial } from "../common/serializers.js";
 
 const normalizePin = (value) => String(value || "").replace(/\D/g, "");
 
@@ -13,7 +14,7 @@ export function parseTopupScratchCode(scratchCode) {
       if (parsed?.type === "oxygen_recharge_card") {
         return {
           pin: parsed.pin ? String(parsed.pin) : null,
-          serial: parsed.serial ? String(parsed.serial) : null,
+          serial: parsed.serial ? toNumericSerial(parsed.serial) : null,
         };
       }
     } catch {
@@ -26,12 +27,12 @@ export function parseTopupScratchCode(scratchCode) {
 
 export async function resolveTopupCouponCard({ pin, serial }) {
   const Model = CouponCard();
-  const normalizedSerial = serial ? String(serial).trim().toUpperCase() : null;
+  const serialDigits = serial ? toNumericSerial(serial) : null;
   const pinRaw = pin ? String(pin).trim() : null;
   const pinDigits = normalizePin(pinRaw);
 
-  if (normalizedSerial) {
-    const bySerial = await Model.findOne({ serialNumber: normalizedSerial });
+  if (serialDigits) {
+    const bySerial = await Model.findOne({ serialNumber: serialDigits });
     if (bySerial) return bySerial;
   }
 

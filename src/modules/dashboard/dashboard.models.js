@@ -33,7 +33,16 @@ const engineerProfileSchema = new mongoose.Schema(
 
 const couponCardSchema = new mongoose.Schema(
   {
-    serialNumber: { type: String, required: true, unique: true, trim: true, uppercase: true },
+    serialNumber: {
+      type: String,
+      required: true,
+      unique: true,
+      trim: true,
+      validate: {
+        validator: (value) => /^\d{14}$/.test(String(value || "")),
+        message: "Serial number must be exactly 14 digits",
+      },
+    },
     pinCode: { type: String, required: true, trim: true },
     value: { type: Number, required: true },
     status: { type: String, enum: ["available", "sold", "used"], default: "available" },
