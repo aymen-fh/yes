@@ -16,6 +16,7 @@ router.post("/agents", ...adminOnly, DashboardController.createAgent);
 router.patch("/agents/:id", ...adminOnly, DashboardController.updateAgent);
 router.delete("/agents/:id", ...adminOnly, DashboardController.deleteAgent);
 router.post("/agents/:id/topup", ...adminOnly, DashboardController.topUpAgent);
+router.post("/agents/:id/refill", requireAuth, DashboardController.processAgentRefill);
 
 router.patch("/engineers/:id", ...adminOnly, DashboardController.updateEngineer);
 
@@ -24,7 +25,10 @@ router.patch("/users/:id", ...adminOnly, DashboardController.updateStaffUser);
 router.delete("/users/:id", ...adminOnly, DashboardController.deleteStaffUser);
 
 router.post("/cards/generate", ...adminOnly, DashboardController.generateCards);
+router.patch("/cards/:id", requireAuth, DashboardController.updateCard);
 router.delete("/cards/:id", ...adminOnly, DashboardController.deleteCard);
+
+router.get("/sync", requireAuth, DashboardController.staffSync);
 
 router.post("/reports", requireAuth, DashboardController.createReport);
 router.post("/audit-logs", requireAuth, DashboardController.createAuditLog);
@@ -36,5 +40,7 @@ router.patch("/requests/:id", ...adminOnly, DashboardController.updateRequest);
 
 router.post("/messages", requireAuth, DashboardController.createMessage);
 router.patch("/messages/:id/read", requireAuth, DashboardController.markMessageRead);
+
+router.patch("/ai-chats/:id", requireAuth, DashboardController.updateAiChat);
 
 export default router;

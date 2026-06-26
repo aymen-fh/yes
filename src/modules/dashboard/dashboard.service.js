@@ -1,5 +1,5 @@
 import EncryptionServices from "../../utils/encryptionServices.js";
-import { NotFoundError } from "../../utils/errors.js";
+import { NotFoundError, ValidationError } from "../../utils/errors.js";
 import { Roles, STAFF_ROLES } from "../../utils/roles.js";
 import { findUserByIdAcrossRoles, getModelsForRole } from "../../utils/roleModels.js";
 import {
@@ -19,6 +19,7 @@ import {
   SystemPermission,
   AgentRequest,
   InternalMessage,
+  CustomerAiChat,
 } from "./dashboard.models.js";
 
 const resolveModel = (Model) => (Model?.modelName ? Model : Model());
@@ -146,6 +147,46 @@ const ensureAgentProfiles = async () => {
   }
 };
 
+const ensureAiChatDemoSeed = async () => {
+  const Model = CustomerAiChat();
+  const count = await Model.countDocuments();
+  if (count > 0) return;
+
+  await Model.insertMany([
+    {
+      sessionCode: "CHAT-1001",
+      customerId: "seed-customer-1",
+      customerName: "عبد الرحمن الورفلي",
+      customerPhone: "091-2345678",
+      status: "awaiting_cs",
+      aiCategory: "شبكة وإشارة",
+      aiSummary: "انقطاع متكرر في الفايبر مع ضوء LOS أحمر على المودم",
+      priority: "critical",
+      suggestedRoute: "tech_support",
+      lastMessageAt: new Date().toISOString(),
+      messages: [
+        { role: "customer", content: "السلام عليكم، الإنترنت ينقطع كل ساعة والمودم يطلع ضوء أحمر.", createdAt: new Date().toISOString() },
+        { role: "assistant", content: "وعليكم السلام. هل الضوء الأحمر على مودم الفايبر الخارجي (ONT)؟", createdAt: new Date().toISOString() },
+      ],
+    },
+    {
+      sessionCode: "CHAT-1002",
+      customerId: "seed-customer-2",
+      customerName: "سارة الترهوني",
+      customerPhone: "092-8765432",
+      status: "awaiting_cs",
+      aiCategory: "بطء سرعة",
+      aiSummary: "سرعة التحميل تهبط لأقل من 2 ميجا مساءً",
+      priority: "high",
+      suggestedRoute: "tech_support",
+      lastMessageAt: new Date().toISOString(),
+      messages: [
+        { role: "customer", content: "السرعة طبيعية الصبح لكن بالليل تصير بطيئة جداً.", createdAt: new Date().toISOString() },
+      ],
+    },
+  ]);
+};
+
 const normalizeLegacyCouponCardSerials = async () => {
   const Model = CouponCard();
   const cards = await Model.find({
@@ -180,11 +221,11 @@ const normalizeLegacyCouponCardSerials = async () => {
 
 class DashboardService {
   static async bootstrap() {
-    await Promise.all([ensureAgentProfiles(), ensureEngineerProfiles()]);
+    await Promise.all([ensureAgentProfiles(), ensureEngineerProfiles(), ensureAiChatDemoSeed()]);
     await normalizeLegacyCouponCardSerials();
 
     const { Plan, SupportTicket } = getModelsForRole(Roles.CUSTOMER);
-    const [customers, staffUsers, agents, engineers, plans, tickets, cards, reports, logs, permissions, requests, messages] =
+    const [customers, staffUsers, agents, engineers, plans, tickets, cards, reports, logs, permissions, requests, messages, customerAiChats] =
       await Promise.all([
         listCustomers(),
         listStaffUsers(),
@@ -198,6 +239,7 @@ class DashboardService {
         SystemPermission().find().sort({ role: 1, module: 1 }),
         AgentRequest().find().sort({ createdAt: -1 }).limit(200),
         InternalMessage().find().sort({ createdAt: -1 }).limit(200),
+        CustomerAiChat().find().sort({ updatedAt: -1 }).limit(200),
       ]);
 
     return {
@@ -213,6 +255,7 @@ class DashboardService {
       permissions: permissions.map((p) => toDto(p)),
       requests: requests.map((r) => toDto(r)),
       messages: messages.map((m) => toDto(m)),
+      customerAiChats: customerAiChats.map((c) => toDto(c)),
     };
   }
 
@@ -364,6 +407,38 @@ class DashboardService {
     return created;
   }
 
+  static async updateCard(id, payload) {
+    const card = await CouponCard().findByIdAndUpdate(id, payload, { new: true });
+    if (!card) throw new NotFoundError("Card not found");
+    return toDto(card);
+  }
+
+  static async processAgentRefill(agentId, { amount, customerId, customerName }) {
+    const profile = await AgentProfile().findById(agentId);
+    if (!profile) throw new NotFoundError("Agent profile not found");
+    const value = Number(amount) || 0;
+    if (value <= 0) throw new ValidationError("amount must be greater than zero");
+    if (profile.balance < value) throw new ValidationError("Insufficient agent balance");
+
+    profile.balance -= value;
+    profile.salesCount += 1;
+    profile.todayRefills += value;
+    profile.todayCommission += value * 0.05;
+    await profile.save();
+
+    const log = await DashboardService.createAuditLog({
+      timestamp: new Date().toISOString(),
+      userRole: "agent",
+      userName: profile.name,
+      action: "شحن رصيد مباشر للعملاء",
+      details: `تم شحن رصيد بقيمة ${value} د.ل للمشترك ${customerName || customerId}`,
+      ipAddress: "",
+      status: "success",
+    });
+
+    return { agent: toDto(profile), log };
+  }
+
   static async createAuditLog(payload) {
     const logCode = await nextCode(AuditLog(), "logCode", "LOG");
     const log = await AuditLog().create({ ...payload, logCode });
@@ -387,6 +462,61 @@ class DashboardService {
     const req = await AgentRequest().findByIdAndUpdate(id, payload, { new: true });
     if (!req) throw new NotFoundError("Request not found");
     return toDto(req);
+  }
+
+  static async createRequest(payload) {
+    const requestCode = await nextCode(AgentRequest, "requestCode", "REQ");
+    const item = await AgentRequest().create({ ...payload, requestCode });
+    return toDto(item);
+  }
+
+  static async updateAiChat(id, payload) {
+    const chat = await CustomerAiChat().findByIdAndUpdate(id, payload, { new: true });
+    if (!chat) throw new NotFoundError("Chat session not found");
+    return toDto(chat);
+  }
+
+  static async staffSync(user) {
+    const role = user.role;
+    const messageFilter = {
+      $or: [{ receiverRole: role }, { receiverRole: "all" }, { senderRole: role }],
+    };
+
+    const [messages, cards, customerAiChats, logs] = await Promise.all([
+      InternalMessage().find(messageFilter).sort({ createdAt: -1 }).limit(100),
+      role === "agent" ? CouponCard().find().sort({ createdAt: -1 }).limit(500) : [],
+      role === "customer_service" ? CustomerAiChat().find().sort({ updatedAt: -1 }).limit(200) : [],
+      AuditLog().find().sort({ createdAt: -1 }).limit(100),
+    ]);
+
+    let requests = [];
+    if (role === "agent") {
+      requests = await AgentRequest().find({ agentId: user.id }).sort({ createdAt: -1 }).limit(100);
+    } else if (role === "admin" || role === "system_engineer") {
+      requests = await AgentRequest().find().sort({ createdAt: -1 }).limit(100);
+    }
+
+    const { SupportTicket } = getModelsForRole(Roles.CUSTOMER);
+    const tickets = await SupportTicket.find()
+      .populate("customerId", "fullName phone")
+      .sort({ createdAt: -1 })
+      .limit(200);
+
+    let agents = [];
+    if (role === "agent") {
+      const profile = await AgentProfile().findOne({ userId: user.id });
+      if (profile) agents = [toDto(profile)];
+    }
+
+    return {
+      messages: messages.map((m) => toDto(m)),
+      requests: requests.map((r) => toDto(r)),
+      cards: cards.map((c) => toDto(c)),
+      customerAiChats: customerAiChats.map((c) => toDto(c)),
+      tickets: tickets.map((t) => toDto(t)),
+      logs: logs.map((l) => toDto(l)),
+      agents,
+    };
   }
 
   static async createMessage(payload) {

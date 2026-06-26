@@ -13,7 +13,7 @@ import {
   InternalMessage,
 } from "./dashboard.models.js";
 import EncryptionServices from "../../utils/encryptionServices.js";
-import { NotFoundError } from "../../utils/errors.js";
+import { NotFoundError, ValidationError } from "../../utils/errors.js";
 import { createReadableCode } from "../common/serializers.js";
 
 const DEFAULT_PERMISSIONS = [
@@ -170,10 +170,43 @@ class DashboardController {
     }
   }
 
+  static async updateCard(req, res, next) {
+    try {
+      const data = await DashboardService.updateCard(req.params.id, req.body);
+      return ApiResponse.success(res, data, "Card updated");
+    } catch (error) {
+      return next(error);
+    }
+  }
+
+  static async processAgentRefill(req, res, next) {
+    try {
+      const data = await DashboardService.processAgentRefill(req.params.id, req.body);
+      return ApiResponse.success(res, data, "Refill processed");
+    } catch (error) {
+      return next(error);
+    }
+  }
+
   static async createReport(req, res, next) {
     try {
+      const title = String(req.body?.title ?? "").trim();
+      const content = String(req.body?.content ?? "").trim();
+      if (!title || !content) {
+        return next(new ValidationError("title and content are required"));
+      }
+
       const reportCode = createReadableCode("REP");
-      const report = await DailyReport().create({ ...req.body, reportCode });
+      const report = await DailyReport().create({
+        reportCode,
+        authorId: req.user.id,
+        authorName: String(req.body?.authorName ?? req.user.email ?? "مستخدم").trim(),
+        authorRole: req.user.role,
+        title,
+        content,
+        date: req.body?.date || new Date().toISOString().split("T")[0],
+        metrics: req.body?.metrics || undefined,
+      });
       return ApiResponse.created(res, serializeDoc(report), "Report created");
     } catch (error) {
       return next(error);
@@ -218,9 +251,15 @@ class DashboardController {
 
   static async createRequest(req, res, next) {
     try {
-      const requestCode = createReadableCode("REQ");
-      const item = await AgentRequest().create({ ...req.body, requestCode });
-      return ApiResponse.created(res, serializeDoc(item), "Request created");
+      const data = await DashboardService.createRequest({
+        agentId: req.body.agentId || req.user.id,
+        agentName: req.body.agentName || req.user.email,
+        type: req.body.type,
+        status: req.body.status || "pending",
+        customerData: req.body.customerData,
+        responseNotes: req.body.responseNotes || "",
+      });
+      return ApiResponse.created(res, data, "Request created");
     } catch (error) {
       return next(error);
     }
@@ -250,6 +289,24 @@ class DashboardController {
       const profile = await EngineerProfile().findByIdAndUpdate(req.params.id, req.body, { new: true });
       if (!profile) throw new NotFoundError("Engineer not found");
       return ApiResponse.success(res, serializeDoc(profile), "Engineer updated");
+    } catch (error) {
+      return next(error);
+    }
+  }
+
+  static async updateAiChat(req, res, next) {
+    try {
+      const data = await DashboardService.updateAiChat(req.params.id, req.body);
+      return ApiResponse.success(res, data, "Chat updated");
+    } catch (error) {
+      return next(error);
+    }
+  }
+
+  static async staffSync(req, res, next) {
+    try {
+      const data = await DashboardService.staffSync(req.user);
+      return ApiResponse.success(res, data);
     } catch (error) {
       return next(error);
     }

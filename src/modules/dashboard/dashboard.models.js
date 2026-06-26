@@ -155,6 +155,42 @@ const internalMessageSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+const customerAiChatSchema = new mongoose.Schema(
+  {
+    sessionCode: { type: String, required: true, unique: true, trim: true, uppercase: true },
+    customerId: { type: String, required: true },
+    customerName: { type: String, required: true, trim: true },
+    customerPhone: { type: String, default: "", trim: true },
+    status: {
+      type: String,
+      enum: ["active", "awaiting_cs", "routed", "closed"],
+      default: "awaiting_cs",
+    },
+    aiCategory: { type: String, default: "", trim: true },
+    aiSummary: { type: String, default: "", trim: true },
+    priority: {
+      type: String,
+      enum: ["low", "medium", "high", "critical"],
+      default: "medium",
+    },
+    suggestedRoute: {
+      type: String,
+      enum: ["admin", "agent", "customer_service", "tech_support", "system_engineer"],
+      default: "tech_support",
+    },
+    routedComplaintId: { type: String, default: null },
+    lastMessageAt: { type: String, default: "" },
+    messages: [
+      {
+        role: { type: String, enum: ["customer", "assistant"], required: true },
+        content: { type: String, required: true, trim: true },
+        createdAt: { type: String, default: "" },
+      },
+    ],
+  },
+  { timestamps: true }
+);
+
 const getDb = () => getRoleDb(Roles.CUSTOMER);
 
 const registerModel = (name, schema) => {
@@ -170,3 +206,4 @@ export const AuditLog = () => registerModel("AuditLog", auditLogSchema);
 export const SystemPermission = () => registerModel("SystemPermission", systemPermissionSchema);
 export const AgentRequest = () => registerModel("AgentRequest", agentRequestSchema);
 export const InternalMessage = () => registerModel("InternalMessage", internalMessageSchema);
+export const CustomerAiChat = () => registerModel("CustomerAiChat", customerAiChatSchema);

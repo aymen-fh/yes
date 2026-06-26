@@ -126,6 +126,7 @@ class SupportTicketController {
         description: req.body.description,
         category: req.body.category,
         priority: req.body.priority,
+        dashboardMeta: req.body.dashboardMeta || undefined,
       });
 
       const item = await SupportTicket.findById(ticket._id)

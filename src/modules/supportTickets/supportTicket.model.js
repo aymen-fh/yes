@@ -98,6 +98,27 @@ const supportTicketSchema = new mongoose.Schema(
       type: Date,
       default: null,
     },
+    dashboardMeta: {
+      chatSessionId: { type: String, default: null },
+      aiCategory: { type: String, default: null },
+      aiSummary: { type: String, default: null },
+      routedToRole: {
+        type: String,
+        enum: ["admin", "agent", "customer_service", "tech_support", "system_engineer", null],
+        default: null,
+      },
+      routedToDepartment: { type: String, default: null },
+      routedByName: { type: String, default: null },
+      routedAt: { type: String, default: null },
+      resolutionOutcome: {
+        type: String,
+        enum: ["pending", "resolved", "not_resolved", null],
+        default: null,
+      },
+      specialistResponse: { type: String, default: null },
+      specialistName: { type: String, default: null },
+      specialistRespondedAt: { type: String, default: null },
+    },
   },
   {
     timestamps: true,
