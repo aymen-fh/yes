@@ -241,11 +241,45 @@ const normalizeLegacyStaffUserCodes = async () => {
   }
 };
 
+const sanitizeLegacyTicketAssignments = async () => {
+  const { SupportTicket } = getModelsForRole(Roles.CUSTOMER);
+  const removedPattern = /وسيم|زريق/i;
+  const tickets = await SupportTicket.find({
+    $or: [
+      { "dashboardMeta.assignedEngineerName": removedPattern },
+      { "dashboardMeta.specialistName": removedPattern },
+    ],
+  });
+
+  for (const ticket of tickets) {
+    const meta = ticket.dashboardMeta ?? {};
+    let changed = false;
+
+    if (meta.assignedEngineerName && removedPattern.test(meta.assignedEngineerName)) {
+      meta.assignedEngineerName = null;
+      meta.assignedEngineerId = null;
+      ticket.assignedTo = null;
+      changed = true;
+    }
+    if (meta.specialistName && removedPattern.test(meta.specialistName)) {
+      meta.specialistName = null;
+      changed = true;
+    }
+
+    if (changed) {
+      ticket.dashboardMeta = meta;
+      ticket.markModified("dashboardMeta");
+      await ticket.save();
+    }
+  }
+};
+
 class DashboardService {
   static async bootstrap() {
     await Promise.all([ensureAgentProfiles(), pruneSystemEngineerProfiles(), ensureEngineerProfiles(), ensureAiChatDemoSeed()]);
     await normalizeLegacyCouponCardSerials();
     await normalizeLegacyStaffUserCodes();
+    await sanitizeLegacyTicketAssignments();
 
     const { Plan, SupportTicket } = getModelsForRole(Roles.CUSTOMER);
     const [customers, staffUsers, agents, engineers, plans, tickets, cards, reports, logs, permissions, requests, messages, customerAiChats] =

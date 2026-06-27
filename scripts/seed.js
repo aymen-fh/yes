@@ -17,9 +17,54 @@ import { getUsageDailyModel } from "../src/modules/usage/usageDaily.model.js";
 import { getSpeedTestModel } from "../src/modules/speedTests/speedTest.model.js";
 import SupportTicketService from "../src/modules/supportTickets/supportTicket.service.js";
 import { Roles, getRoleCodePrefix } from "../src/utils/roles.js";
+import {
+  AgentProfile,
+  EngineerProfile,
+  CouponCard,
+  DailyReport,
+  AuditLog,
+  AgentRequest,
+  InternalMessage,
+  CustomerAiChat,
+} from "../src/modules/dashboard/dashboard.models.js";
 
 const DEFAULT_PASSWORD = "admin123";
 const CUSTOMER_EMAIL_DOMAIN = "yes.com";
+const MAX_OPERATION_RETRIES = 5;
+
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+const retryAsync = async (label, fn) => {
+  let lastError;
+  for (let attempt = 1; attempt <= MAX_OPERATION_RETRIES; attempt += 1) {
+    try {
+      return await fn();
+    } catch (error) {
+      lastError = error;
+      const retryable =
+        error?.name === "MongoNetworkError" ||
+        error?.code === "ECONNRESET" ||
+        error?.cause?.code === "ECONNRESET";
+      if (!retryable || attempt === MAX_OPERATION_RETRIES) break;
+      const waitMs = attempt * 3000;
+      console.log(`${label} failed (${error.message}). Retrying in ${waitMs / 1000}s... (${MAX_OPERATION_RETRIES - attempt} left)`);
+      await sleep(waitMs);
+    }
+  }
+  throw lastError;
+};
+
+const getMongoConnectOptions = (dbName) => ({
+  dbName,
+  serverSelectionTimeoutMS: 30000,
+  connectTimeoutMS: 30000,
+  socketTimeoutMS: 45000,
+  maxPoolSize: 5,
+  minPoolSize: 1,
+  maxIdleTimeMS: 30000,
+  retryWrites: true,
+  retryReads: true,
+});
 
 // Mobile + FTTH plan catalogue
 const bestPlans = [
@@ -93,19 +138,25 @@ const connect = async () => {
   if (!mongoUrl || !dbName) {
     throw new Error("Missing MONGO_URL or MONGO_DB_NAME in environment");
   }
-  
+
   let retries = 5;
   while (retries > 0) {
     try {
-      await mongoose.connect(mongoUrl, { dbName });
+      await mongoose.connect(mongoUrl, getMongoConnectOptions(dbName));
       return;
     } catch (err) {
-      console.log(`Connection failed. Retrying... (${retries} left)`);
+      console.log(`Connection failed (${err.message}). Retrying... (${retries} left)`);
       retries -= 1;
-      await new Promise(res => setTimeout(res, 5000));
+      await sleep(5000);
     }
   }
   throw new Error("Failed to connect to MongoDB after multiple retries");
+};
+
+const resetCollections = async (tasks) => {
+  for (const { label, run } of tasks) {
+    await retryAsync(label, run);
+  }
 };
 
 const createCode = (prefix, index) => `${prefix}-${String(index + 1).padStart(4, "0")}`;
@@ -158,21 +209,29 @@ const seed = async () => {
   const sysEngModels = getRoleModels(Roles.SYSTEM_ENGINEER);
   const csModels = getRoleModels(Roles.CUSTOMER_SERVICE);
 
-  await Promise.all([
-    adminModels.Customer.deleteMany({}),
-    distributorModels.Customer.deleteMany({}),
-    supportModels.Customer.deleteMany({}),
-    sysEngModels.Customer.deleteMany({}),
-    csModels.Customer.deleteMany({}),
-    customerModels.Customer.deleteMany({}),
-    customerModels.Plan.deleteMany({}),
-    customerModels.Device.deleteMany({}),
-    customerModels.Subscription.deleteMany({}),
-    customerModels.Payment.deleteMany({}),
-    customerModels.SupportTicket.deleteMany({}),
-    customerModels.ServicePoint.deleteMany({}),
-    customerModels.UsageDaily.deleteMany({}),
-    customerModels.SpeedTest.deleteMany({}),
+  await resetCollections([
+    { label: "Clear admin users", run: () => adminModels.Customer.deleteMany({}) },
+    { label: "Clear agent users", run: () => distributorModels.Customer.deleteMany({}) },
+    { label: "Clear tech support users", run: () => supportModels.Customer.deleteMany({}) },
+    { label: "Clear system engineer users", run: () => sysEngModels.Customer.deleteMany({}) },
+    { label: "Clear customer service users", run: () => csModels.Customer.deleteMany({}) },
+    { label: "Clear customers", run: () => customerModels.Customer.deleteMany({}) },
+    { label: "Clear plans", run: () => customerModels.Plan.deleteMany({}) },
+    { label: "Clear devices", run: () => customerModels.Device.deleteMany({}) },
+    { label: "Clear subscriptions", run: () => customerModels.Subscription.deleteMany({}) },
+    { label: "Clear payments", run: () => customerModels.Payment.deleteMany({}) },
+    { label: "Clear support tickets", run: () => customerModels.SupportTicket.deleteMany({}) },
+    { label: "Clear service points", run: () => customerModels.ServicePoint.deleteMany({}) },
+    { label: "Clear usage records", run: () => customerModels.UsageDaily.deleteMany({}) },
+    { label: "Clear speed tests", run: () => customerModels.SpeedTest.deleteMany({}) },
+    { label: "Clear agent profiles", run: () => AgentProfile().deleteMany({}) },
+    { label: "Clear engineer profiles", run: () => EngineerProfile().deleteMany({}) },
+    { label: "Clear coupon cards", run: () => CouponCard().deleteMany({}) },
+    { label: "Clear daily reports", run: () => DailyReport().deleteMany({}) },
+    { label: "Clear audit logs", run: () => AuditLog().deleteMany({}) },
+    { label: "Clear agent requests", run: () => AgentRequest().deleteMany({}) },
+    { label: "Clear internal messages", run: () => InternalMessage().deleteMany({}) },
+    { label: "Clear AI chats", run: () => CustomerAiChat().deleteMany({}) },
   ]);
 
   const password = await EncryptionServices.encryptText(DEFAULT_PASSWORD);
@@ -375,40 +434,123 @@ const seed = async () => {
   await customerModels.ServicePoint.insertMany(servicePoints);
   console.log(`✅ Inserted ${servicePoints.length} Service Points`);
 
-  // 5. Sample support tickets for first customer
+  // 5. Sample support tickets from database (dashboard complaints)
   if (insertedCustomers.length > 0) {
-    const customer = insertedCustomers[0];
-    const customerSub = await customerModels.Subscription.findOne({ customerId: customer._id });
-    if (customerSub) {
+    const subscriptions = await Promise.all(
+      insertedCustomers.map((customer) =>
+        customerModels.Subscription.findOne({ customerId: customer._id }),
+      ),
+    );
+
+    const ticketSeeds = [
+      {
+        customerIndex: 1,
+        subject: "انخفاض مفاجئ في سرعة التحميل بالمساء",
+        description: "نعاني من هبوط السرعة من 50 ميجا إلى أقل من 2 ميجا يوميًا من الساعة 8 مساءً.",
+        status: "open",
+        priority: "high",
+        dashboardMeta: {
+          aiCategory: "بطء سرعة",
+          aiSummary: "سرعة التحميل تهبط مساءً",
+          routedToRole: "admin",
+          routedToDepartment: "admin",
+          routedByName: "دعاء محمد",
+          routedAt: new Date(Date.now() - 1000 * 60 * 60 * 24).toISOString(),
+          resolutionOutcome: "pending",
+        },
+      },
+      {
+        customerIndex: 0,
+        subject: "تقطع مستمر في إشارة الفايبر الضوئية Los",
+        description: "ضوء أحمر يرمش بشكل متكرر على مودم الفايبر الخارجي.",
+        status: "in_progress",
+        priority: "urgent",
+        assignedTo: insertedSupportUser?._id ?? null,
+        dashboardMeta: {
+          aiCategory: "انقطاع كامل",
+          aiSummary: "انقطاع تام منذ الصباح",
+          routedToRole: "tech_support",
+          routedToDepartment: "tech_support",
+          routedByName: "دعاء محمد",
+          routedAt: new Date(Date.now() - 1000 * 60 * 60 * 48).toISOString(),
+          resolutionOutcome: "pending",
+          assignedEngineerId: insertedSupportUser?._id?.toString() ?? null,
+          assignedEngineerName: insertedSupportUser?.fullName ?? "مهندس معتصم شيوب",
+        },
+      },
+      {
+        customerIndex: 3,
+        subject: "خطأ في صلاحيات الدخول للمنظومة",
+        description: "موظف جديد لا يستطيع الدخول لقسم الشكاوى رغم تفعيل حسابه.",
+        status: "open",
+        priority: "high",
+        dashboardMeta: {
+          aiCategory: "منظومة وصلاحيات",
+          aiSummary: "مشكلة صلاحيات دخول لموظف",
+          routedToRole: "system_engineer",
+          routedToDepartment: "system_engineer",
+          routedByName: "دعاء محمد",
+          routedAt: new Date(Date.now() - 1000 * 60 * 60 * 36).toISOString(),
+          resolutionOutcome: "pending",
+        },
+      },
+      {
+        customerIndex: 2,
+        subject: "طلب تغيير موقع جهاز المايكروويف الاحتياطي",
+        description: "انحجب مسار توجيه الهوائي ونحتاج لنقله إلى السطح الأعلى.",
+        status: "resolved",
+        priority: "medium",
+        resolvedAt: new Date(Date.now() - 1000 * 60 * 60 * 72),
+        resolutionNote: "تم نقل جهاز المايكروويف إلى السطح الثاني وضبط زاوية التوجيه.",
+        dashboardMeta: {
+          resolutionOutcome: "resolved",
+          assignedEngineerName: insertedSupportUser?.fullName ?? "مهندس معتصم شيوب",
+        },
+      },
+      {
+        customerIndex: 4,
+        subject: "ارتفاع البينغ أثناء ألعاب الأونلاين",
+        description: "ارتفاع البينغ ليصل لـ 150ms مع فقدان باقات (Packet Loss 5%).",
+        status: "resolved",
+        priority: "low",
+        resolvedAt: new Date(Date.now() - 1000 * 60 * 60 * 96),
+        resolutionNote: "تم تحويل التوجيه عبر مسار بحري بديل لحل مشكلة التأخير.",
+        dashboardMeta: { resolutionOutcome: "resolved" },
+      },
+    ];
+
+    let ticketCount = 0;
+    for (const seed of ticketSeeds) {
+      const customer = insertedCustomers[seed.customerIndex];
+      const subscription = subscriptions[seed.customerIndex];
+      if (!customer || !subscription) continue;
+
       const ticketNumber = await SupportTicketService.createTicketNumber();
       await customerModels.SupportTicket.create({
         ticketNumber,
         customerId: customer._id,
-        subscriptionId: customerSub._id,
-        subject: "انقطاع الإنترنت مساءً",
-        description: "الإنترنت ينقطع بشكل متكرر بعد الساعة 8 مساءً",
+        subscriptionId: subscription._id,
+        subject: seed.subject,
+        description: seed.description,
         category: "technical",
-        priority: "medium",
-        status: "in_progress",
+        priority: seed.priority,
+        status: seed.status,
+        assignedTo: seed.assignedTo ?? null,
+        resolutionNote: seed.resolutionNote ?? "",
+        resolvedAt: seed.resolvedAt ?? null,
+        dashboardMeta: seed.dashboardMeta,
         replies: [
           {
             authorId: customer._id,
             authorRole: "customer",
-            message: "الإنترنت ينقطع بشكل متكرر بعد الساعة 8 مساءً",
-            createdAt: new Date(Date.now() - 1000 * 60 * 60 * 5),
+            message: seed.description,
+            createdAt: new Date(Date.now() - 1000 * 60 * 60 * 8),
           },
-          ...(insertedSupportUser
-            ? [{
-                authorId: insertedSupportUser._id,
-                authorRole: "tech_support",
-                message: "تم استلام بلاغك وجاري فحص الخط في منطقتك",
-                createdAt: new Date(Date.now() - 1000 * 60 * 60 * 2),
-              }]
-            : []),
         ],
       });
-      console.log("✅ Inserted sample support ticket");
+      ticketCount += 1;
     }
+    console.log(`✅ Inserted ${ticketCount} support tickets`);
   }
 
   console.log("-----------------------------------------");
