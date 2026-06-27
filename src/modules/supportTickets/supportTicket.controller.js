@@ -201,6 +201,14 @@ class SupportTicketController {
         payload.closedAt = new Date();
       }
 
+      if (payload.dashboardMeta) {
+        const existingMeta =
+          typeof existing.dashboardMeta?.toObject === "function"
+            ? existing.dashboardMeta.toObject()
+            : { ...(existing.dashboardMeta ?? {}) };
+        payload.dashboardMeta = { ...existingMeta, ...payload.dashboardMeta };
+      }
+
       const updated = await SupportTicket.findByIdAndUpdate(req.params.id, payload, { new: true })
         .populate("customerId", "fullName customerCode email status")
         .populate("subscriptionId", "subscriptionNumber status");

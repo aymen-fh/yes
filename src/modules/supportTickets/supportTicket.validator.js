@@ -11,6 +11,27 @@ export const supportTicketQuerySchema = paginationQuerySchema.extend({
   priority: z.enum(["low", "medium", "high", "urgent"]).optional(),
 });
 
+export const dashboardMetaSchema = z
+  .object({
+    chatSessionId: z.string().nullable().optional(),
+    aiCategory: z.string().nullable().optional(),
+    aiSummary: z.string().nullable().optional(),
+    routedToRole: z
+      .enum(["admin", "agent", "customer_service", "tech_support", "system_engineer"])
+      .nullable()
+      .optional(),
+    routedToDepartment: z.string().nullable().optional(),
+    routedByName: z.string().nullable().optional(),
+    routedAt: z.string().nullable().optional(),
+    resolutionOutcome: z.enum(["pending", "resolved", "not_resolved"]).nullable().optional(),
+    specialistResponse: z.string().nullable().optional(),
+    specialistName: z.string().nullable().optional(),
+    specialistRespondedAt: z.string().nullable().optional(),
+    assignedEngineerId: z.string().nullable().optional(),
+    assignedEngineerName: z.string().nullable().optional(),
+  })
+  .optional();
+
 export const createSupportTicketSchema = z.object({
   customerId: objectIdSchema.optional(),
   subscriptionId: objectIdSchema.optional(),
@@ -18,6 +39,7 @@ export const createSupportTicketSchema = z.object({
   description: z.string().min(10).max(1000),
   category: z.enum(["technical", "billing", "account", "other"]).default("technical"),
   priority: z.enum(["low", "medium", "high", "urgent"]).default("medium"),
+  dashboardMeta: dashboardMetaSchema,
 });
 
 export const updateSupportTicketSchema = z
@@ -26,6 +48,8 @@ export const updateSupportTicketSchema = z
     priority: z.enum(["low", "medium", "high", "urgent"]).optional(),
     assignedTo: objectIdSchema.optional().nullable(),
     resolutionNote: z.string().max(1000).optional(),
+    resolvedAt: z.union([z.string(), z.date()]).optional().nullable(),
+    dashboardMeta: dashboardMetaSchema,
   })
   .refine((input) => Object.keys(input).length > 0, {
     message: "Provide at least one field to update",
