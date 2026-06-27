@@ -81,46 +81,50 @@ const listAgents = async () => {
 };
 
 const listEngineers = async () => {
-  const engineerRoles = [Roles.SUPPORT, Roles.SYSTEM_ENGINEER];
   const profiles = await EngineerProfile().find().sort({ createdAt: -1 });
+  const { Customer } = getModelsForRole(Roles.SUPPORT);
   const results = [];
   for (const profile of profiles) {
-    let user = null;
-    for (const role of engineerRoles) {
-      const { Customer } = getModelsForRole(role);
-      user = await Customer.findById(profile.userId);
-      if (user) break;
-    }
+    const user = await Customer.findById(profile.userId);
+    if (!user) continue;
+
     const dto = toDto(profile);
-    if (!dto.profileCode && user?.customerCode) {
+    if (!dto.profileCode && user.customerCode) {
       profile.profileCode = user.customerCode;
       await profile.save();
       dto.profileCode = user.customerCode;
     }
-    dto.customerCode = user?.customerCode ?? dto.profileCode;
+    dto.customerCode = user.customerCode ?? dto.profileCode;
+    dto.staffRole = Roles.SUPPORT;
     results.push(dto);
   }
   return results;
 };
 
+const pruneSystemEngineerProfiles = async () => {
+  const profiles = await EngineerProfile().find();
+  const { Customer: SysCustomer } = getModelsForRole(Roles.SYSTEM_ENGINEER);
+  for (const profile of profiles) {
+    const sysUser = await SysCustomer.findById(profile.userId);
+    if (sysUser) await profile.deleteOne();
+  }
+};
+
 const ensureEngineerProfiles = async () => {
-  const engineerRoles = [Roles.SUPPORT, Roles.SYSTEM_ENGINEER];
-  for (const role of engineerRoles) {
-    const { Customer } = getModelsForRole(role);
-    const users = await Customer.find();
-    for (const user of users) {
-      const exists = await EngineerProfile().exists({ userId: user._id });
-      if (!exists) {
-        await EngineerProfile().create({
-          userId: user._id,
-          profileCode: user.customerCode,
-          name: user.fullName,
-          phone: user.phone,
-          specialization: role === Roles.SYSTEM_ENGINEER ? "مهندس منظومة" : "دعم فني",
-          activeTasks: 0,
-          status: "available",
-        });
-      }
+  const { Customer } = getModelsForRole(Roles.SUPPORT);
+  const users = await Customer.find();
+  for (const user of users) {
+    const exists = await EngineerProfile().exists({ userId: user._id });
+    if (!exists) {
+      await EngineerProfile().create({
+        userId: user._id,
+        profileCode: user.customerCode,
+        name: user.fullName,
+        phone: user.phone,
+        specialization: "دعم فني",
+        activeTasks: 0,
+        status: "available",
+      });
     }
   }
 };
@@ -239,7 +243,7 @@ const normalizeLegacyStaffUserCodes = async () => {
 
 class DashboardService {
   static async bootstrap() {
-    await Promise.all([ensureAgentProfiles(), ensureEngineerProfiles(), ensureAiChatDemoSeed()]);
+    await Promise.all([ensureAgentProfiles(), pruneSystemEngineerProfiles(), ensureEngineerProfiles(), ensureAiChatDemoSeed()]);
     await normalizeLegacyCouponCardSerials();
     await normalizeLegacyStaffUserCodes();
 
@@ -368,13 +372,13 @@ class DashboardService {
       status: payload.status || "active",
     });
 
-    if (role === Roles.SUPPORT || role === Roles.SYSTEM_ENGINEER) {
+    if (role === Roles.SUPPORT) {
       await EngineerProfile().create({
         userId: user._id,
         profileCode: customerCode,
         name: user.fullName,
         phone: user.phone,
-        specialization: role === Roles.SYSTEM_ENGINEER ? "مهندس منظومة" : "دعم فني",
+        specialization: "دعم فني",
         activeTasks: 0,
         status: "available",
       });
