@@ -16,7 +16,7 @@ import { getServicePointModel } from "../src/modules/servicePoints/servicePoint.
 import { getUsageDailyModel } from "../src/modules/usage/usageDaily.model.js";
 import { getSpeedTestModel } from "../src/modules/speedTests/speedTest.model.js";
 import SupportTicketService from "../src/modules/supportTickets/supportTicket.service.js";
-import { Roles } from "../src/utils/roles.js";
+import { Roles, getRoleCodePrefix } from "../src/utils/roles.js";
 
 const DEFAULT_PASSWORD = "admin123";
 const CUSTOMER_EMAIL_DOMAIN = "yes.com";
@@ -191,7 +191,7 @@ const seed = async () => {
   
   for (let i = 0; i < bestUsers.length; i++) {
     const u = bestUsers[i];
-    const customerCode = u.customerCode || createCode(u.role === Roles.CUSTOMER ? "CUS" : "STF", i + 100);
+    const customerCode = u.customerCode || createCode(getRoleCodePrefix(u.role), i + 100);
 
     const { Customer } = getRoleModels(u.role);
     const doc = await Customer.create({

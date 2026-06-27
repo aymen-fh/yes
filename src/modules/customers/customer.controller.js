@@ -1,7 +1,7 @@
 import EncryptionServices from "../../utils/encryptionServices.js";
 import { ApiResponse } from "../../utils/apiResponse.js";
 import { ForbiddenError, NotFoundError } from "../../utils/errors.js";
-import { Roles } from "../../utils/roles.js";
+import { Roles, getRoleCodePrefix } from "../../utils/roles.js";
 import { findUserByIdAcrossRoles, getModelsForRole } from "../../utils/roleModels.js";
 import { createReadableCode, serializeDoc, serializeDocs } from "../common/serializers.js";
 
@@ -33,13 +33,14 @@ const getUserModel = (role) => getModelsForRole(role).Customer;
 
 const createCustomerCode = async (role) => {
   const Customer = getUserModel(role);
+  const prefix = getRoleCodePrefix(role);
   for (let attempt = 0; attempt < 8; attempt += 1) {
-    const code = createReadableCode("CUS");
+    const code = createReadableCode(prefix);
     const exists = await Customer.exists({ customerCode: code });
     if (!exists) return code;
   }
 
-  return `${createReadableCode("CUS")}-${Date.now().toString().slice(-4)}`;
+  return `${createReadableCode(prefix)}-${Date.now().toString().slice(-4)}`;
 };
 
 const resolveTargetUser = async ({ requesterRole, roleHint, id }) => {

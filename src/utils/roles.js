@@ -14,3 +14,15 @@ export const STAFF_ROLES = Object.freeze([
   Roles.SYSTEM_ENGINEER,
   Roles.CUSTOMER_SERVICE,
 ]);
+
+/** Prefix used in human-readable IDs (ADM-123456, AGT-123456, …) */
+export const ROLE_CODE_PREFIX = Object.freeze({
+  [Roles.ADMIN]: "ADM",
+  [Roles.DISTRIBUTOR]: "AGT",
+  [Roles.SUPPORT]: "TEC",
+  [Roles.SYSTEM_ENGINEER]: "ENG",
+  [Roles.CUSTOMER_SERVICE]: "CSO",
+  [Roles.CUSTOMER]: "CUS",
+});
+
+export const getRoleCodePrefix = (role) => ROLE_CODE_PREFIX[role] ?? "USR";

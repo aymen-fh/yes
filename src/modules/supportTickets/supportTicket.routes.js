@@ -38,5 +38,12 @@ router.patch(
   validateRequest({ params: supportTicketIdParamsSchema, body: updateSupportTicketSchema }),
   SupportTicketController.update
 );
+router.delete(
+  "/:id",
+  requireAuth,
+  requireRole("admin", "system_engineer"),
+  validateRequest({ params: supportTicketIdParamsSchema }),
+  SupportTicketController.remove
+);
 
 export default router;

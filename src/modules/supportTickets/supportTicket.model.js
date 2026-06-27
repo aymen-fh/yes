@@ -118,6 +118,8 @@ const supportTicketSchema = new mongoose.Schema(
       specialistResponse: { type: String, default: null },
       specialistName: { type: String, default: null },
       specialistRespondedAt: { type: String, default: null },
+      assignedEngineerId: { type: String, default: null },
+      assignedEngineerName: { type: String, default: null },
     },
   },
   {

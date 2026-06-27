@@ -211,6 +211,19 @@ class SupportTicketController {
       return next(error);
     }
   }
+
+  static async remove(req, res, next) {
+    try {
+      const { SupportTicket } = getCustomerDomainModels();
+      const ticket = await SupportTicket.findByIdAndDelete(req.params.id);
+      if (!ticket) {
+        throw new NotFoundError("Support ticket not found");
+      }
+      return ApiResponse.success(res, null, "Support ticket deleted");
+    } catch (error) {
+      return next(error);
+    }
+  }
 }
 
 export default SupportTicketController;

@@ -1,6 +1,6 @@
 import EncryptionServices from "../../utils/encryptionServices.js";
 import { NotFoundError, ValidationError } from "../../utils/errors.js";
-import { Roles, STAFF_ROLES } from "../../utils/roles.js";
+import { Roles, STAFF_ROLES, getRoleCodePrefix } from "../../utils/roles.js";
 import { findUserByIdAcrossRoles, getModelsForRole } from "../../utils/roleModels.js";
 import {
   COUPON_CARD_SERIAL_LENGTH,
@@ -219,10 +219,29 @@ const normalizeLegacyCouponCardSerials = async () => {
   }
 };
 
+const normalizeLegacyStaffUserCodes = async () => {
+  for (const role of STAFF_ROLES) {
+    const expectedPrefix = getRoleCodePrefix(role);
+    const { Customer } = getModelsForRole(role);
+    const users = await Customer.find();
+    for (const user of users) {
+      const code = String(user.customerCode || "");
+      if (code.startsWith(`${expectedPrefix}-`)) continue;
+
+      const newCode = await nextCode(Customer, "customerCode", expectedPrefix);
+      user.customerCode = newCode;
+      await user.save();
+      await AgentProfile().updateOne({ userId: user._id }, { profileCode: newCode });
+      await EngineerProfile().updateOne({ userId: user._id }, { profileCode: newCode });
+    }
+  }
+};
+
 class DashboardService {
   static async bootstrap() {
     await Promise.all([ensureAgentProfiles(), ensureEngineerProfiles(), ensureAiChatDemoSeed()]);
     await normalizeLegacyCouponCardSerials();
+    await normalizeLegacyStaffUserCodes();
 
     const { Plan, SupportTicket } = getModelsForRole(Roles.CUSTOMER);
     const [customers, staffUsers, agents, engineers, plans, tickets, cards, reports, logs, permissions, requests, messages, customerAiChats] =
@@ -335,7 +354,7 @@ class DashboardService {
   static async createStaffUser(payload) {
     const role = payload.role || Roles.ADMIN;
     const { Customer } = getModelsForRole(role);
-    const prefix = role === Roles.DISTRIBUTOR ? "AGT" : "USR";
+    const prefix = getRoleCodePrefix(role);
     const customerCode = await nextCode(Customer, "customerCode", prefix);
     const password = await EncryptionServices.encryptText(payload.password || "staff12345");
     const user = await Customer.create({

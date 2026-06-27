@@ -122,6 +122,7 @@ const agentRequestSchema = new mongoose.Schema(
       name: String,
       phone: String,
       idNumber: String,
+      passportNumber: String,
       contractType: { type: String, enum: ["fiber", "vdsl", "wireless"] },
       city: String,
       region: String,
