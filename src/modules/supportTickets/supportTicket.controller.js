@@ -20,7 +20,7 @@ const ensureTicketRelations = async ({ customerId, subscriptionId }) => {
 
   const subscription = await Subscription.findById(subscriptionId);
   if (!subscription) {
-    throw new NotFoundError("Subscription not found");
+    return { customer, subscription: null };
   }
 
   if (subscription.customerId.toString() !== customerId.toString()) {
@@ -28,6 +28,38 @@ const ensureTicketRelations = async ({ customerId, subscriptionId }) => {
   }
 
   return { customer, subscription };
+};
+
+const resolveTicketCustomer = async ({ customerId, customerPhone, customerName }) => {
+  const { Customer } = getCustomerDomainModels();
+
+  if (customerId) {
+    const byId = await Customer.findById(customerId);
+    if (byId) return byId;
+  }
+
+  const digits = String(customerPhone || "").replace(/\D/g, "");
+  if (digits.length >= 7) {
+    const candidates = await Customer.find();
+    const byPhone = candidates.find((entry) => {
+      const phone = String(entry.phone || "").replace(/\D/g, "");
+      return (
+        phone === digits ||
+        phone.endsWith(digits.slice(-9)) ||
+        digits.endsWith(phone.slice(-9))
+      );
+    });
+    if (byPhone) return byPhone;
+  }
+
+  if (customerName?.trim()) {
+    const byName = await Customer.findOne({
+      fullName: { $regex: customerName.trim().slice(0, 60).replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), $options: "i" },
+    });
+    if (byName) return byName;
+  }
+
+  throw new NotFoundError("Customer not found");
 };
 
 const hydrateAssignedTo = async (ticket) => {
@@ -108,20 +140,36 @@ class SupportTicketController {
 
   static async create(req, res, next) {
     try {
-      const { SupportTicket } = getCustomerDomainModels();
-      const targetCustomerId = req.user.role === "customer" ? req.user.id : req.body.customerId || req.user.id;
+      const { SupportTicket, Subscription } = getCustomerDomainModels();
+      const isCustomerActor = req.user.role === "customer";
+      const targetCustomerId = isCustomerActor ? req.user.id : null;
 
-      const { customer } = await ensureTicketRelations({
-        customerId: targetCustomerId,
-        subscriptionId: req.body.subscriptionId,
-      });
+      const customer = isCustomerActor
+        ? await resolveTicketCustomer({ customerId: targetCustomerId })
+        : await resolveTicketCustomer({
+            customerId: req.body.customerId,
+            customerPhone: req.body.customerPhone,
+            customerName: req.body.customerName,
+          });
+
+      let subscriptionId = req.body.subscriptionId || null;
+      if (subscriptionId) {
+        const subscription = await Subscription.findById(subscriptionId);
+        if (!subscription || subscription.customerId.toString() !== customer._id.toString()) {
+          subscriptionId = null;
+        }
+      }
+      if (!subscriptionId) {
+        const activeSubscription = await Subscription.findOne({ customerId: customer._id }).sort({ createdAt: -1 });
+        subscriptionId = activeSubscription?._id ?? null;
+      }
 
       const ticketNumber = await SupportTicketService.createTicketNumber();
 
       const ticket = await SupportTicket.create({
         ticketNumber,
-        customerId: targetCustomerId,
-        subscriptionId: req.body.subscriptionId || null,
+        customerId: customer._id,
+        subscriptionId,
         subject: req.body.subject,
         description: req.body.description,
         category: req.body.category,
@@ -140,7 +188,7 @@ class SupportTicketController {
         ticket: serializeDoc(hydrated),
       });
 
-      return ApiResponse.created(res, toTicketMobileDto(hydrated), "Support ticket created successfully");
+      return ApiResponse.created(res, serializeDoc(hydrated), "Support ticket created successfully");
     } catch (error) {
       return next(error);
     }

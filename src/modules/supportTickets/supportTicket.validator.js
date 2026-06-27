@@ -32,15 +32,21 @@ export const dashboardMetaSchema = z
   })
   .optional();
 
-export const createSupportTicketSchema = z.object({
-  customerId: objectIdSchema.optional(),
-  subscriptionId: objectIdSchema.optional(),
-  subject: z.string().min(4).max(140),
-  description: z.string().min(10).max(1000),
-  category: z.enum(["technical", "billing", "account", "other"]).default("technical"),
-  priority: z.enum(["low", "medium", "high", "urgent"]).default("medium"),
-  dashboardMeta: dashboardMetaSchema,
-});
+export const createSupportTicketSchema = z
+  .object({
+    customerId: objectIdSchema.optional(),
+    customerPhone: z.string().min(5).max(30).optional(),
+    customerName: z.string().min(2).max(120).optional(),
+    subscriptionId: objectIdSchema.optional(),
+    subject: z.string().min(4).max(140),
+    description: z.string().min(10).max(1000),
+    category: z.enum(["technical", "billing", "account", "other"]).default("technical"),
+    priority: z.enum(["low", "medium", "high", "urgent"]).default("medium"),
+    dashboardMeta: dashboardMetaSchema,
+  })
+  .refine((input) => Boolean(input.customerId || input.customerPhone), {
+    message: "customerId or customerPhone is required",
+  });
 
 export const updateSupportTicketSchema = z
   .object({

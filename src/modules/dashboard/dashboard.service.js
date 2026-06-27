@@ -153,42 +153,80 @@ const ensureAgentProfiles = async () => {
 
 const ensureAiChatDemoSeed = async () => {
   const Model = CustomerAiChat();
-  const count = await Model.countDocuments();
-  if (count > 0) return;
+  const { Customer } = getModelsForRole(Roles.CUSTOMER);
+  const dbCustomers = await Customer.find().sort({ createdAt: 1 }).limit(5);
 
-  await Model.insertMany([
-    {
-      sessionCode: "CHAT-1001",
-      customerId: "seed-customer-1",
-      customerName: "عبد الرحمن الورفلي",
-      customerPhone: "091-2345678",
-      status: "awaiting_cs",
-      aiCategory: "شبكة وإشارة",
-      aiSummary: "انقطاع متكرر في الفايبر مع ضوء LOS أحمر على المودم",
-      priority: "critical",
-      suggestedRoute: "tech_support",
-      lastMessageAt: new Date().toISOString(),
-      messages: [
-        { role: "customer", content: "السلام عليكم، الإنترنت ينقطع كل ساعة والمودم يطلع ضوء أحمر.", createdAt: new Date().toISOString() },
-        { role: "assistant", content: "وعليكم السلام. هل الضوء الأحمر على مودم الفايبر الخارجي (ONT)؟", createdAt: new Date().toISOString() },
-      ],
-    },
-    {
-      sessionCode: "CHAT-1002",
-      customerId: "seed-customer-2",
-      customerName: "سارة الترهوني",
-      customerPhone: "092-8765432",
-      status: "awaiting_cs",
-      aiCategory: "بطء سرعة",
-      aiSummary: "سرعة التحميل تهبط لأقل من 2 ميجا مساءً",
-      priority: "high",
-      suggestedRoute: "tech_support",
-      lastMessageAt: new Date().toISOString(),
-      messages: [
-        { role: "customer", content: "السرعة طبيعية الصبح لكن بالليل تصير بطيئة جداً.", createdAt: new Date().toISOString() },
-      ],
-    },
-  ]);
+  const count = await Model.countDocuments();
+  if (count === 0 && dbCustomers.length > 0) {
+    const [c1, c2] = dbCustomers;
+    await Model.insertMany([
+      {
+        sessionCode: "CHAT-1001",
+        customerId: c1._id.toString(),
+        customerName: c1.fullName,
+        customerPhone: c1.phone,
+        status: "awaiting_cs",
+        aiCategory: "شبكة وإشارة",
+        aiSummary: "انقطاع متكرر في الفايبر مع ضوء LOS أحمر على المودم",
+        priority: "critical",
+        suggestedRoute: "tech_support",
+        lastMessageAt: new Date().toISOString(),
+        messages: [
+          { role: "customer", content: "السلام عليكم، الإنترنت ينقطع كل ساعة والمودم يطلع ضوء أحمر.", createdAt: new Date().toISOString() },
+          { role: "assistant", content: "وعليكم السلام. هل الضوء الأحمر على مودم الفايبر الخارجي (ONT)؟", createdAt: new Date().toISOString() },
+        ],
+      },
+      ...(c2
+        ? [{
+            sessionCode: "CHAT-1002",
+            customerId: c2._id.toString(),
+            customerName: c2.fullName,
+            customerPhone: c2.phone,
+            status: "awaiting_cs",
+            aiCategory: "بطء سرعة",
+            aiSummary: "سرعة التحميل تهبط لأقل من 2 ميجا مساءً",
+            priority: "high",
+            suggestedRoute: "tech_support",
+            lastMessageAt: new Date().toISOString(),
+            messages: [
+              { role: "customer", content: "السرعة طبيعية الصبح لكن بالليل تصير بطيئة جداً.", createdAt: new Date().toISOString() },
+            ],
+          }]
+        : []),
+    ]);
+    return;
+  }
+
+  await normalizeLegacyAiChatCustomerIds();
+};
+
+const normalizeLegacyAiChatCustomerIds = async () => {
+  const Model = CustomerAiChat();
+  const { Customer } = getModelsForRole(Roles.CUSTOMER);
+  const customers = await Customer.find();
+  const chats = await Model.find({
+    $or: [
+      { customerId: { $regex: /^seed-customer-/ } },
+      { customerId: { $regex: /^CUST-/ } },
+      { customerId: { $not: /^[a-f0-9]{24}$/i } },
+    ],
+  });
+
+  for (const chat of chats) {
+    const digits = String(chat.customerPhone || "").replace(/\D/g, "");
+    const match =
+      customers.find((c) => String(c.customerCode) === chat.customerId) ||
+      customers.find((c) => {
+        const phone = String(c.phone || "").replace(/\D/g, "");
+        return digits.length >= 7 && (phone === digits || phone.endsWith(digits.slice(-9)));
+      }) ||
+      customers.find((c) => c.fullName === chat.customerName);
+
+    if (match) {
+      chat.customerId = match._id.toString();
+      await chat.save();
+    }
+  }
 };
 
 const normalizeLegacyCouponCardSerials = async () => {
