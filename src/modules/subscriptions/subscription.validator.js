@@ -47,6 +47,10 @@ export const topupSubmitSchema = z.object({
   scratchCode: z.string().min(3).max(512),
 });
 
+export const advanceCreditRequestSchema = z.object({
+  amount: z.coerce.number().min(5).max(10000),
+});
+
 export const updateSubscriptionSchema = z
   .object({
     planId: objectIdSchema.optional(),

@@ -30,6 +30,15 @@ class AuthController {
     }
   }
 
+  static async requestRecoveryOtp(req, res, next) {
+    try {
+      const data = await AuthService.requestRecoveryOtp(req.body);
+      return ApiResponse.success(res, data, "Recovery code sent");
+    } catch (error) {
+      return next(error);
+    }
+  }
+
   static async verifyLoginOtp(req, res, next) {
     try {
       const data = await AuthService.verifyLoginOtp(req.body);

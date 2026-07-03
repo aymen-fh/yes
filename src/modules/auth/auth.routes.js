@@ -6,6 +6,7 @@ import {
   loginSchema,
   refreshTokenSchema,
   requestLoginOtpSchema,
+  requestRecoveryOtpSchema,
   verifyLoginOtpSchema,
 } from "./auth.validator.js";
 import { validateRequest } from "../../validators/validateRequest.js";
@@ -28,6 +29,12 @@ router.post(
   authLimiter,
   validateRequest({ body: requestLoginOtpSchema }),
   AuthController.requestLoginOtp
+);
+router.post(
+  "/request-recovery-otp",
+  authLimiter,
+  validateRequest({ body: requestRecoveryOtpSchema }),
+  AuthController.requestRecoveryOtp
 );
 router.post(
   "/verify-login-otp",

@@ -11,6 +11,7 @@ import {
   subscriptionQuerySchema,
   switchPlanSchema,
   topupSubmitSchema,
+  advanceCreditRequestSchema,
   updateSubscriptionSchema,
 } from "./subscription.validator.js";
 
@@ -83,6 +84,21 @@ router.post(
   requireAuth,
   validateRequest({ params: subscriptionIdParamsSchema, body: topupSubmitSchema }),
   SubscriptionController.submitTopup
+);
+router.get(
+  "/:id/advance-credit",
+  requireAuth,
+  validateRequest({ params: subscriptionIdParamsSchema }),
+  SubscriptionController.getAdvanceCredit
+);
+router.post(
+  "/:id/advance-credit/request",
+  requireAuth,
+  validateRequest({
+    params: subscriptionIdParamsSchema,
+    body: advanceCreditRequestSchema,
+  }),
+  SubscriptionController.requestAdvanceCredit
 );
 router.post(
   "/",

@@ -1,10 +1,17 @@
 import { Router } from "express";
 import { requireAuth } from "../../middleware/ispAuth.js";
-import ServicePointController from "../servicePoints/servicePoint.controller.js";
+import { validateRequest } from "../../validators/validateRequest.js";
+import MobileController from "./mobile.controller.js";
+import { oxyChatSchema } from "./mobile.validator.js";
 
 const router = Router();
 
-// Stable mobile-only endpoints (no :id conflicts).
-router.get("/locations", requireAuth, ServicePointController.list);
+router.get("/locations", requireAuth, MobileController.listLocations);
+router.post(
+  "/oxy/chat",
+  requireAuth,
+  validateRequest({ body: oxyChatSchema }),
+  MobileController.oxyChat,
+);
 
 export default router;

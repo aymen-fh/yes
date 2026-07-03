@@ -62,6 +62,31 @@ const subscriptionSchema = new mongoose.Schema(
       default: "",
       trim: true,
     },
+    advanceCredit: {
+      status: {
+        type: String,
+        enum: ["none", "pending", "active", "rejected"],
+        default: "none",
+      },
+      owedAmount: {
+        type: Number,
+        default: 0,
+        min: 0,
+      },
+      pendingAmount: {
+        type: Number,
+        default: 0,
+        min: 0,
+      },
+      lastRequestAt: {
+        type: Date,
+        default: null,
+      },
+      approvedAt: {
+        type: Date,
+        default: null,
+      },
+    },
   },
   {
     timestamps: true,

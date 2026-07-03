@@ -63,8 +63,12 @@ const pruneExpiredOtpSessions = () => {
   }
 };
 
-const sendLoginOtpSms = async ({ phone, code }) => {
-  const message = `رمز التحقق الخاص بتسجيل الدخول هو: ${code}`;
+const sendOtpSms = async ({ phone, code, purpose = "login" }) => {
+  const messages = {
+    login: `رمز تسجيل الدخول في تطبيق Oxygen هو: ${code}. صالح 5 دقائق. لا تشاركه مع أحد.`,
+    password_recovery: `رمز استعادة كلمة المرور في Oxygen هو: ${code}. صالح 5 دقائق. لا تشاركه مع أحد.`,
+  };
+  const message = messages[purpose] || messages.login;
   const providerUrl = process.env.SMS_PROVIDER_URL;
 
   if (!providerUrl) {
@@ -213,13 +217,15 @@ class AuthService {
       throw new UnauthorizedError("Invalid credentials");
     }
 
-    const isValidPassword = await EncryptionServices.compare({
-      text: payload.password,
-      encryptedText: customer.password,
-    });
+    if (!payload.skipPasswordCheck) {
+      const isValidPassword = await EncryptionServices.compare({
+        text: payload.password,
+        encryptedText: customer.password,
+      });
 
-    if (!isValidPassword) {
-      throw new UnauthorizedError("Invalid credentials");
+      if (!isValidPassword) {
+        throw new UnauthorizedError("Invalid credentials");
+      }
     }
 
     if (!phonesMatch(customer.phone, payload.phone)) {
@@ -230,18 +236,21 @@ class AuthService {
 
     const otpToken = randomUUID();
     const code = generateOtpCode();
+    const purpose =
+      payload.purpose === "password_recovery" ? "password_recovery" : "login";
 
     loginOtpSessions.set(otpToken, {
       customerId: customer._id.toString(),
       role: role || customer.role,
       code,
+      purpose,
       attempts: 0,
       expiresAt: Date.now() + LOGIN_OTP_EXPIRY_MS,
     });
 
-    await sendLoginOtpSms({ phone: customer.phone, code });
+    await sendOtpSms({ phone: customer.phone, code, purpose });
 
-    return {
+    const response = {
       requestId: otpToken,
       otpToken,
       expiresInSec: Math.floor(LOGIN_OTP_EXPIRY_MS / 1000),
@@ -249,7 +258,23 @@ class AuthService {
       maskedDestination: maskPhone(customer.phone),
       maskedPhone: maskPhone(customer.phone),
       destinationPhone: customer.phone,
+      purpose,
     };
+
+    if (process.env.NODE_ENV !== "production" && process.env.OTP_DEBUG === "true") {
+      response.debugCode = code;
+    }
+
+    return response;
+  }
+
+  static async requestRecoveryOtp(payload) {
+    return AuthService.requestLoginOtp({
+      email: payload.email,
+      phone: payload.phone,
+      purpose: "password_recovery",
+      skipPasswordCheck: true,
+    });
   }
 
   static async verifyLoginOtp(payload) {
@@ -290,6 +315,14 @@ class AuthService {
     const customer = await Customer.findById(session.customerId);
     if (!customer) {
       throw new UnauthorizedError("Account no longer exists");
+    }
+
+    if (session.purpose === "password_recovery") {
+      return {
+        verified: true,
+        purpose: "password_recovery",
+        maskedPhone: maskPhone(customer.phone),
+      };
     }
 
     const tokens = await issueTokenPair(customer);

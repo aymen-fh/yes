@@ -9,6 +9,7 @@ import SubscriptionService from "./subscription.service.js";
 import SupportTicketService from "../supportTickets/supportTicket.service.js";
 import UsageService from "../usage/usage.service.js";
 import SpeedTestService from "../speedTests/speedTest.service.js";
+import AdvanceCreditService from "./advanceCredit.service.js";
 import {
   parseTopupScratchCode,
   redeemTopupCouponCard,
@@ -676,6 +677,31 @@ class SubscriptionController {
 
       const latest = await SpeedTestService.getLatest(subscription._id);
       return ApiResponse.success(res, toSpeedTestDto(latest));
+    } catch (error) {
+      return next(error);
+    }
+  }
+
+  static async getAdvanceCredit(req, res, next) {
+    try {
+      const data = await AdvanceCreditService.getStatus({
+        subscriptionId: req.params.id,
+        user: req.user,
+      });
+      return ApiResponse.success(res, data, "Advance credit status");
+    } catch (error) {
+      return next(error);
+    }
+  }
+
+  static async requestAdvanceCredit(req, res, next) {
+    try {
+      const data = await AdvanceCreditService.request({
+        subscriptionId: req.params.id,
+        user: req.user,
+        amount: req.body.amount,
+      });
+      return ApiResponse.success(res, data, "Advance credit approved");
     } catch (error) {
       return next(error);
     }
