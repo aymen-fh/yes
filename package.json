@@ -7,8 +7,8 @@
   "scripts": {
     "start": "node src/config/server.js",
     "dev": "nodemon src/config/server.js",
-    "build:admin-react": "npm --prefix ../frontend run build",
-    "dev:admin-react": "npm --prefix ../frontend run dev",
+    "build:admin-react": "npm --prefix ../Web run build",
+    "dev:admin-react": "npm --prefix ../Web run dev",
     "seed": "node scripts/seed.js",
     "seed.js": "node scripts/seed.js",
     "seed:isp": "node scripts/seed.js",

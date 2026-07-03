@@ -141,6 +141,17 @@ app.use("/api/v1/mobile", mobileRoute);
 app.use("/api/v1/dashboard", dashboardRoute);
 
 // Legacy/compat alias to support /api base path used by the mobile app.
+app.use("/api", (req, res, next) => {
+  if (isDatabaseReady()) {
+    return next();
+  }
+
+  return res.status(503).json({
+    success: false,
+    message: "Database is unavailable. The server is running in degraded mode and will retry automatically.",
+    database: getDatabaseStatus(),
+  });
+});
 app.use("/api/auth", authRoute);
 app.use("/api/customers", customerRoute);
 app.use("/api/plans", planRoute);

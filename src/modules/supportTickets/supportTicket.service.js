@@ -5,6 +5,11 @@ import { createReadableCode } from "../common/serializers.js";
 class SupportTicketService {
   static normalizeAuthorRole(role) {
     if (role === "customer") return "customer";
+    if (role === "agent") return "agent";
+    if (role === "tech_support") return "tech_support";
+    if (role === "customer_service") return "customer_service";
+    if (role === "system_engineer") return "system_engineer";
+    if (role === "admin") return "admin";
     return "support";
   }
 
@@ -44,7 +49,16 @@ class SupportTicketService {
       },
     ];
 
-    if (["admin", "distributor", "support"].includes(actor.role) && ticket.status === "open") {
+    const staffRoles = [
+      "admin",
+      "agent",
+      "tech_support",
+      "customer_service",
+      "system_engineer",
+      "distributor",
+      "support",
+    ];
+    if (staffRoles.includes(actor.role) && ticket.status === "open") {
       ticket.status = "in_progress";
     }
 

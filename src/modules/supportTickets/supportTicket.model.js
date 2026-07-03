@@ -64,6 +64,7 @@ const supportTicketSchema = new mongoose.Schema(
           enum: [
             "customer",
             "admin",
+            "agent",
             "distributor",
             "support",
             "tech_support",
