@@ -73,6 +73,7 @@ const IN_SCOPE_HINTS = [
   "اختبار", "test", "انته", "نفذ", "خلص", "موقوف", "suspended",
   "ألعاب", "gaming", "بث", "stream", "wifi", "واي", "إعدادات", "settings",
   "شركة", "company", "about", "من أنت", "who are you",
+  "تركيب", "كابل", "كوابل", "سلك", "اسلاك", "أسلاك", "توصيل", "ethernet", "ont",
 ];
 
 const SMALL_TALK = [

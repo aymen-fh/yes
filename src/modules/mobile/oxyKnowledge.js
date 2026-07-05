@@ -255,6 +255,45 @@ export const answerCoverage = () =>
 export const answerRouterHelp = () =>
   `📶 **الراوتر:** إعادة تشغيل 30 ثانية · أضواء خضراء · Wi-Fi في وسط المنزل · بلاغ دعم لمشاكل العتاد.`;
 
+export const answerCableInstallation = (context = {}) => {
+  const serviceType = pick(context, "subscription.serviceType", "serviceType") || "ftth";
+  const supportPhone = pick(context, "support.phone") || SUPPORT.phone;
+  const isFiber = /ftth|fiber|\u0623\u0644\u064a\u0627\u0641|\u0641\u0627\u064a\u0628/i.test(String(serviceType));
+
+  if (isFiber) {
+    return `\uD83D\uDD0C **\u062a\u0631\u0643\u064a\u0628 \u0643\u0648\u0627\u0628\u0644 \u0627\u0644\u0625\u0646\u062a\u0631\u0646\u062a (\u0623\u0644\u064a\u0627\u0641 FTTH):**
+
+\u26A0\uFE0F **\u0643\u0627\u0628\u0644 \u0627\u0644\u0623\u0644\u064a\u0627\u0641 \u0627\u0644\u0628\u0635\u0631\u064a** \u062d\u0633\u0627\u0633 \u2014 \u0644\u0627 \u062a\u062b\u0646\u0651\u0650\u0647 \u0628\u0632\u0627\u0648\u064a\u0629 \u062d\u0627\u062f\u0629 \u0648\u0644\u0627 \u062a\u0644\u0645\u0633 \u0631\u0623\u0633\u0647.
+
+**1\uFE0F\u20E3 \u0645\u0646 \u0627\u0644\u062d\u0627\u0626\u0637/\u0627\u0644\u0639\u0644\u0628\u0629 \u0625\u0644\u0649 ONT:**
+\u2022 \u0648\u0635\u0651\u0644 \u0643\u0627\u0628\u0644 \u0627\u0644\u0623\u0644\u064a\u0627\u0641 \u0641\u064a \u0645\u0646\u0641\u0630 **PON / OPTICAL**.
+\u2022 \u0644\u0627 \u062a\u0646\u0638\u0641 \u0631\u0623\u0633 \u0627\u0644\u0643\u0627\u0628\u0644 \u0628\u0646\u0641\u0633\u0643 \u0625\u0646 \u0643\u0627\u0646 \u0645\u062a\u0633\u062e\u0627\u064b.
+
+**2\uFE0F\u20E3 \u0645\u0646 ONT \u0625\u0644\u0649 \u0627\u0644\u0631\u0627\u0648\u062a\u0631:**
+\u2022 \u0643\u0627\u0628\u0644 **Ethernet (RJ45)** \u0645\u0646 **LAN/GE** \u0625\u0644\u0649 **WAN** \u0641\u064a \u0627\u0644\u0631\u0627\u0648\u062a\u0631.
+\u2022 \u0627\u062f\u0641\u0639 \u062d\u062a\u0649 \u062a\u0633\u0645\u0639 **\u0637\u0642** \u0648\u064a\u062b\u0628\u062a \u0627\u0644\u0645\u0634\u0628\u0643.
+
+**3\uFE0F\u20E3 \u0645\u0646 \u0627\u0644\u0631\u0627\u0648\u062a\u0631 \u0625\u0644\u0649 \u0627\u0644\u062c\u0647\u0627\u0632 (\u0627\u062e\u062a\u064a\u0627\u0631\u064a):**
+\u2022 \u0645\u0646\u0641\u0630 **LAN 1\u20134** \u0625\u0644\u0649 \u0627\u0644\u0643\u0645\u0628\u064a\u0648\u062a\u0631 \u0623\u0648 \u0627\u0644\u062a\u0644\u0641\u0627\u0632\u064a\u0648\u0646.
+\u2022 **Cat5e** \u0623\u0648 **Cat6** \u2014 \u0644\u0644\u0633\u0631\u0639\u0627\u062a \u0627\u0644\u0639\u0627\u0644\u064a\u0629 \u064a\u064f\u0641\u0636\u0651\u064e\u0644 Cat6.
+
+**4\uFE0F\u20E3 \u0627\u0644\u062a\u0634\u063a\u064a\u0644:** ONT \u0623\u0648\u0644\u0627\u064b (\u062f\u0642\u064a\u0642\u062a\u0627\u0646) \u2192 \u062b\u0645 \u0627\u0644\u0631\u0627\u0648\u062a\u0631.
+\u2022 PON/LOS \u0623\u062e\u0636\u0631 = \u062c\u064a\u062f. \u0623\u062d\u0645\u0631 = \u0628\u0644\u0627\u063a \u062f\u0639\u0645.
+
+**5\uFE0F\u20E3 \u0644\u0627 \u062a\u0641\u0639\u0644:** \u0644\u0627 \u062a\u0642\u0637\u0639 \u0623\u0648 \u062a\u0645\u062f\u0651\u0650\u062f \u0643\u0627\u0628\u0644 \u0627\u0644\u0623\u0644\u064a\u0627\u0641 \u0628\u0646\u0641\u0633\u0643.
+
+\u062a\u0631\u0643\u064a\u0628 \u062c\u062f\u064a\u062f \u0623\u0648 \u0645\u0634\u0643\u0644\u0629\u061f \u0627\u062a\u0635\u0644 **${supportPhone}** \u0623\u0648 \u0628\u0644\u0627\u063a \u062f\u0639\u0645.`;
+  }
+
+  return `\uD83D\uDD0C **\u062a\u0631\u0643\u064a\u0628 \u0648\u062a\u0648\u0635\u064a\u0644 \u0643\u0648\u0627\u0628\u0644 \u0627\u0644\u0625\u0646\u062a\u0631\u0646\u062a:**
+
+**1\uFE0F\u20E3 Ethernet (RJ45):** \u0645\u0646\u0641\u0630 **LAN** \u0628\u0627\u0644\u0631\u0627\u0648\u062a\u0631 \u2190 \u062c\u0647\u0627\u0632\u0643. \u0627\u062f\u0641\u0639 \u062d\u062a\u0649 **\u0637\u0642**.
+**2\uFE0F\u20E3 WAN:** \u0645\u0646 \u0627\u0644\u0645\u0648\u062f\u0645/ONT \u2190 \u0645\u0646\u0641\u0630 **WAN / Internet** (\u0644\u0648\u0646 \u0645\u062e\u062a\u0644\u0641 \u0639\u0646 LAN).
+**3\uFE0F\u20E3 ADSL:** \u062e\u0637 \u0627\u0644\u0647\u0627\u062a\u0641 \u2190 \u0645\u0646\u0641\u0630 **DSL** + splitter \u0625\u0646 \u0644\u0632\u0645.
+**4\uFE0F\u20E3** \u062a\u062c\u0646\u0651\u0650\u0628 \u062b\u0646\u064a \u0627\u0644\u0643\u0648\u0627\u0628\u0644. Ethernet \u0623\u0633\u0631\u0639 \u0645\u0646 Wi-Fi. \u0623\u0639\u062f \u062a\u0634\u063a\u064a\u0644 \u0627\u0644\u0631\u0627\u0648\u062a\u0631 30 \u062b\u0627\u0646\u064a\u0629.
+**5\uFE0F\u20E3** \u062a\u0631\u0643\u064a\u0628 \u0623\u0648\u0644\u061f \u0641\u0646\u064a Oxygen \u2014 **${supportPhone}** \u0623\u0648 \u0628\u0644\u0627\u063a \u062f\u0639\u0645.`;
+};
+
 export const answerWhoIsOxy = () =>
   `🤖 **أنا أوكسي OXY** — مساعد Oxygen الذكي داخل التطبيق.\n`
   + `أساعدك في: رصيدك، استهلاكك، باقتك، الشحن، سلفني، ضعف النت، والدعم الفني.\n`
@@ -487,6 +526,18 @@ export const FAQ_ENTRIES = [
   { id: "topup_fail", patterns: [/فشل\s*الشحن|شحن\s*ما\s*نجح|topup\s*fail|recharge\s*fail|الكرت\s*ما\s*اشتغ/i], answer: answerTopupFailed },
   { id: "coverage", patterns: [/تغطية|coverage|منطقت|area|available\s*in/i], answer: answerCoverage },
   { id: "wifi_password", patterns: [/كلمة\s*(ال)?wifi|wifi\s*pass|باسورد\s*الواي|password\s*wifi|شبكة\s*لاسلك/i], answer: answerWifiPassword },
+  {
+    id: "cable_install",
+    patterns: [
+      /تركيب.*(كابل|سلك|اسلا|أسلاك|كوابل|انترنت|إنترنت|نت)/i,
+      /(كابل|سلك|اسلا|أسلاك|كوابل).*(تركيب|توصيل|ربط|وصل)/i,
+      /طريقة.*(تركيب|توصيل).*(كابل|سلك|اسلا|انترنت|إنترنت)/i,
+      /cable.*(install|connect|wiring)|ethernet.*(install|connect)/i,
+      /وصل.*(كابل|راوتر|ont|مودم)/i,
+      /توصيل.*(كابل|اسلا|أسلاك|انترنت)/i,
+    ],
+    answer: answerCableInstallation,
+  },
   { id: "router", patterns: [/راوتر|router|مودم|modem|الراوتر|إعادة\s*تشغيل\s*الر/i], answer: answerRouterHelp },
   { id: "who_oxy", patterns: [/من\s*أنت|من\s*انت|who\s*are\s*you|what\s*is\s*oxy|ما\s*هو\s*أوكس|ما\s*هي\s*أوكس|أوكسي\s*من|مساعد\s*ذك/i], answer: answerWhoIsOxy },
   { id: "capabilities", patterns: [/ماذا\s*يمكن|وش\s*تقدر|what\s*can\s*you|help\s*with|كيف\s*تساعد|ماذا\s*تفعل|تقدر\s*تساعد|خدماتك/i], answer: answerCapabilities },
