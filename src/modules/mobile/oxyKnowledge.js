@@ -29,7 +29,7 @@ export const answerSlowInternet = (context = {}) => {
   }
 
   if (!isUnlimited && remaining != null && remaining <= 0.5) {
-    return `⚠️ الكota شبه منتهية (متبقي ${remaining} GB). قد تُخفّض السرعة. الحل: شحن أو ترقية من «الباقات».`;
+    return `⚠️ الكوتا شبه منتهية (متبقي ${remaining} GB). قد تُخفّض السرعة. الحل: شحن أو ترقية من «الباقات».`;
   }
 
   const steps = [
@@ -42,7 +42,7 @@ export const answerSlowInternet = (context = {}) => {
 
   const planPart =
     planName && speed
-      ? `\n\n📦 باقتك: ${planName} (${speed} Mbps). السرعة الفعلية تعتمد على الكables والمسافة وازدحام الشبكة.`
+      ? `\n\n📦 باقتك: ${planName} (${speed} Mbps). السرعة الفعلية تعتمد على الكابلات والمسافة وازدحام الشبكة.`
       : "";
   const usagePart =
     !isUnlimited && consumed != null && remaining != null
@@ -61,7 +61,7 @@ export const answerWhyFewPlans = (context = {}) => {
     ftth: "الألياف FTTH",
     mobile4g5g: "4G/5G",
     adsl: "ADSL",
-    other: "الإنternet",
+    other: "الإنترنت",
   }[serviceType] || serviceType;
 
   let text = `📋 **لماذا الباقات تبدو قليلة؟**\n\n`;
@@ -108,7 +108,7 @@ export const answerNoInternet = (context = {}) => {
     return `❌ **لا رصيد** (${balance} د.ل). شحن ← الرئيسية، ثم أعد تشغيل الراوتر.`;
   }
 
-  return `❌ **انقطاع الإنternet:**
+  return `❌ **انقطاع الإنترنت:**
 1️⃣ تأكد الراوتر يعمل (أضواء خضراء).
 2️⃣ أعد تشغيله 30 ثانية.
 3️⃣ تحقق اشتراكك «نشط» في التطبيق.
@@ -143,7 +143,7 @@ export const answerPlanDifference = (context = {}) => {
   const plans = getAvailablePlans(context);
   if (plans.length >= 2) {
     const sorted = [...plans].sort((a, b) => a.monthlyPrice - b.monthlyPrice);
-    return `📊 **فرق الباقات:** السرعة + الكota + السعر + المدة.
+    return `📊 **فرق الباقات:** السرعة + الكوتا + السعر + المدة.
 
 ${formatPlanLine(sorted[0])}
 ${formatPlanLine(sorted[sorted.length - 1])}
@@ -152,7 +152,7 @@ ${formatPlanLine(sorted[sorted.length - 1])}
 
 «الباقات» للمقارنة الكاملة.`;
   }
-  return `📊 الباقات تختلف بالسرعة والكota. باقتك: ${pick(context, "subscription.plan.name", "planName") || "—"}. «الباقات» للمقارنة.`;
+  return `📊 الباقات تختلف بالسرعة والكوتا. باقتك: ${pick(context, "subscription.plan.name", "planName") || "—"}. «الباقات» للمقارنة.`;
 };
 
 export const isBestPlanQuestion = (message) => {
@@ -247,13 +247,217 @@ export const answerBestPlanRecommendation = (context = {}) => {
 };
 
 export const answerTopupFailed = () =>
-  `❌ **فشل الشحن:** تحقق PIN، الكرت غير مستخدم، اتصال الإنternet، انتظر دقيقة. استمر؟ احتفظ بالكرت وافتح بلاغ.`;
+  `❌ **فشل الشحن:** تحقق PIN، الكرت غير مستخدم، اتصال الإنترنت، انتظر دقيقة. استمر؟ احتفظ بالكرت وافتح بلاغ.`;
 
 export const answerCoverage = () =>
   `📡 التغطية تختلف بالمنطقة. اتصل ${SUPPORT.phone} أو «خريطة الوكلاء».`;
 
 export const answerRouterHelp = () =>
-  `📶 **الراوتر:** إعادة تشغيل 30 ثانية · أضواء خضراء · Wi-Fi في وسط المنزل · بلاغ دعم لمشاكل hardware.`;
+  `📶 **الراوتر:** إعادة تشغيل 30 ثانية · أضواء خضراء · Wi-Fi في وسط المنزل · بلاغ دعم لمشاكل العتاد.`;
+
+export const answerWhoIsOxy = () =>
+  `🤖 **أنا أوكسي OXY** — مساعد Oxygen الذكي داخل التطبيق.\n`
+  + `أساعدك في: رصيدك، استهلاكك، باقتك، الشحن، سلفني، ضعف النت، والدعم الفني.\n`
+  + `لست مساعداً عاماً — أسئلة خارج خدمات Oxygen لا أجيب عنها.`;
+
+export const answerCapabilities = () =>
+  `✨ **يمكنني مساعدتك في:**\n`
+  + `• 💰 الرصيد والشحن (PIN / QR)\n`
+  + `• 📊 الاستهلاك والكوتا وتحليلها\n`
+  + `• 📦 الباقات والترقية والتوصيات\n`
+  + `• 🔧 ضعف النت وانقطاع الخدمة\n`
+  + `• 💳 سلفني (سلفة رصيد)\n`
+  + `• 🛠️ الدعم الفني والبلاغات\n`
+  + `• 📍 خريطة الوكلاء\n\n`
+  + `اسأل مباشرة: «كم رصيدي؟»، «ما رأيك في استهلاكي؟»، «ضعف الإنترنت».`;
+
+export const answerHowToTopup = () =>
+  `🔋 **كيفية الشحن:**\n`
+  + `1️⃣ الرئيسية ← **شحن الرصيد**\n`
+  + `2️⃣ أدخل **PIN** من الكرت أو امسح **QR**\n`
+  + `3️⃣ انتظر التأكيد — يظهر الرصيد فوراً\n\n`
+  + `💡 فشل الشحن؟ تحقق PIN والاتصال. «سجل المعاملات» للتفاصيل.`;
+
+export const answerPasswordReset = () =>
+  `🔐 **استعادة كلمة المرور:**\n`
+  + `1️⃣ شاشة الدخول ← **هل نسيت كلمة المرور؟**\n`
+  + `2️⃣ أدخل معرفك (رقم الهاتف/العقد)\n`
+  + `3️⃣ أدخل **OTP** من SMS\n`
+  + `4️⃣ اختر كلمة مرور جديدة\n\n`
+  + `لم يصل OTP؟ تحقق الرقم أو اتصل ${SUPPORT.phone}.`;
+
+export const answerChangePlan = (context = {}) => {
+  const planName = pick(context, "subscription.plan.name", "planName");
+  const part = planName ? `\n\n📦 باقتك الحالية: ${planName}.` : "";
+  return `📦 **تغيير الباقة:**\n`
+    + `1️⃣ تبويب **«الباقات»** (أسفل الشاشة)\n`
+    + `2️⃣ اختر الباقة المناسبة\n`
+    + `3️⃣ أكّد الترقية أو التخفيض\n\n`
+    + `💡 للتوصية حسب استهلاكك اسأل: «ما أفضل باقة برأيك؟»${part}`;
+};
+
+export const answerQuotaExhausted = (context = {}) => {
+  const remaining = pick(context, "usage.remainingGb", "remainingGb");
+  const planName = pick(context, "subscription.plan.name", "planName");
+  if (remaining != null && remaining <= 0) {
+    return `⚠️ **الكوتا منتهية** (متبقي ${remaining} GB). السرعة قد تُخفّض.\n`
+      + `الحل: شحن رصيد + ترقية من «الباقات»${planName ? ` (باقتك: ${planName})` : ""}.`;
+  }
+  return `⚠️ **انتهت الكوتا؟** الحل:\n`
+    + `• ترقية من «الباقات»\n`
+    + `• أو انتظر دورة الفوترة التالية\n`
+    + `• أو شحن رصيد إن لزم`;
+};
+
+export const answerSpeedTest = () =>
+  `⚡ **اختبار السرعة:**\n`
+  + `تبويب **«الاستهلاك»** ← اختبار السرعة.\n\n`
+  + `💡 للدقة: وصّل كابل Ethernet، أغلق التحميلات، أعد تشغيل الراوتر.`;
+
+export const answerSalfniHelp = (context = {}) => {
+  const advance = context.advanceCredit || {};
+  const maxRequest = advance.maxRequest;
+  if (advance.status === "active" && advance.owedAmount > 0) {
+    return `💳 **سلفني:** لديك سلفة ${advance.owedAmount} د.ل — تُخصم تلقائياً عند الشحن التالي.`;
+  }
+  if (advance.status === "pending") return "⏳ طلب سلفني **قيد المراجعة** — انتظر SMS أو إشعار.";
+  if (advance.canRequest && maxRequest) {
+    return `💳 **سلفني — سلفة رصيد:**\n`
+      + `الخدمات ← **سلفني** ← اطلب حتى **${maxRequest} د.ل**\n`
+      + `تُخصم من أول شحن بعد الموافقة.`;
+  }
+  return `💳 **سلفني:** الخدمات ← **سلفني**. متاح للمشتركين النشطين بدون سلفة معلقة.`;
+};
+
+export const answerSupportContact = (context = {}) => {
+  const phone = pick(context, "support.phone") || SUPPORT.phone;
+  const openTickets = pick(context, "openTicketsCount");
+  const ticketPart = openTickets > 0 ? `\n📋 لديك ${openTickets} بلاغ مفتوح — تابع من «سجل البلاغات».` : "";
+  return `🛠️ **الدعم الفني:**\n`
+    + `• الخدمات ← **الدعم الفني** ← إنشاء بلاغ\n`
+    + `• هاتف: **${phone}**\n`
+    + `• بريد: ${SUPPORT.email}${ticketPart}`;
+};
+
+export const answerHowToComplaint = () =>
+  `📝 **فتح بلاغ:**\n`
+  + `1️⃣ تبويب **«الخدمات»**\n`
+  + `2️⃣ **الدعم الفني** ← صف المشكلة\n`
+  + `3️⃣ تابع من **سجل البلاغات**\n\n`
+  + `💡 للانقطاع أو ضعف النت: اذكر وقت المشكلة ونوع الراوتر.`;
+
+export const answerAboutOxygen = () =>
+  `🌐 **Oxygen** — مزود خدمة إنترنت (ISP) في ليبيا.\n`
+  + `نوفر: ألياف FTTH، 4G/5G، ADSL — باقات متنوعة.\n`
+  + `التطبيق: شحن، استهلاك، باقات، سلفني، دعم، وكلاء.\n`
+  + `للاستفسار: ${SUPPORT.phone}`;
+
+export const answerAppNavigation = (message) => {
+  const q = message.toString().toLowerCase();
+  if (/شحن|topup|recharge|pin|qr|كرت/.test(q)) return "📍 **شحن الرصيد:** الرئيسية ← شحن الرصيد.";
+  if (/استهلاك|usage|كوتا|quota|سرعة|speed\s*test/.test(q)) return "📍 **الاستهلاك:** تبويب «الاستهلاك» (أسفل الشاشة).";
+  if (/باق|plan|ترق|upgrade/.test(q)) return "📍 **الباقات:** تبويب «الباقات» (أسفل الشاشة).";
+  if (/سلف|advance|salfni/.test(q)) return "📍 **سلفني:** الخدمات ← سلفني.";
+  if (/وكيل|agent|map|خريطة/.test(q)) return "📍 **الوكلاء:** الخدمات ← خريطة الوكلاء.";
+  if (/دعم|support|بلاغ|ticket|complaint/.test(q)) return "📍 **الدعم:** الخدمات ← الدعم الفني.";
+  if (/معامل|transaction|سجل|history/.test(q)) return "📍 **المعاملات:** الرئيسية ← سجل المعاملات.";
+  if (/إعداد|setting|لغة|language|theme/.test(q)) return "📍 **الإعدادات:** الرئيسية ← الإعدادات (أيقونة الترس).";
+  if (/أوكسي|oxy|مساعد|chat/.test(q)) return "📍 **أوكسي:** الخدمات ← أوكسي OXY.";
+  return `📱 **التطبيق — 4 تبويبات:**\n`
+    + `• **الرئيسية** — رصيد، شحن، ملخص\n`
+    + `• **الخدمات** — سلفني، أوكسي، وكلاء، دعم\n`
+    + `• **الاستهلاك** — كوتا واختبار سرعة\n`
+    + `• **الباقات** — ترقية وتغيير`;
+};
+
+export const answerSubscriptionSuspended = (context = {}) => {
+  const status = pick(context, "subscription.statusLabel", "status");
+  const balance = pick(context, "accountBalance");
+  let text = `⛔ **اشتراك موقوف:**\n`;
+  if (status) text += `الحالة: **${status}**.\n`;
+  text += `الأسباب الشائعة: انتهاء الباقة، عدم التجديد، رصيد سالب.\n`;
+  text += `**الحل:** شحن رصيد ← تجديد من «الباقات».`;
+  if (balance != null && balance <= 0) text += `\n💰 رصيدك: ${balance} د.ل — شحن مطلوب.`;
+  return text;
+};
+
+export const answerUnlimitedVsLimited = () =>
+  `📊 **محدودة vs غير محدودة:**\n`
+  + `• **محدودة:** كوتا GB محددة + سرعة — أرخص.\n`
+  + `• **غير محدودة:** بدون حد GB — للاستخدام العالي والبث.\n\n`
+  + `«الباقات» للمقارنة. اسأل «ما أفضل باقة؟» للتوصية.`;
+
+export const answerCancelSubscription = () =>
+  `❌ **إلغاء الاشتراك:**\n`
+  + `يتطلب التواصل مع الدعم — افتح بلاغ أو اتصل ${SUPPORT.phone}.\n`
+  + `جهّز: رقم الاشتراك، الهوية، سبب الإلغاء.`;
+
+export const answerInvoicePayment = (context = {}) => {
+  const nextBilling = pick(context, "subscription.nextBillingDate", "nextBillingDate");
+  const balance = pick(context, "accountBalance");
+  let text = `🧾 **الفواتير والدفع:**\n`
+    + `• الشحن: الرئيسية ← شحن الرصيد\n`
+    + `• المعاملات: سجل المعاملات\n`
+    + `• التجديد التلقائي عند وجود رصيد كافٍ`;
+  if (nextBilling) text += `\n📅 موعد التجديد: ${nextBilling}.`;
+  if (balance != null) text += `\n💰 رصيدك: ${balance} د.ل.`;
+  return text;
+};
+
+export const answerWifiPassword = () =>
+  `🔑 **كلمة Wi-Fi:**\n`
+  + `• ملصق على **الراوتر** (SSID + Password)\n`
+  + `• أو إعدادات الراوتر: 192.168.1.1 (حسب الموديل)\n`
+  + `• نسيتها؟ اتصل ${SUPPORT.phone} أو بلاغ دعم.`;
+
+export const answerSubscriptionNumber = (context = {}) => {
+  const subNumber = pick(context, "subscription.number", "subscriptionNumber");
+  if (subNumber) return `📋 **رقم اشتراكك:** ${subNumber}`;
+  return `📋 **رقم الاشتراك** في: الرئيسية ← تفاصيل الاشتراك، أو العقد الأصلي.`;
+};
+
+export const answerMultipleDevices = () =>
+  `📱 **أجهزة متعددة:**\n`
+  + `يمكن توصيل عدة أجهزة — السرعة تُقسّم بينها.\n`
+  + `💡 للبث والألعاب: باقة أعلى سرعة. Wi-Fi 5GHz أسرع من 2.4GHz.`;
+
+export const answerGamingStreaming = (context = {}) => {
+  const plans = getAvailablePlans(context);
+  const highSpeed = plans.filter((p) => p.speedMbps >= 16).sort((a, b) => a.monthlyPrice - b.monthlyPrice);
+  let text = `🎮 **للألعاب والبث:**\n`
+    + `• سرعة 16 Mbps+ موصى بها\n`
+    + `• Ethernet أفضل من Wi-Fi\n`
+    + `• باقة غير محدودة للبث المكثف`;
+  if (highSpeed.length) {
+    text += `\n\n**خيارات مناسبة:**\n${highSpeed.slice(0, 3).map(formatPlanLine).join("\n")}`;
+  }
+  text += `\n\nاسأل «ما أفضل باقة؟» لتوصية شخصية.`;
+  return text;
+};
+
+export const answerChangePassword = () =>
+  `🔐 **تغيير كلمة المرور:** الإعدادات ← الأمان ← تغيير كلمة المرور.\n`
+  + `أو «هل نسيت كلمة المرور؟» من شاشة الدخول.`;
+
+export const answerActivation = () =>
+  `✅ **تفعيل اشتراك جديد:**\n`
+  + `1️⃣ سجّل دخول بالمعرف من العقد\n`
+  + `2️⃣ شحن رصيد ← اختيار باقة\n`
+  + `3️⃣ انتظر التفعيل (دقائق — ساعات)\n`
+  + `متأخر؟ بلاغ دعم أو ${SUPPORT.phone}.`;
+
+export const answerAgentsMap = () =>
+  `📍 **خريطة الوكلاء:**\n`
+  + `الخدمات ← **خريطة الوكلاء** — مكاتب ونقاط بيع وشحن.\n`
+  + `يمكنك عرض التفاصيل والاتجاهات لكل وكيل.`;
+
+export const answerTicketStatus = (context = {}) => {
+  const openTickets = pick(context, "openTicketsCount");
+  if (openTickets > 0) {
+    return `📋 لديك **${openTickets} بلاغ مفتوح**. تابع من: الخدمات ← **سجل البلاغات**.`;
+  }
+  return `📋 **متابعة البلاغات:** الخدمات ← سجل البلاغات.\nلا بلاغات مفتوحة حالياً — لإنشاء بلاغ: الدعم الفني.`;
+};
 
 export const FAQ_ENTRIES = [
   {
@@ -282,7 +486,31 @@ export const FAQ_ENTRIES = [
   { id: "plan_diff", patterns: [/فرق\s*(بين\s*)?(الباق|plan)|difference.*plan|قارن/i], answer: answerPlanDifference },
   { id: "topup_fail", patterns: [/فشل\s*الشحن|شحن\s*ما\s*نجح|topup\s*fail|recharge\s*fail|الكرت\s*ما\s*اشتغ/i], answer: answerTopupFailed },
   { id: "coverage", patterns: [/تغطية|coverage|منطقت|area|available\s*in/i], answer: answerCoverage },
-  { id: "router", patterns: [/راوتر|router|مودم|modem|wifi|واي\s*فاي|الراوتر/i], answer: answerRouterHelp },
+  { id: "wifi_password", patterns: [/كلمة\s*(ال)?wifi|wifi\s*pass|باسورد\s*الواي|password\s*wifi|شبكة\s*لاسلك/i], answer: answerWifiPassword },
+  { id: "router", patterns: [/راوتر|router|مودم|modem|الراوتر|إعادة\s*تشغيل\s*الر/i], answer: answerRouterHelp },
+  { id: "who_oxy", patterns: [/من\s*أنت|من\s*انت|who\s*are\s*you|what\s*is\s*oxy|ما\s*هو\s*أوكس|ما\s*هي\s*أوكس|أوكسي\s*من|مساعد\s*ذك/i], answer: answerWhoIsOxy },
+  { id: "capabilities", patterns: [/ماذا\s*يمكن|وش\s*تقدر|what\s*can\s*you|help\s*with|كيف\s*تساعد|ماذا\s*تفعل|تقدر\s*تساعد|خدماتك/i], answer: answerCapabilities },
+  { id: "how_topup", patterns: [/كيف\s*(أ|ا)?شحن|how\s*to\s*(topup|recharge)|طريقة\s*الشحن|شحن\s*كيف|أين\s*أشحن|where.*topup/i], answer: answerHowToTopup },
+  { id: "password_reset", patterns: [/نسيت\s*كلمة|forgot\s*password|reset\s*password|استعادة\s*كلمة|كلمة\s*المرور\s*نس/i], answer: answerPasswordReset },
+  { id: "change_password", patterns: [/تغيير\s*كلمة|change\s*password|بدل\s*كلمة/i], answer: answerChangePassword },
+  { id: "change_plan", patterns: [/تغيير\s*(الباق|plan)|change\s*plan|بدل\s*باق|أبدل\s*باق|switch\s*plan/i], answer: answerChangePlan },
+  { id: "quota_exhausted", patterns: [/انتهت\s*الكوت|نفذ\s*الاست|خلص\s*النت|quota\s*exhaust|out\s*of\s*data|no\s*data\s*left|الكوتا\s*خلص/i], answer: answerQuotaExhausted },
+  { id: "speed_test", patterns: [/اختبار\s*سر|speed\s*test|فحص\s*سر|قياس\s*سر/i], answer: answerSpeedTest },
+  { id: "salfni", patterns: [/سلفني|سلف\s*ني|advance\s*credit|سلفة|salfni/i], answer: answerSalfniHelp },
+  { id: "support_contact", patterns: [/رقم\s*الدعم|اتصل|contact|phone\s*support|هاتف\s*الدع|support\s*number/i], answer: answerSupportContact },
+  { id: "how_complaint", patterns: [/كيف\s*(أ|ا)?فتح\s*بلاغ|how\s*to\s*complaint|open\s*ticket|إنشاء\s*بلاغ|رفع\s*بلاغ/i], answer: answerHowToComplaint },
+  { id: "about_oxygen", patterns: [/ما\s*هي\s*oxygen|what\s*is\s*oxygen|عن\s*oxygen|عن\s*أوكس|شركة\s*oxygen|من\s*هي\s*oxygen/i], answer: answerAboutOxygen },
+  { id: "app_nav", patterns: [/أين\s*أجد|وين\s*ال|where\s*(is|find)|كيف\s*أوصل|فين\s*ال|أين\s*(شحن|باق|استه|سلف|دعم|وكيل)/i], answer: answerAppNavigation },
+  { id: "suspended", patterns: [/موقوف|suspended|معلق|تعليق\s*الخدم|خدمة\s*موقوف/i], answer: answerSubscriptionSuspended },
+  { id: "unlimited_limited", patterns: [/غير\s*محدود|unlimited|محدود\s*و\s*غير|فرق\s*محدود/i], answer: answerUnlimitedVsLimited },
+  { id: "cancel", patterns: [/إلغاء\s*اش|cancel\s*sub|الغاء\s*الاش|إنهاء\s*اش/i], answer: answerCancelSubscription },
+  { id: "invoice", patterns: [/فاتورة|invoice|bill|دفع|payment|سداد/i], answer: answerInvoicePayment },
+  { id: "sub_number", patterns: [/رقم\s*الاش|subscription\s*number|رقم\s*اشتراك/i], answer: answerSubscriptionNumber },
+  { id: "multi_device", patterns: [/أجهزة\s*مت|عدة\s*أجه|multiple\s*device|more\s*than\s*one\s*device/i], answer: answerMultipleDevices },
+  { id: "gaming", patterns: [/ألعاب|gaming|game|بث|stream|netflix|youtube\s*4k/i], answer: answerGamingStreaming },
+  { id: "activation", patterns: [/تفعيل|activate|اشتراك\s*جديد|new\s*sub/i], answer: answerActivation },
+  { id: "agents_map", patterns: [/خريطة\s*الو|وكلاء|agents?\s*map|nearest\s*agent|أقرب\s*وكيل/i], answer: answerAgentsMap },
+  { id: "ticket_status", patterns: [/حالة\s*البل|متابعة\s*بل|ticket\s*status|بلاغاتي|سجل\s*البل/i], answer: answerTicketStatus },
 ];
 
 export const matchFaq = (message) => {
@@ -301,4 +529,6 @@ export const answerFaq = (message, context = {}) => {
   return entry ? entry.answer(context) : null;
 };
 
-export default { FAQ_ENTRIES, matchFaq, answerFaq };
+export const isKnownTopic = (message) => Boolean(matchFaq(message));
+
+export default { FAQ_ENTRIES, matchFaq, answerFaq, isKnownTopic, isBestPlanQuestion };

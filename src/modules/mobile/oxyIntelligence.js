@@ -24,6 +24,10 @@ const CLEARLY_OUT_OF_SCOPE = [
   "trump", "biden", "putin", "تاريخ", "history", "جغرافيا", "geography",
   "math", "رياضيات", "علم", "science", "دين", "religion", "طب", "medicine",
   "نكت", "joke", "funny", "احكي", "قصة", "story", "أغنية", "song", "music",
+  "واجب", "homework", "essay", "مقال", "translate", "ترجم", "حل سؤال",
+  "tiktok", "instagram", "facebook", "whatsapp business",
+  "iphone", "samsung", "apple", "google", "microsoft",
+  "القمر", "الشمس", "الفضاء", "space", "planet",
 ];
 
 const EXTERNAL_TOPIC_RE = [
@@ -38,6 +42,8 @@ const EXTERNAL_TOPIC_RE = [
   /gpt|chatgpt|gemini|openai|claude/i,
   /joke|نكت|funny|story|قصة|أغنية|music/i,
   /history|geography|math|science|medicine|religion|تاريخ|رياضيات|طب/i,
+  /homework|واجب|essay|مقال|translate|ترجم/i,
+  /tiktok|instagram|facebook/i,
 ];
 
 const IN_SCOPE_HINTS = [
@@ -61,6 +67,12 @@ const IN_SCOPE_HINTS = [
   "ضعف", "ضعيف", "بطي", "بطء", "انقطاع", "راوتر", "router", "مودم", "modem",
   "تغطية", "coverage", "غالي", "expensive", "فرق", "difference",
   "قليل", "few", "مشكلة", "problem", "issue", "فشل", "fail", "offline",
+  "سلفني", "salfni", "فاتورة", "invoice", "إلغاء", "cancel", "تفعيل", "activate",
+  "نسيت", "forgot", "كلمة", "password", "مساعد", "assistant", "chatbot",
+  "كيف", "how", "أين", "where", "وين", "فين", "متى", "when",
+  "اختبار", "test", "انته", "نفذ", "خلص", "موقوف", "suspended",
+  "ألعاب", "gaming", "بث", "stream", "wifi", "واي", "إعدادات", "settings",
+  "شركة", "company", "about", "من أنت", "who are you",
 ];
 
 const SMALL_TALK = [
@@ -107,6 +119,11 @@ export const politeDeclineReply = (message) => {
 
   if (/joke|نكت|احك|قصة|story|تحك/i.test(lower)) {
     return "😊 أنا مساعد خدمة Oxygen وليس للأسئلة العامة، لكن يسعدني مساعدتك في الإنترنت أو اشتراكك!";
+  }
+
+  if (/homework|واجب|essay|مقال|translate|ترجم|حل\s*لي/i.test(lower)) {
+    return "عذراً 🙏 لا أستطيع المساعدة في الواجبات أو الترجمة — أنا متخصص في Oxygen فقط.\n"
+      + "هل أساعدك في رصيدك، باقتك، أو الدعم الفني؟";
   }
 
   return "عذراً، لا أستطيع الإجابة — هذا السؤال خارج نطاق Oxygen.\n"
