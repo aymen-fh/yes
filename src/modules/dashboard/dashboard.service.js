@@ -21,6 +21,9 @@ import {
   InternalMessage,
   CustomerAiChat,
 } from "./dashboard.models.js";
+import CustomerAiChatSyncService from "./customerAiChatSync.service.js";
+import CustomerNotificationService from "./customerNotification.service.js";
+import SupportTicketService from "../supportTickets/supportTicket.service.js";
 
 const resolveModel = (Model) => (Model?.modelName ? Model : Model());
 
@@ -569,6 +572,108 @@ class DashboardService {
     const chat = await CustomerAiChat().findByIdAndUpdate(id, payload, { new: true });
     if (!chat) throw new NotFoundError("Chat session not found");
     return toDto(chat);
+  }
+
+  static mapChatPriorityToTicket(priority) {
+    if (priority === "critical") return "urgent";
+    if (priority === "high") return "high";
+    if (priority === "low") return "low";
+    return "medium";
+  }
+
+  static async ensureTicketForChat(chat) {
+    const { SupportTicket, Subscription, Customer } = getModelsForRole(Roles.CUSTOMER);
+    const chatId = chat._id.toString();
+
+    if (chat.ticketId) {
+      const linked = await SupportTicket.findById(chat.ticketId);
+      if (linked) return linked;
+    }
+
+    const bySession = await SupportTicket.findOne({ "dashboardMeta.chatSessionId": chatId }).sort({
+      createdAt: -1,
+    });
+    if (bySession) {
+      if (!chat.ticketId) {
+        await CustomerAiChat().findByIdAndUpdate(chatId, { ticketId: bySession._id.toString() });
+      }
+      return bySession;
+    }
+
+    const customer = await Customer.findById(chat.customerId);
+    if (!customer) {
+      throw new NotFoundError("Customer not found for this chat");
+    }
+
+    const subscription = await Subscription.findOne({ customerId: customer._id }).sort({ createdAt: -1 });
+    const transcript = (chat.messages || [])
+      .map((m) => `${m.role === "customer" ? "الزبون" : m.role === "staff" ? "الموظف" : "المساعد"}: ${m.content}`)
+      .join("\n");
+    const summary = String(chat.aiSummary || "محادثة زبون").trim();
+    const category = String(chat.aiCategory || "استفسار").trim();
+
+    const ticket = await SupportTicket.create({
+      ticketNumber: await SupportTicketService.createTicketNumber(),
+      customerId: customer._id,
+      subscriptionId: subscription?._id ?? null,
+      subject: `[${category}] ${summary.slice(0, 100)}`,
+      description: `${summary}\n\n--- المحادثة ---\n${transcript}`.slice(0, 1000),
+      category: "other",
+      priority: DashboardService.mapChatPriorityToTicket(chat.priority),
+      dashboardMeta: {
+        chatSessionId: chatId,
+        aiCategory: chat.aiCategory,
+        aiSummary: chat.aiSummary,
+        resolutionOutcome: "pending",
+      },
+    });
+
+    await CustomerAiChat().findByIdAndUpdate(chatId, { ticketId: ticket._id.toString() });
+    return ticket;
+  }
+
+  static async replyToAiChat(chatId, { message, actor }) {
+    const chat = await CustomerAiChat().findById(chatId);
+    if (!chat) throw new NotFoundError("Chat session not found");
+
+    const trimmed = String(message || "").trim();
+    if (!trimmed) {
+      throw new ValidationError("Message is required");
+    }
+
+    const ticket = await DashboardService.ensureTicketForChat(chat);
+    await SupportTicketService.appendReply({
+      ticket,
+      actor: {
+        id: actor.id,
+        role: actor.role,
+      },
+      message: trimmed,
+    });
+
+    const staffLookup = await findUserByIdAcrossRoles(actor.id, STAFF_ROLES);
+    const staffName = staffLookup?.user?.fullName || actor.fullName || "خدمة العملاء";
+
+    await CustomerAiChatSyncService.syncStaffReply({
+      customerId: chat.customerId,
+      ticketId: ticket._id.toString(),
+      message: trimmed,
+      staffName,
+    });
+
+    await CustomerNotificationService.notifyTicketReply({
+      customerId: chat.customerId,
+      ticketId: ticket._id.toString(),
+      ticketNumber: ticket.ticketNumber,
+      message: trimmed,
+      staffName,
+    });
+
+    const updatedChat = await CustomerAiChat().findById(chatId);
+    return {
+      chat: toDto(updatedChat),
+      ticketId: ticket._id.toString(),
+    };
   }
 
   static async staffSync(user) {

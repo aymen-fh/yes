@@ -303,6 +303,22 @@ class DashboardController {
     }
   }
 
+  static async replyToAiChat(req, res, next) {
+    try {
+      const data = await DashboardService.replyToAiChat(req.params.id, {
+        message: req.body.message,
+        actor: {
+          id: req.user.id,
+          role: req.user.role,
+          fullName: req.user.fullName,
+        },
+      });
+      return ApiResponse.success(res, data, "Reply sent to customer");
+    } catch (error) {
+      return next(error);
+    }
+  }
+
   static async staffSync(req, res, next) {
     try {
       const data = await DashboardService.staffSync(req.user);

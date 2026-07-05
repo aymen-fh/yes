@@ -42,5 +42,11 @@ router.post("/messages", requireAuth, DashboardController.createMessage);
 router.patch("/messages/:id/read", requireAuth, DashboardController.markMessageRead);
 
 router.patch("/ai-chats/:id", requireAuth, DashboardController.updateAiChat);
+router.post(
+  "/ai-chats/:id/reply",
+  requireAuth,
+  requireRole("admin", "customer_service", "tech_support", "system_engineer"),
+  DashboardController.replyToAiChat,
+);
 
 export default router;
