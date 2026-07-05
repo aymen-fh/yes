@@ -78,15 +78,20 @@ export async function buildOxyContext({ customerId, role }) {
     return { support: SUPPORT };
   }
 
-  const { Customer, Subscription, Payment, SupportTicket } = getModelsForRole(
+  const { Customer, Subscription, Payment, SupportTicket, Plan } = getModelsForRole(
     Roles.CUSTOMER,
   );
 
-  const [customer, subscription] = await Promise.all([
+  const [customer, subscription, availablePlansRaw] = await Promise.all([
     Customer.findById(customerId).select("fullName customerCode email phone").lean(),
     Subscription.findOne({ customerId, status: { $in: ["active", "pending", "suspended"] } })
       .sort({ status: 1, createdAt: -1 })
       .populate("planId", "name code speedMbps dataLimitGb monthlyPrice")
+      .lean(),
+    Plan.find({ isActive: true })
+      .sort({ monthlyPrice: 1 })
+      .select("name code speedMbps dataLimitGb monthlyPrice isUnlimited validityLabel description")
+      .limit(30)
       .lean(),
   ]);
 
@@ -131,6 +136,17 @@ export async function buildOxyContext({ customerId, role }) {
 
   const advanceCredit = toAdvanceCreditDto(subscription);
 
+  const availablePlans = (availablePlansRaw || []).map((p) => ({
+    name: p.name,
+    code: p.code,
+    speedMbps: p.speedMbps,
+    dataLimitGb: p.dataLimitGb,
+    monthlyPrice: p.monthlyPrice,
+    isUnlimited: p.isUnlimited || p.dataLimitGb >= 999,
+    validityLabel: p.validityLabel || "",
+    description: (p.description || "").slice(0, 120),
+  }));
+
   return {
     ...base,
     subscription: {
@@ -158,6 +174,7 @@ export async function buildOxyContext({ customerId, role }) {
     accountBalance: computeAccountBalance(paidPayments),
     advanceCredit,
     openTicketsCount,
+    availablePlans,
     latestTransactions: latestPayments.map((p) => ({
       amount: p.totalAmount || p.amount || 0,
       status: p.status,
