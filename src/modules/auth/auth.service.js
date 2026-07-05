@@ -6,52 +6,13 @@ import { ConflictError, UnauthorizedError } from "../../utils/errors.js";
 import { Roles } from "../../utils/roles.js";
 import { findUserByIdentifierAcrossRoles, getModelsForRole } from "../../utils/roleModels.js";
 import { createReadableCode, serializeDoc } from "../common/serializers.js";
+import { sendOtpEmail, maskEmail } from "../../utils/otpMail.js";
 
 const LOGIN_OTP_EXPIRY_MS = 5 * 60 * 1000;
 const LOGIN_OTP_MAX_ATTEMPTS = 5;
 const loginOtpSessions = new Map();
 
-const normalizePhone = (value) => value.toString().replace(/\D/g, "");
-
-const stripLeadingInternationalPrefix = (value) =>
-  value.startsWith("00") ? value.slice(2) : value;
-
-const phonesMatch = (contractPhone, providedPhone) => {
-  const normalizedContract = stripLeadingInternationalPrefix(normalizePhone(contractPhone));
-  const normalizedProvided = stripLeadingInternationalPrefix(normalizePhone(providedPhone));
-
-  if (!normalizedContract || !normalizedProvided) {
-    return false;
-  }
-
-  if (normalizedContract === normalizedProvided) {
-    return true;
-  }
-
-  const contractTail =
-    normalizedContract.length > 9
-      ? normalizedContract.slice(-9)
-      : normalizedContract;
-  const providedTail =
-    normalizedProvided.length > 9
-      ? normalizedProvided.slice(-9)
-      : normalizedProvided;
-
-  return contractTail === providedTail;
-};
-
 const generateOtpCode = () => String(randomInt(0, 1000000)).padStart(6, "0");
-
-const maskPhone = (phone) => {
-  const normalized = normalizePhone(phone);
-  if (!normalized) return "";
-
-  if (normalized.length <= 3) {
-    return `***${normalized}`;
-  }
-
-  return `***${normalized.slice(-3)}`;
-};
 
 const pruneExpiredOtpSessions = () => {
   const now = Date.now();
@@ -60,49 +21,6 @@ const pruneExpiredOtpSessions = () => {
     if (session.expiresAt <= now) {
       loginOtpSessions.delete(otpToken);
     }
-  }
-};
-
-const sendOtpSms = async ({ phone, code, purpose = "login" }) => {
-  const messages = {
-    login: `رمز تسجيل الدخول في تطبيق Oxygen هو: ${code}. صالح 5 دقائق. لا تشاركه مع أحد.`,
-    password_recovery: `رمز استعادة كلمة المرور في Oxygen هو: ${code}. صالح 5 دقائق. لا تشاركه مع أحد.`,
-  };
-  const message = messages[purpose] || messages.login;
-  const providerUrl = process.env.SMS_PROVIDER_URL;
-
-  if (!providerUrl) {
-    console.info(`[OTP SMS] Sent login code ${code} to ${phone}`);
-    return;
-  }
-
-  const headers = {
-    "Content-Type": "application/json",
-    Accept: "application/json",
-  };
-
-  if (process.env.SMS_PROVIDER_TOKEN) {
-    headers.Authorization = `Bearer ${process.env.SMS_PROVIDER_TOKEN}`;
-  }
-
-  try {
-    const response = await fetch(providerUrl, {
-      method: "POST",
-      headers,
-      body: JSON.stringify({
-        to: phone,
-        message,
-      }),
-    });
-
-    if (!response.ok) {
-      const details = await response.text();
-      console.error(
-        `[OTP SMS] Provider responded with ${response.status}: ${details}`
-      );
-    }
-  } catch (error) {
-    console.error("[OTP SMS] Failed to call SMS provider", error);
   }
 };
 
@@ -228,8 +146,8 @@ class AuthService {
       }
     }
 
-    if (!phonesMatch(customer.phone, payload.phone)) {
-      throw new UnauthorizedError("Phone number does not match contract");
+    if (!customer?.email?.trim()) {
+      throw new UnauthorizedError("No email registered for this account");
     }
 
     pruneExpiredOtpSessions();
@@ -248,16 +166,17 @@ class AuthService {
       expiresAt: Date.now() + LOGIN_OTP_EXPIRY_MS,
     });
 
-    await sendOtpSms({ phone: customer.phone, code, purpose });
+    await sendOtpEmail({ email: customer.email, code, purpose });
 
+    const masked = maskEmail(customer.email);
     const response = {
       requestId: otpToken,
       otpToken,
       expiresInSec: Math.floor(LOGIN_OTP_EXPIRY_MS / 1000),
       expiresInSeconds: Math.floor(LOGIN_OTP_EXPIRY_MS / 1000),
-      maskedDestination: maskPhone(customer.phone),
-      maskedPhone: maskPhone(customer.phone),
-      destinationPhone: customer.phone,
+      maskedDestination: masked,
+      maskedEmail: masked,
+      destinationEmail: customer.email,
       purpose,
     };
 
@@ -271,7 +190,6 @@ class AuthService {
   static async requestRecoveryOtp(payload) {
     return AuthService.requestLoginOtp({
       email: payload.email,
-      phone: payload.phone,
       purpose: "password_recovery",
       skipPasswordCheck: true,
     });
@@ -321,7 +239,7 @@ class AuthService {
       return {
         verified: true,
         purpose: "password_recovery",
-        maskedPhone: maskPhone(customer.phone),
+        maskedEmail: maskEmail(customer.email),
       };
     }
 

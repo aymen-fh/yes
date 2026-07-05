@@ -5,6 +5,7 @@ import ServicePointController from "../servicePoints/servicePoint.controller.js"
 import CustomerAiChatSyncService from "../dashboard/customerAiChatSync.service.js";
 import CustomerNotificationService from "../dashboard/customerNotification.service.js";
 import { chatWithOxy } from "./oxy.service.js";
+import { buildOxyContext } from "./oxyContext.service.js";
 
 const ensureCustomer = (req) => {
   if (req.user?.role !== Roles.CUSTOMER) {
@@ -20,10 +21,21 @@ class MobileController {
   static async oxyChat(req, res, next) {
     try {
       const { message, history, context } = req.body || {};
+      const clientContext = context && typeof context === "object" ? context : {};
+
+      let serverContext = {};
+      if (req.user?.role === "customer" && req.user?.id) {
+        serverContext = await buildOxyContext({
+          customerId: req.user.id,
+          role: req.user.role,
+        });
+      }
+
       const result = await chatWithOxy({
         message,
         history: Array.isArray(history) ? history : [],
-        context: context && typeof context === "object" ? context : {},
+        context: clientContext,
+        serverContext,
       });
 
       if (req.user?.role === "customer" && req.user?.id) {

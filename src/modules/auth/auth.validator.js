@@ -22,13 +22,11 @@ export const loginSchema = z
 export const requestLoginOtpSchema = z.object({
   email: z.string().email(),
   password: z.string().min(1),
-  phone: z.string().min(6).max(24),
   purpose: z.enum(["login", "password_recovery"]).optional(),
 });
 
 export const requestRecoveryOtpSchema = z.object({
   email: z.string().email(),
-  phone: z.string().min(6).max(24),
 });
 
 export const verifyLoginOtpSchema = z.object({
