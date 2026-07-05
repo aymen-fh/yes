@@ -21,6 +21,23 @@ const CLEARLY_OUT_OF_SCOPE = [
   "gpt", "chatgpt", "gemini", "openai", "claude",
   "bitcoin", "crypto", "bitcoin",
   "recipe", "طبخ", "وصفة",
+  "trump", "biden", "putin", "تاريخ", "history", "جغرافيا", "geography",
+  "math", "رياضيات", "علم", "science", "دين", "religion", "طب", "medicine",
+  "نكت", "joke", "funny", "احكي", "قصة", "story", "أغنية", "song", "music",
+];
+
+const EXTERNAL_TOPIC_RE = [
+  /messi|ronaldo|football|sport|كرة|nba|lakers/i,
+  /politic|election|سياس|trump|biden|putin|انتخاب/i,
+  /weather|forecast|طقس|درجة\s*الحرارة/i,
+  /movie|film|netflix|فيلم|مسلسل|series/i,
+  /python|javascript|react|flutter|برمج|coding|program/i,
+  /news|bbc|cnn|أخبار/i,
+  /bitcoin|crypto/i,
+  /recipe|طبخ|وصفة/i,
+  /gpt|chatgpt|gemini|openai|claude/i,
+  /joke|نكت|funny|story|قصة|أغنية|music/i,
+  /history|geography|math|science|medicine|religion|تاريخ|رياضيات|طب/i,
 ];
 
 const IN_SCOPE_HINTS = [
@@ -36,10 +53,9 @@ const IN_SCOPE_HINTS = [
   "تجديد", "renew", "ترقية", "upgrade", "تطبيق", "app",
   "otp", "رمز", "تحقق", "login", "دخول", "password", "كلمة",
   "مرحب", "hello", "hi", "hey", "اهلا", "أهلا", "السلام", "salam",
-  "كم", "متى", "أين", "كيف", "وش", "ايش", "ليش", "لماذا", "حالة", "وضع",
   "راي", "رأي", "رأيك", "رايك", "think", "opinion", "نصيحة", "tip", "advice",
   "شكر", "thanks", "thank", "تسلم", "ممتاز", "ok", "okay",
-  "how are", "how r u", "how're", "كيف حال", "كيفك", "شلونك", "شنو", "ايش",
+  "how are", "how r u", "how're", "كيف حال", "كيفك", "شلونك", "شنو",
   "معامل", "transaction", "عمليات", "سجل", "ملخص", "summary", "كل", "all",
   "اشتراكي", "باقتي", "استهلاكي", "حسابي",
   "ضعف", "ضعيف", "بطي", "بطء", "انقطاع", "راوتر", "router", "مودم", "modem",
@@ -67,20 +83,45 @@ const GREETING = [/^(hi|hello|hey|salam|marhaba)\b/i, /مرحب/i, /السلام
 export const isClearlyOutOfScope = (message) => {
   const q = message.toString().toLowerCase().trim();
   if (!q) return false;
-  return CLEARLY_OUT_OF_SCOPE.some((kw) => q.includes(kw));
+  if (CLEARLY_OUT_OF_SCOPE.some((kw) => q.includes(kw))) return true;
+  return EXTERNAL_TOPIC_RE.some((re) => re.test(q));
+};
+
+/** ردود مهذبة عند الأسئلة الخارجية عن Oxygen */
+export const politeDeclineReply = (message) => {
+  const q = message.toString().trim();
+  const lower = q.toLowerCase();
+
+  if (EXTERNAL_TOPIC_RE.some((re) => re.test(q))) {
+    return "عذراً 🙏 لا أستطيع الإجابة عن هذا الموضوع — أنا أوكسي، مساعد Oxygen للإنترنت والاشتراك فقط.\n"
+      + "هل أساعدك في: رصيدك، باقتك، ضعف النت، أو الدعم الفني؟";
+  }
+
+  if (
+    /^(who|what|where|when|why|how)\s+(is|are|was|were|did|do|can)/i.test(lower) ||
+    /^(من|ما|ماهو|ماهي|ماذا|أين|متى|لماذا)\s+(هو|هي|هم|هذا)/u.test(q)
+  ) {
+    return "عذراً، لا أملك معلومات عن هذا السؤال. أنا متخصص في Oxygen: اشتراكك، الشحن، الباقات، والدعم.\n"
+      + "ما الذي تريد معرفته عن خدمتك؟";
+  }
+
+  if (/joke|نكت|احك|قصة|story|تحك/i.test(lower)) {
+    return "😊 أنا مساعد خدمة Oxygen وليس للأسئلة العامة، لكن يسعدني مساعدتك في الإنترنت أو اشتراكك!";
+  }
+
+  return "عذراً، لا أستطيع الإجابة — هذا السؤال خارج نطاق Oxygen.\n"
+    + "اسألني عن: رصيدك، استهلاكك، الباقات، ضعف الإنترنت، سلفني، أو الدعم.";
 };
 
 export const isInScope = (message, context = {}) => {
   const q = message.toString().toLowerCase().trim();
   if (!q) return true;
   if (isClearlyOutOfScope(q)) return false;
-  if (IN_SCOPE_HINTS.some((kw) => q.includes(kw))) return true;
+  if (GREETING.some((re) => re.test(q))) return true;
   if (SMALL_TALK.some((re) => re.test(q))) return true;
   if (THANKS.some((re) => re.test(q))) return true;
-  if (context?.subscription || context?.planName || context?.customer?.name || context?.customerName) {
-    return true;
-  }
-  if (q.length <= 50) return true;
+  if (matchFaq(message)) return true;
+  if (IN_SCOPE_HINTS.some((kw) => q.includes(kw))) return true;
   return false;
 };
 
@@ -173,6 +214,9 @@ export const isGenericReply = (reply) => {
   const r = (reply || "").toString();
   return (
     r.includes("مساعد Oxygen فقط") ||
+    r.includes("خارج نطاق Oxygen") ||
+    r.includes("لا أستطيع الإجابة") ||
+    r.includes("لا أملك معلومات") ||
     r.includes("اسألني عن رصيدك، استهلاكك") ||
     r.includes("اسألني عن اشتراكك") ||
     r.length < 20
@@ -183,7 +227,7 @@ export const smartReply = (message, context = {}) => {
   const q = message.toString().toLowerCase().trim();
 
   if (!isInScope(message, context)) {
-    return "أنا أوكسي OXY، مساعد Oxygen فقط. كيف أساعدك في اشتراكك أو خدمات الإنترنت؟";
+    return politeDeclineReply(message);
   }
 
   const name = pick(context, "customer.name", "customerName");
@@ -329,4 +373,5 @@ export default {
   isThanks,
   isGreeting,
   isOpinionAboutUsage,
+  politeDeclineReply,
 };
