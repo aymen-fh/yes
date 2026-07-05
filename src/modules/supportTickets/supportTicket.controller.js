@@ -5,6 +5,8 @@ import { findUserByIdAcrossRoles, getCustomerDomainModels } from "../../utils/ro
 import { serializeDoc, serializeDocs } from "../common/serializers.js";
 import { toTicketMobileDto } from "../../utils/mobileDto.js";
 import NotificationService from "../notifications/notification.service.js";
+import CustomerAiChatSyncService from "../dashboard/customerAiChatSync.service.js";
+import CustomerNotificationService from "../dashboard/customerNotification.service.js";
 import SupportTicketService from "./supportTicket.service.js";
 
 const ensureTicketRelations = async ({ customerId, subscriptionId }) => {
@@ -188,6 +190,16 @@ class SupportTicketController {
         ticket: serializeDoc(hydrated),
       });
 
+      if (req.user?.role === "customer") {
+        CustomerAiChatSyncService.syncCustomerMessage({
+          customerId: customer._id.toString(),
+          customerMessage: req.body.description,
+          ticketId: ticket._id.toString(),
+        }).catch((err) => {
+          console.warn("[Ticket] Failed to sync chat to customer service:", err?.message);
+        });
+      }
+
       return ApiResponse.created(res, serializeDoc(hydrated), "Support ticket created successfully");
     } catch (error) {
       return next(error);
@@ -212,6 +224,42 @@ class SupportTicketController {
         actor: req.user,
         message: req.body.message,
       });
+
+      if (req.user?.role === "customer") {
+        const customerId =
+          ticket.customerId?._id?.toString?.() || ticket.customerId?.toString?.();
+        CustomerAiChatSyncService.syncCustomerMessage({
+          customerId,
+          customerMessage: req.body.message,
+          ticketId: ticket._id.toString(),
+        }).catch((err) => {
+          console.warn("[Ticket] Failed to sync reply to customer service:", err?.message);
+        });
+      } else {
+        const customerId =
+          ticket.customerId?._id?.toString?.() || ticket.customerId?.toString?.();
+        const staffLookup = await findUserByIdAcrossRoles(req.user.id, STAFF_ROLES);
+        const staffName = staffLookup?.user?.fullName || "فريق الدعم";
+
+        CustomerAiChatSyncService.syncStaffReply({
+          customerId,
+          ticketId: ticket._id.toString(),
+          message: req.body.message,
+          staffName,
+        }).catch((err) => {
+          console.warn("[Ticket] Failed to sync staff reply to chat:", err?.message);
+        });
+
+        CustomerNotificationService.notifyTicketReply({
+          customerId,
+          ticketId: ticket._id.toString(),
+          ticketNumber: ticket.ticketNumber,
+          message: req.body.message,
+          staffName,
+        }).catch((err) => {
+          console.warn("[Ticket] Failed to create customer notification:", err?.message);
+        });
+      }
 
       const updatedTicket = await SupportTicket.findById(ticket._id)
         .populate("customerId", "fullName customerCode email status")

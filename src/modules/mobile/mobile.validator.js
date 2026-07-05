@@ -13,3 +13,12 @@ export const oxyChatSchema = z.object({
     .optional(),
   context: z.record(z.string(), z.unknown()).optional(),
 });
+
+export const notificationIdParamsSchema = z.object({
+  id: z.string().min(1),
+});
+
+export const notificationsQuerySchema = z.object({
+  unreadOnly: z.enum(["true", "false"]).optional(),
+  limit: z.coerce.number().int().min(1).max(100).optional(),
+});

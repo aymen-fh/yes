@@ -7,6 +7,7 @@ import { ensureUserCanReadSubscription } from "../../utils/subscriptionAccess.js
 import PaymentService from "../payments/payment.service.js";
 import SubscriptionService from "./subscription.service.js";
 import SupportTicketService from "../supportTickets/supportTicket.service.js";
+import CustomerAiChatSyncService from "../dashboard/customerAiChatSync.service.js";
 import UsageService from "../usage/usage.service.js";
 import SpeedTestService from "../speedTests/speedTest.service.js";
 import AdvanceCreditService from "./advanceCredit.service.js";
@@ -622,6 +623,16 @@ class SubscriptionController {
           },
         ],
       });
+
+      if (req.user?.role === "customer") {
+        CustomerAiChatSyncService.syncCustomerMessage({
+          customerId: subscription.customerId.toString(),
+          customerMessage: description,
+          ticketId: ticket._id.toString(),
+        }).catch((err) => {
+          console.warn("[Ticket] Failed to sync chat to customer service:", err?.message);
+        });
+      }
 
       return ApiResponse.created(res, toTicketMobileDto(ticket), "Support ticket created successfully");
     } catch (error) {

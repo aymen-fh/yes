@@ -180,14 +180,31 @@ const customerAiChatSchema = new mongoose.Schema(
       default: "tech_support",
     },
     routedComplaintId: { type: String, default: null },
+    ticketId: { type: String, default: null },
     lastMessageAt: { type: String, default: "" },
     messages: [
       {
-        role: { type: String, enum: ["customer", "assistant"], required: true },
+        role: { type: String, enum: ["customer", "assistant", "staff"], required: true },
         content: { type: String, required: true, trim: true },
         createdAt: { type: String, default: "" },
       },
     ],
+  },
+  { timestamps: true }
+);
+
+const customerNotificationSchema = new mongoose.Schema(
+  {
+    customerId: { type: String, required: true, index: true },
+    type: {
+      type: String,
+      enum: ["ticket_reply", "ticket_update", "system"],
+      default: "ticket_reply",
+    },
+    title: { type: String, required: true, trim: true },
+    body: { type: String, required: true, trim: true },
+    ticketId: { type: String, default: null },
+    isRead: { type: Boolean, default: false },
   },
   { timestamps: true }
 );
@@ -208,3 +225,4 @@ export const SystemPermission = () => registerModel("SystemPermission", systemPe
 export const AgentRequest = () => registerModel("AgentRequest", agentRequestSchema);
 export const InternalMessage = () => registerModel("InternalMessage", internalMessageSchema);
 export const CustomerAiChat = () => registerModel("CustomerAiChat", customerAiChatSchema);
+export const CustomerNotification = () => registerModel("CustomerNotification", customerNotificationSchema);
