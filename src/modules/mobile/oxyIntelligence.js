@@ -286,14 +286,64 @@ export const smartReply = (message, context = {}) => {
     return "متابعة الاستهلاك من تبويب «الاستهلاك».";
   }
 
-  if (/باق|plan|package|سرعة|speed/.test(q)) {
+  // ─── Plans: listing, recommendations, best plan question ─────────────────
+  if (/باق|plan|package|سرعة|speed|اقتراح|افضل|أفضل|عرض|قارن|compare|recommend/i.test(q)) {
+    const allPlans = Array.isArray(context.availablePlans) ? context.availablePlans : [];
+
+    // User is asking for a recommendation or the "best" plan
+    const wantsRecommendation = /اقتراح|افضل|أفضل|توصي|recommend|best|انسب|ارخص|ارقى|اقوى/i.test(q);
+    // User wants to see all plans
+    const wantsList = /اعرض|عرض|قائمة|كل الباقات|كلها|list|all|show|compare|قارن/i.test(q);
+
+    if (allPlans.length > 0 && (wantsRecommendation || wantsList)) {
+      const currentPlanName = planName || "";
+
+      const planLines = allPlans.map((p, i) => {
+        const quota = p.isUnlimited ? "♾️ غير محدود" : `📊 ${p.dataLimitGb} GB`;
+        const price = p.monthlyPrice ? `💵 ${p.monthlyPrice} د.ل/شهر` : "";
+        const speed = p.speedMbps ? `⚡ ${p.speedMbps} Mbps` : "";
+        const isCurrent = currentPlanName && p.name === currentPlanName ? " ← **باقتك الحالية**" : "";
+        return `${i + 1}. **${p.name}** | ${quota} | ${speed} | ${price}${isCurrent}`;
+      });
+
+      if (wantsRecommendation && !wantsList) {
+        // Pick best value plan: highest data/speed at lowest price
+        const scored = allPlans
+          .filter((p) => !p.isUnlimited)
+          .map((p) => ({
+            ...p,
+            score: ((p.dataLimitGb || 0) * (p.speedMbps || 1)) / Math.max(p.monthlyPrice || 1, 1),
+          }))
+          .sort((a, b) => b.score - a.score);
+
+        const unlimited = allPlans.filter((p) => p.isUnlimited);
+        const best = scored[0] || unlimited[0];
+
+        if (best) {
+          const quota = best.isUnlimited ? "غير محدود" : `${best.dataLimitGb} GB`;
+          return (
+            `💡 **أفضل باقة من حيث القيمة:** ${best.name}\n` +
+            `⚡ السرعة: ${best.speedMbps || "—"} Mbps | 📊 الكوتا: ${quota} | 💵 ${best.monthlyPrice} د.ل/شهر\n\n` +
+            `📋 **جميع الباقات المتاحة:**\n${planLines.join("\n")}\n\n` +
+            `للترقية أو تغيير الباقة: **تبويب «الباقات»**.`
+          );
+        }
+      }
+
+      return (
+        `📋 **الباقات المتاحة (${allPlans.length} باقة):**\n${planLines.join("\n")}\n\n` +
+        `للاشتراك أو الترقية: **تبويب «الباقات»**.`
+      );
+    }
+
+    // Fallback: show only current plan info
     const parts = [];
     if (planName) parts.push(`📦 ${planName}`);
     if (speed) parts.push(`⚡ ${speed} Mbps`);
     if (planPrice) parts.push(`💵 ${planPrice} د.ل/شهر`);
     if (isUnlimited) parts.push("♾️ غير محدود");
     else if (remaining != null) parts.push(`📊 متبقي ${remaining} GB`);
-    if (parts.length) return `باقتك: ${parts.join(" · ")}. للإدارة: تبويب «الباقات».`;
+    if (parts.length) return `باقتك الحالية: ${parts.join(" · ")}. للإدارة: تبويب «الباقات».`;
     return "لإدارة باقتك: تبويب «الباقات».";
   }
 
