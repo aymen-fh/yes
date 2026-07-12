@@ -102,33 +102,7 @@ export const isClearlyOutOfScope = (message) => {
 
 /** ردود مهذبة عند الأسئلة الخارجية عن Oxygen */
 export const politeDeclineReply = (message) => {
-  const q = message.toString().trim();
-  const lower = q.toLowerCase();
-
-  if (EXTERNAL_TOPIC_RE.some((re) => re.test(q))) {
-    return "عذراً 🙏 لا أستطيع الإجابة عن هذا الموضوع — أنا أوكسي، مساعد Oxygen للإنترنت والاشتراك فقط.\n"
-      + "هل أساعدك في: رصيدك، باقتك، ضعف النت، أو الدعم الفني؟";
-  }
-
-  if (
-    /^(who|what|where|when|why|how)\s+(is|are|was|were|did|do|can)/i.test(lower) ||
-    /^(من|ما|ماهو|ماهي|ماذا|أين|متى|لماذا)\s+(هو|هي|هم|هذا)/u.test(q)
-  ) {
-    return "عذراً، لا أملك معلومات عن هذا السؤال. أنا متخصص في Oxygen: اشتراكك، الشحن، الباقات، والدعم.\n"
-      + "ما الذي تريد معرفته عن خدمتك؟";
-  }
-
-  if (/joke|نكت|احك|قصة|story|تحك/i.test(lower)) {
-    return "😊 أنا مساعد خدمة Oxygen وليس للأسئلة العامة، لكن يسعدني مساعدتك في الإنترنت أو اشتراكك!";
-  }
-
-  if (/homework|واجب|essay|مقال|translate|ترجم|حل\s*لي/i.test(lower)) {
-    return "عذراً 🙏 لا أستطيع المساعدة في الواجبات أو الترجمة — أنا متخصص في Oxygen فقط.\n"
-      + "هل أساعدك في رصيدك، باقتك، أو الدعم الفني؟";
-  }
-
-  return "عذراً، لا أستطيع الإجابة — هذا السؤال خارج نطاق Oxygen.\n"
-    + "اسألني عن: رصيدك، استهلاكك، الباقات، ضعف الإنترنت، سلفني، أو الدعم.";
+  return "أعتذر، أنا مساعد متخصص في تطبيق Oxygen ISP للموبايل فقط، لذلك لا أستطيع الإجابة عن الأسئلة الخارجة عن نطاق التطبيق. إذا كان لديك أي سؤال يتعلق بـ Oxygen ISP فسأكون سعيدًا بمساعدتك.";
 };
 
 export const isInScope = (message, context = {}) => {
@@ -237,6 +211,8 @@ export const isGenericReply = (reply) => {
     r.includes("لا أملك معلومات") ||
     r.includes("اسألني عن رصيدك، استهلاكك") ||
     r.includes("اسألني عن اشتراكك") ||
+    r.includes("أعتذر، أنا مساعد متخصص") ||
+    r.includes("الخارجة عن نطاق التطبيق") ||
     r.length < 20
   );
 };
@@ -373,10 +349,7 @@ export const smartReply = (message, context = {}) => {
     return "سجل المعاملات في الشاشة الرئيسية.";
   }
 
-  const planPart = planName ? `باقتك ${planName}. ` : "";
-  const hint =
-    "اسألني: «ضعف الإنترنت»، «لماذا الباقات قليلة؟»، «ما رأيك في استهلاكي؟»، «كم رصيدي؟»";
-  return `${planPart}${hint}`;
+  return "أهلاً بك! أنا أوكسي مساعد Oxygen. يمكنك الاستفسار عن رصيدك، استهلاكك، باقتك، الشحن، أو الدعم الفني. كيف يمكنني مساعدتك اليوم؟";
 };
 
 export const isFaqQuestion = (message) => Boolean(matchFaq(message));
