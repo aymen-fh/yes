@@ -212,8 +212,7 @@ export const isGenericReply = (reply) => {
     r.includes("اسألني عن رصيدك، استهلاكك") ||
     r.includes("اسألني عن اشتراكك") ||
     r.includes("أعتذر، أنا مساعد متخصص") ||
-    r.includes("الخارجة عن نطاق التطبيق") ||
-    r.length < 20
+    r.includes("الخارجة عن نطاق التطبيق")
   );
 };
 
